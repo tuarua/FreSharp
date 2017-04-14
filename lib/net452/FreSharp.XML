@@ -1,0 +1,297 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>FreSharp</name>
+    </assembly>
+    <members>
+        <member name="T:FreSharp.FreArraySharp">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:FreSharp.FreArraySharp.#ctor">
+            <summary>
+            Creates an Empty C# FreArray.
+            </summary>
+        </member>
+        <member name="M:FreSharp.FreArraySharp.#ctor(System.IntPtr)">
+            <summary>
+            Creates a C# FreArray from a C FREObject.
+            </summary>
+            <param name="freArray"></param>
+        </member>
+        <member name="M:FreSharp.FreArraySharp.GetLength">
+            <summary>
+            Returns the length of the C# FreArray.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FreSharp.FreArraySharp.GetObjectAt(System.UInt32)">
+            <summary>
+            Returns the C# FreObject from the C# FreArray at i.
+            </summary>
+            <param name="i"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FreSharp.FreArraySharp.SetObjectAt">
+            <summary>
+            Sets the C# FreObject in the C# FreArray at i.
+            </summary>
+        </member>
+        <member name="M:FreSharp.FreArraySharp.Get">
+            <summary>
+            Returns the associated C FREObject of the C# FreArray.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:FreSharp.FreObjectSharp">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:FreSharp.FreObjectSharp.#ctor">
+            <summary>
+            Creates an empty C# FREObject
+            </summary>
+        </member>
+        <member name="M:FreSharp.FreObjectSharp.#ctor(System.IntPtr)">
+            <summary>
+            Creates a C# FREObject from a C FREObject
+            </summary>
+            <param name="freObject"></param>
+        </member>
+        <member name="M:FreSharp.FreObjectSharp.#ctor(System.String)">
+            <summary>
+            Creates a C# FREObject from a string
+            </summary>
+            <param name="value"></param>
+        </member>
+        <member name="M:FreSharp.FreObjectSharp.#ctor(System.Boolean)">
+            <summary>
+            Creates a C# FREObject from a bool
+            </summary>
+            <param name="value"></param>
+        </member>
+        <member name="M:FreSharp.FreObjectSharp.#ctor(System.Double)">
+            <summary>
+            Creates a C# FREObject from a double
+            </summary>
+            <param name="value"></param>
+        </member>
+        <member name="M:FreSharp.FreObjectSharp.#ctor(System.Int32)">
+            <summary>
+            Creates a C# FREObject from an int
+            </summary>
+            <param name="value"></param>
+        </member>
+        <member name="M:FreSharp.FreObjectSharp.#ctor(System.UInt32)">
+            <summary>
+            Creates a C# FREObject from a uint
+            </summary>
+            <param name="value"></param>
+        </member>
+        <member name="M:FreSharp.FreObjectSharp.#ctor(System.String,System.Collections.ArrayList)">
+            <summary>
+            Creates a C# FREObject with given class name
+            </summary>
+            <param name="className"></param>
+            <param name="args"></param>
+        </member>
+        <member name="M:FreSharp.FreObjectSharp.CallMethod(System.String,System.Collections.ArrayList)">
+            <summary>
+            Calls a method on a C# FREObject.
+            </summary>
+            <param name="methodName"></param>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FreSharp.FreObjectSharp.GetAsString">
+            <summary>
+            Returns the C# FREObject as a string.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FreSharp.FreObjectSharp.GetAsUInt">
+            <summary>
+            Returns the C# FREObject as a uint.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FreSharp.FreObjectSharp.GetAsInt">
+            <summary>
+            Returns the C# FREObject as an int.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FreSharp.FreObjectSharp.GetAsBool">
+            <summary>
+            Returns the C# FREObject as a bool.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FreSharp.FreObjectSharp.GetAsDouble">
+            <summary>
+            Returns the C# FREObject as a double.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FreSharp.FreObjectSharp.GetProperty(System.String)">
+            <summary>
+            Returns the property of the C# FREObject of the given name.
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FreSharp.FreObjectSharp.SetProperty(System.String,FreSharp.FreObjectSharp)">
+            <summary>
+            Sets the property of the C# FREObject as a C# FREObject value.
+            </summary>
+            <param name="name"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:FreSharp.FreObjectSharp.SetProperty(System.String,System.String)">
+            <summary>
+            Sets the property of the C# FREObject as a string.
+            </summary>
+            <param name="name"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:FreSharp.FreObjectSharp.SetProperty(System.String,System.Double)">
+            <summary>
+            Sets the property of the C# FREObject as a double.
+            </summary>
+            <param name="name"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:FreSharp.FreObjectSharp.SetProperty(System.String,System.Boolean)">
+            <summary>
+            Sets the property of the C# FREObject as a bool.
+            </summary>
+            <param name="name"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:FreSharp.FreObjectSharp.SetProperty(System.String,System.Int32)">
+            <summary>
+            Sets the property of the C# FREObject as an int.
+            </summary>
+            <param name="name"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:FreSharp.FreObjectSharp.SetProperty(System.String,System.UInt32)">
+            <summary>
+            Sets the property of the C# FREObject as a uint.
+            </summary>
+            <param name="name"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:FreSharp.FreObjectSharp.GetType">
+            <summary>
+            Returns the Actionscript type of the C# FREObject.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FreSharp.FreObjectSharp.Get">
+            <summary>
+            Returns the associated C FREObject of the C# FREObject.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:FreSharp.FreObjectTypeSharp">
+            <summary>
+            Similar to FreObject. Added extra types to match Actionscript
+            </summary>
+        </member>
+        <member name="F:FreSharp.FreObjectTypeSharp.Object">
+            <summary>
+            Object
+            </summary>
+        </member>
+        <member name="F:FreSharp.FreObjectTypeSharp.Number">
+            <summary>
+            Number
+            </summary>
+        </member>
+        <member name="F:FreSharp.FreObjectTypeSharp.String">
+            <summary>
+            String
+            </summary>
+        </member>
+        <member name="F:FreSharp.FreObjectTypeSharp.Bytearray">
+            <summary>
+            Bytearray
+            </summary>
+        </member>
+        <member name="F:FreSharp.FreObjectTypeSharp.Array">
+            <summary>
+            Array
+            </summary>
+        </member>
+        <member name="F:FreSharp.FreObjectTypeSharp.Vector">
+            <summary>
+            Vector
+            </summary>
+        </member>
+        <member name="F:FreSharp.FreObjectTypeSharp.Bitmapdata">
+            <summary>
+            Bitmapdata
+            </summary>
+        </member>
+        <member name="F:FreSharp.FreObjectTypeSharp.Boolean">
+            <summary>
+            Boolean
+            </summary>
+        </member>
+        <member name="F:FreSharp.FreObjectTypeSharp.Null">
+            <summary>
+            Null
+            </summary>
+        </member>
+        <member name="F:FreSharp.FreObjectTypeSharp.Int">
+            <summary>
+            Int
+            </summary>
+        </member>
+        <member name="F:FreSharp.FreObjectTypeSharp.Custom">
+            <summary>
+            Custom. A Class that the user as created
+            </summary>
+        </member>
+        <member name="T:FreSharp.FreSharpHelper">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:FreSharp.FreSharpHelper.Core">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:FreSharp.FreSharpHelper.SetFreContext(System.IntPtr@)">
+            <summary>
+            
+            </summary>
+            <param name="freContext"></param>
+        </member>
+        <member name="M:FreSharp.FreSharpHelper.DispatchEvent(System.String,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="name"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:FreSharp.FreSharpHelper.ArgsToArgv(System.Collections.ArrayList)">
+            <summary>
+            
+            </summary>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FreSharp.FreSharpHelper.GetArgsC(System.Collections.ArrayList)">
+            <summary>
+            
+            </summary>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

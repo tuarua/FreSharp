@@ -13,6 +13,7 @@ namespace FRESharpCore {
 		UInt32 getUInt32(FREObjectCLR freObject);
 		UInt32 getArrayLength(FREObjectCLR freObject);
 		FREObjectCLR getObjectAt(FREObjectCLR freObject, UInt32 i);
+		void setObjectAt(FREObjectCLR freObject, UInt32 i, FREObjectCLR value);
 		bool getBool(FREObjectCLR freObject);
 		double getDouble(FREObjectCLR freObject);
 		void dispatchEvent (String^ name, String^ value);

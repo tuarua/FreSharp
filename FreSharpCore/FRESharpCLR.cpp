@@ -133,6 +133,10 @@ namespace FRESharpCore {
 		return FREObjectCLR(mFRESharpLib->getObjectAt(freObject.ToPointer(), i));
 	}
 
+	void FRESharpCLR::setObjectAt(FREObjectCLR freObject, UInt32 i, FREObjectCLR value) {
+		mFRESharpLib->setObjectAt(freObject.ToPointer(), i, value.ToPointer());
+	}
+
 	bool FRESharpCLR::getBool(FREObjectCLR freObject) {
 		return mFRESharpLib->getBool(freObject.ToPointer());
 	}

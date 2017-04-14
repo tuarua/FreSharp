@@ -1,5 +1,4 @@
 ﻿#include "FRESharpLib.h"
-#include <iostream>
 #include <vector>
 
 using namespace std;
@@ -93,8 +92,7 @@ double FRESharpLib::getDouble(FREObject freObject) const {
 	return result;
 }
 
-FREObject FRESharpLib::getProperty(FREObject freObject, string propertyName) const
-{
+FREObject FRESharpLib::getProperty(FREObject freObject, string propertyName) const {
 	FREObject result = nullptr;
 	FREObject thrownException = nullptr;
 	auto status = FREGetObjectProperty(freObject, reinterpret_cast<const uint8_t *>(propertyName.data()), &result, &thrownException);
@@ -235,7 +233,8 @@ int FRESharpLib::getType(FREObject freObject) {
 	return objectType;
 }
 
-uint32_t FRESharpLib::getArrayLength(FREObject freObject) {
+uint32_t FRESharpLib::getArrayLength(FREObject freObject) const
+{
 	auto arrayLengthAS = getProperty(freObject, "length");
 	return getUInt32(arrayLengthAS);
 }
@@ -244,4 +243,12 @@ FREObject FRESharpLib::getObjectAt(FREObject freObject, uint32_t i) {
 	FREObject ret = nullptr;
 	FREGetArrayElementAt(freObject, i, &ret);
 	return ret;
+}
+
+void FRESharpLib::setObjectAt(FREObject freObject, uint32_t i, FREObject value) const {
+	FREObject thrownException = nullptr;
+	auto status = FRESetArrayElementAt(freObject, i, value);
+	isFREResultOK(status, "Could not get FREObject property.");
+	if (FRE_OK != status)
+		hasThrownException(thrownException);
 }

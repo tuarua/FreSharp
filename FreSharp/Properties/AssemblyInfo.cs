@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Resources;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -6,7 +7,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("FRESharp")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("C# port of FlashRuntimeExtensions for creating AIR Native Extensions")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Tua Rua Ltd.")]
 [assembly: AssemblyProduct("FRESharp")]
@@ -34,3 +35,5 @@ using System.Runtime.InteropServices;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: NeutralResourcesLanguage("en")]
+

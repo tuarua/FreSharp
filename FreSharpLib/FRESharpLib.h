@@ -24,6 +24,7 @@ public:
 	static bool getBool(FREObject freObject);
 	double getDouble(FREObject freObject) const;
 	FREObject getProperty(FREObject freObject, std::string propertyName) const;
+	
 
 	void setProperty(FREObject freObject, std::string name, FREObject value) const;
 	void setProperty(FREObject freObject, std::string name, std::string value) const;
@@ -32,8 +33,9 @@ public:
 	void setProperty(FREObject freObject, std::string name, int32_t value) const;
 	void setProperty(FREObject freObject, std::string name, uint32_t value) const;
 
-	uint32_t getArrayLength(FREObject freObject);
+	uint32_t getArrayLength(FREObject freObject) const;
 	static FREObject getObjectAt(FREObject freObject, uint32_t i);
+	void setObjectAt(FREObject freObject, uint32_t i, FREObject value) const;
 	void trace(std::string message) const;
 	void dispatchEvent(std::string name, std::string value) const;
 	void setFREContext(FREContext ctx);
