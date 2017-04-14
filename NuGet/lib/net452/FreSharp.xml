@@ -6,7 +6,7 @@
     <members>
         <member name="T:FreSharp.FreArraySharp">
             <summary>
-            
+             FreArraySharp wraps a C FREObject (Array or Vector) with helper methods.
             </summary>
         </member>
         <member name="M:FreSharp.FreArraySharp.#ctor">
@@ -33,7 +33,7 @@
             <param name="i"></param>
             <returns></returns>
         </member>
-        <member name="M:FreSharp.FreArraySharp.SetObjectAt">
+        <member name="M:FreSharp.FreArraySharp.SetObjectAt(FreSharp.FreObjectSharp,System.UInt32)">
             <summary>
             Sets the C# FreObject in the C# FreArray at i.
             </summary>
@@ -46,7 +46,7 @@
         </member>
         <member name="T:FreSharp.FreObjectSharp">
             <summary>
-            
+            FreObjectSharp wraps a C FREObject with helper methods.
             </summary>
         </member>
         <member name="M:FreSharp.FreObjectSharp.#ctor">
@@ -186,7 +186,7 @@
         </member>
         <member name="M:FreSharp.FreObjectSharp.GetType">
             <summary>
-            Returns the Actionscript type of the C# FREObject.
+            Returns the Actionscript type of the C# FREObject. !Important - your ane must include ANEUtils.as in com.tuarua
             </summary>
             <returns></returns>
         </member>
@@ -198,7 +198,7 @@
         </member>
         <member name="T:FreSharp.FreObjectTypeSharp">
             <summary>
-            Similar to FreObject. Added extra types to match Actionscript
+            Similar to FreObjectType. Added extra types to match Actionscript
             </summary>
         </member>
         <member name="F:FreSharp.FreObjectTypeSharp.Object">
@@ -258,7 +258,7 @@
         </member>
         <member name="T:FreSharp.FreSharpHelper">
             <summary>
-            
+            Creates a new FreSharp Helper
             </summary>
         </member>
         <member name="F:FreSharp.FreSharpHelper.Core">
@@ -268,27 +268,27 @@
         </member>
         <member name="M:FreSharp.FreSharpHelper.SetFreContext(System.IntPtr@)">
             <summary>
-            
+            Sets the C# FreContext to use to dispatch events.
             </summary>
             <param name="freContext"></param>
         </member>
         <member name="M:FreSharp.FreSharpHelper.DispatchEvent(System.String,System.String)">
             <summary>
-            
+            Dispatches an event. Mimics FREDispatchStatusEventAsync
             </summary>
             <param name="name"></param>
             <param name="value"></param>
         </member>
         <member name="M:FreSharp.FreSharpHelper.ArgsToArgv(System.Collections.ArrayList)">
             <summary>
-            
+            Converts ArrayList into argv which can be passed to library calls
             </summary>
             <param name="args"></param>
             <returns></returns>
         </member>
         <member name="M:FreSharp.FreSharpHelper.GetArgsC(System.Collections.ArrayList)">
             <summary>
-            
+            Gets length of ArrayList as argc which can be passed to library calls
             </summary>
             <param name="args"></param>
             <returns></returns>
