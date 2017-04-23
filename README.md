@@ -29,6 +29,17 @@ const string sharpString = "I am a string from C#";
 return new FreObjectSharp(sharpString).Get();
 `````
 
+Example - Call a method on an FREObject
+
+````C#
+var addition = person.CallMethod("add", new ArrayList
+ {
+  new FreObjectSharp(100),
+  new FreObjectSharp(33)
+ });
+var sum = addition.GetAsInt();
+Trace("result is: " + sum);
+`````
 
 ### Tech
 
