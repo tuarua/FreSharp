@@ -7,6 +7,8 @@
 
 Please see the feature rich example in https://github.com/tuarua/FreSharp/example
 
+The package is hosted on NuGet at https://www.nuget.org/packages/TuaRua.FreSharp/
+
 ### Tech
 
 Uses .NET 4.5.2
