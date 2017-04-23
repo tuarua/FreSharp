@@ -5,7 +5,7 @@
 ### Features
  - Build Adobe Air Native Extension  WIN using C#
 
-Please see the feature rich example in https://github.com/tuarua/FreSharp/example
+Please see the feature rich example in https://github.com/tuarua/FreSharp/tree/master/example
 
 The package is hosted on NuGet at https://www.nuget.org/packages/TuaRua.FreSharp/
 
