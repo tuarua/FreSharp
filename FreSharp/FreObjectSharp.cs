@@ -1,8 +1,9 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using FreSharp.Exceptions;
 
 namespace FreSharp {
-
     /// <summary>
     /// FreObjectSharp wraps a C FREObject with helper methods.
     /// </summary>
@@ -13,7 +14,7 @@ namespace FreSharp {
         /// <summary>
         /// Creates an empty C# FREObject
         /// </summary>
-        public FreObjectSharp() {}
+        public FreObjectSharp() { }
 
         /// <summary>
         /// Creates a C# FREObject from a C FREObject
@@ -27,35 +28,40 @@ namespace FreSharp {
         /// </summary>
         /// <param name="value"></param>
         public FreObjectSharp(string value) {
-            _freObject = FreSharpHelper.Core.getFREObject(value);
+            uint resultPtr = 0;
+            _freObject = FreSharpHelper.Core.getFREObject(value, ref resultPtr);
         }
         /// <summary>
         /// Creates a C# FREObject from a bool
         /// </summary>
         /// <param name="value"></param>
         public FreObjectSharp(bool value) {
-            _freObject = FreSharpHelper.Core.getFREObject(value);
+            uint resultPtr = 0;
+            _freObject = FreSharpHelper.Core.getFREObject(value, ref resultPtr);
         }
         /// <summary>
         /// Creates a C# FREObject from a double
         /// </summary>
         /// <param name="value"></param>
         public FreObjectSharp(double value) {
-            _freObject = FreSharpHelper.Core.getFREObject(value);
+            uint resultPtr = 0;
+            _freObject = FreSharpHelper.Core.getFREObject(value, ref resultPtr);
         }
         /// <summary>
         /// Creates a C# FREObject from an int
         /// </summary>
         /// <param name="value"></param>
         public FreObjectSharp(int value) {
-            _freObject = FreSharpHelper.Core.getFREObject(value);
+            uint resultPtr = 0;
+            _freObject = FreSharpHelper.Core.getFREObject(value, ref resultPtr);
         }
         /// <summary>
         /// Creates a C# FREObject from a uint
         /// </summary>
         /// <param name="value"></param>
         public FreObjectSharp(uint value) {
-            _freObject = FreSharpHelper.Core.getFREObject(value);
+            uint resultPtr = 0;
+            _freObject = FreSharpHelper.Core.getFREObject(value, ref resultPtr);
         }
 
         /// <summary>
@@ -64,8 +70,9 @@ namespace FreSharp {
         /// <param name="className"></param>
         /// <param name="args"></param>
         public FreObjectSharp(string className, ArrayList args) {
-            _freObject = FreSharpHelper.Core.getFREObject(className, FreSharpHelper.ArgsToArgv(args), 
-                FreSharpHelper.GetArgsC(args));
+            uint resultPtr = 0;
+            _freObject = FreSharpHelper.Core.getFREObject(className, FreSharpHelper.ArgsToArgv(args),
+                FreSharpHelper.GetArgsC(args), ref resultPtr);
         }
 
         /// <summary>
@@ -75,8 +82,34 @@ namespace FreSharp {
         /// <param name="args"></param>
         /// <returns></returns>
         public FreObjectSharp CallMethod(string methodName, ArrayList args) {
-            return new FreObjectSharp(FreSharpHelper.Core.callMethod(_freObject, methodName, 
-                FreSharpHelper.ArgsToArgv(args), FreSharpHelper.GetArgsC(args)));
+            uint resultPtr = 0;
+            var ret = new FreObjectSharp(FreSharpHelper.Core.callMethod(_freObject, methodName,
+                FreSharpHelper.ArgsToArgv(args), FreSharpHelper.GetArgsC(args), ref resultPtr));
+            var status = (FreResultSharp)resultPtr;
+            if (status == FreResultSharp.Ok) {
+                return ret;
+            }
+            ThrowFreException(status, "cannot call method " + methodName);
+            return null;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="methodName"></param>
+        /// <param name="args"></param>
+        /// <param name="returnArray"></param>
+        /// <returns></returns>
+        public FreArraySharp CallMethod(string methodName, ArrayList args, bool returnArray) {
+            uint resultPtr = 0;
+            var ret = new FreArraySharp(FreSharpHelper.Core.callMethod(_freObject, methodName,
+                FreSharpHelper.ArgsToArgv(args), FreSharpHelper.GetArgsC(args), ref resultPtr));
+            var status = (FreResultSharp)resultPtr;
+            if (status == FreResultSharp.Ok) {
+                return ret;
+            }
+            ThrowFreException(status, "cannot call method " + methodName);
+            return null;
         }
 
         /// <summary>
@@ -84,7 +117,42 @@ namespace FreSharp {
         /// </summary>
         /// <returns></returns>
         public string GetAsString() {
-            return FreSharpHelper.Core.getString(_freObject);
+            uint resultPtr = 0;
+            var ret = FreSharpHelper.Core.getString(_freObject, ref resultPtr);
+            var status = (FreResultSharp)resultPtr;
+
+            if (status == FreResultSharp.Ok) {
+                return ret;
+            }
+            ThrowFreException(status, "cannot get FREObject as String");
+            return "";
+        }
+
+        internal void ThrowFreException(FreResultSharp status, string message) {
+            switch (status) {
+                case FreResultSharp.FreActionscriptError:
+                    throw new FreActionscriptErrorException(message);
+                case FreResultSharp.Ok:
+                    break;
+                case FreResultSharp.NoSuchName:
+                    throw new NoSuchNameException(message);
+                case FreResultSharp.FreInvalidObject:
+                    throw new FreInvalidObjectException(message);
+                case FreResultSharp.FreTypeMismatch:
+                    throw new FreTypeMismatchException(message);
+                case FreResultSharp.FreInvalidArgument:
+                    throw new FreInvalidArgumentException(message);
+                case FreResultSharp.FreReadOnly:
+                    throw new FreReadOnlyException(message);
+                case FreResultSharp.FreWrongThread:
+                    throw new FreWrongThreadException(message);
+                case FreResultSharp.FreIllegalState:
+                    throw new FreIllegalStateException(message);
+                case FreResultSharp.FreInsufficientMemory:
+                    throw new FreInsufficientMemoryException(message);
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(status), status, null);
+            }
         }
 
         /// <summary>
@@ -92,7 +160,15 @@ namespace FreSharp {
         /// </summary>
         /// <returns></returns>
         public uint GetAsUInt() {
-            return FreSharpHelper.Core.getUInt32(_freObject);
+            uint resultPtr = 0;
+            var ret = FreSharpHelper.Core.getUInt32(_freObject, ref resultPtr);
+            var status = (FreResultSharp)resultPtr;
+
+            if (status == FreResultSharp.Ok) {
+                return ret;
+            }
+            ThrowFreException(status, "cannot get FREObject as Uint");
+            return 0;
         }
 
         /// <summary>
@@ -100,7 +176,14 @@ namespace FreSharp {
         /// </summary>
         /// <returns></returns>
         public int GetAsInt() {
-            return FreSharpHelper.Core.getInt32(_freObject);
+            uint resultPtr = 0;
+            var ret = FreSharpHelper.Core.getInt32(_freObject, ref resultPtr);
+            var status = (FreResultSharp)resultPtr;
+            if (status == FreResultSharp.Ok) {
+                return ret;
+            }
+            ThrowFreException(status, "cannot get FREObject as Int");
+            return 0;
         }
 
         /// <summary>
@@ -108,7 +191,14 @@ namespace FreSharp {
         /// </summary>
         /// <returns></returns>
         public bool GetAsBool() {
-            return FreSharpHelper.Core.getBool(_freObject);
+            uint resultPtr = 0;
+            var ret = FreSharpHelper.Core.getBool(_freObject, ref resultPtr);
+            var status = (FreResultSharp)resultPtr;
+            if (status == FreResultSharp.Ok) {
+                return ret;
+            }
+            ThrowFreException(status, "cannot get FREObject as Bool");
+            return false;
         }
 
         /// <summary>
@@ -116,7 +206,14 @@ namespace FreSharp {
         /// </summary>
         /// <returns></returns>
         public double GetAsDouble() {
-            return FreSharpHelper.Core.getDouble(_freObject);
+            uint resultPtr = 0;
+            var ret = FreSharpHelper.Core.getDouble(_freObject, ref resultPtr);
+            var status = (FreResultSharp)resultPtr;
+            if (status == FreResultSharp.Ok) {
+                return ret;
+            }
+            ThrowFreException(status, "cannot get FREObject as Double");
+            return 0.0;
         }
 
         /// <summary>
@@ -125,7 +222,14 @@ namespace FreSharp {
         /// <param name="name"></param>
         /// <returns></returns>
         public FreObjectSharp GetProperty(string name) {
-            return new FreObjectSharp(FreSharpHelper.Core.getProperty(_freObject, name));
+            uint resultPtr = 0;
+            var ret = new FreObjectSharp(FreSharpHelper.Core.getProperty(_freObject, name, ref resultPtr));
+            var status = (FreResultSharp)resultPtr;
+            if (status == FreResultSharp.Ok) {
+                return ret;
+            }
+            ThrowFreException(status, "cannot get property " + name);
+            return null;
         }
 
         /// <summary>
@@ -134,7 +238,13 @@ namespace FreSharp {
         /// <param name="name"></param>
         /// <param name="value"></param>
         public void SetProperty(string name, FreObjectSharp value) {
-            FreSharpHelper.Core.setProperty(_freObject, name, value.Get());
+            uint resultPtr = 0;
+            FreSharpHelper.Core.setProperty(_freObject, name, value.Get(), ref resultPtr);
+            var status = (FreResultSharp)resultPtr;
+            if (status == FreResultSharp.Ok) {
+                return;
+            }
+            ThrowFreException(status, "cannot set property " + name);
         }
 
         /// <summary>
@@ -143,7 +253,13 @@ namespace FreSharp {
         /// <param name="name"></param>
         /// <param name="value"></param>
         public void SetProperty(string name, string value) {
-            FreSharpHelper.Core.setProperty(_freObject,name,value);
+            uint resultPtr = 0;
+            FreSharpHelper.Core.setProperty(_freObject, name, value, ref resultPtr);
+            var status = (FreResultSharp)resultPtr;
+            if (status == FreResultSharp.Ok) {
+                return;
+            }
+            ThrowFreException(status, "cannot set property " + name);
         }
 
         /// <summary>
@@ -152,7 +268,13 @@ namespace FreSharp {
         /// <param name="name"></param>
         /// <param name="value"></param>
         public void SetProperty(string name, double value) {
-            FreSharpHelper.Core.setProperty(_freObject, name, value);
+            uint resultPtr = 0;
+            FreSharpHelper.Core.setProperty(_freObject, name, value, ref resultPtr);
+            var status = (FreResultSharp)resultPtr;
+            if (status == FreResultSharp.Ok) {
+                return;
+            }
+            ThrowFreException(status, "cannot set property " + name);
         }
 
         /// <summary>
@@ -161,7 +283,13 @@ namespace FreSharp {
         /// <param name="name"></param>
         /// <param name="value"></param>
         public void SetProperty(string name, bool value) {
-            FreSharpHelper.Core.setProperty(_freObject, name, value);
+            uint resultPtr = 0;
+            FreSharpHelper.Core.setProperty(_freObject, name, value, ref resultPtr);
+            var status = (FreResultSharp)resultPtr;
+            if (status == FreResultSharp.Ok) {
+                return;
+            }
+            ThrowFreException(status, "cannot set property " + name);
         }
 
         /// <summary>
@@ -170,7 +298,13 @@ namespace FreSharp {
         /// <param name="name"></param>
         /// <param name="value"></param>
         public void SetProperty(string name, int value) {
-            FreSharpHelper.Core.setProperty(_freObject, name, value);
+            uint resultPtr = 0;
+            FreSharpHelper.Core.setProperty(_freObject, name, value, ref resultPtr);
+            var status = (FreResultSharp)resultPtr;
+            if (status == FreResultSharp.Ok) {
+                return;
+            }
+            ThrowFreException(status, "cannot set property " + name);
         }
 
         /// <summary>
@@ -179,7 +313,13 @@ namespace FreSharp {
         /// <param name="name"></param>
         /// <param name="value"></param>
         public void SetProperty(string name, uint value) {
-            FreSharpHelper.Core.setProperty(_freObject, name, value);
+            uint resultPtr = 0;
+            FreSharpHelper.Core.setProperty(_freObject, name, value, ref resultPtr);
+            var status = (FreResultSharp)resultPtr;
+            if (status == FreResultSharp.Ok) {
+                return;
+            }
+            ThrowFreException(status, "cannot set property " + name);
         }
 
         /// <summary>
@@ -187,7 +327,8 @@ namespace FreSharp {
         /// </summary>
         /// <returns></returns>
         public new FreObjectTypeSharp GetType() {
-            var type = (FreObjectTypeSharp) FreSharpHelper.Core.getType(_freObject);
+            uint resultPtr = 0;
+            var type = (FreObjectTypeSharp)FreSharpHelper.Core.getType(_freObject, ref resultPtr);
             return FreObjectTypeSharp.Number == type || FreObjectTypeSharp.Object == type
                 ? GetActionscriptType()
                 : type;
@@ -212,6 +353,62 @@ namespace FreSharp {
                 default:
                     return FreObjectTypeSharp.Custom;
             }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public Dictionary<string, object> GetAsDictionary() {
+            var ret = new Dictionary<string, object>();
+            var aneUtils = new FreObjectSharp("com.tuarua.ANEUtils", null);
+            var paramsArray = new ArrayList {
+                this
+            };
+            var classProps = aneUtils.CallMethod("getClassProps", paramsArray, true);
+            if (classProps == null) return ret;
+            var arrayLength = classProps.GetLength();
+            for (uint i = 0; i < arrayLength; i++) {
+                var elem = classProps.GetObjectAt(i);
+                var propNameAs = elem.GetProperty("name");
+                var propName = propNameAs.GetAsString();
+                var propVal = GetProperty(propName);
+                ret.Add(propName, propVal.GetAsObject());
+            }
+            return ret;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public object GetAsObject() {
+            var objectType = GetType();
+            switch (objectType) {
+                case FreObjectTypeSharp.Object:
+                case FreObjectTypeSharp.Custom:
+                    return GetAsDictionary();
+                case FreObjectTypeSharp.Number:
+                    return GetAsDouble();
+                case FreObjectTypeSharp.String:
+                    return GetAsString();
+                case FreObjectTypeSharp.Bytearray: //TODO
+                    break;
+                case FreObjectTypeSharp.Array:
+                case FreObjectTypeSharp.Vector:  //TODO
+                    break;
+                case FreObjectTypeSharp.Bitmapdata: //TODO
+                    break;
+                case FreObjectTypeSharp.Boolean:
+                    return GetAsBool();
+                case FreObjectTypeSharp.Null:
+                    return null;
+                case FreObjectTypeSharp.Int:
+                    return GetAsInt();
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+            return true;
         }
 
         /// <summary>

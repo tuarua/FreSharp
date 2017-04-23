@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extension xmlns="http://ns.adobe.com/air/extension/19.0">
+    <id>com.tuarua.FreSharpExampleANE</id>
+    <name>FreSharp Example ANE</name>
+    <copyright>his work is licensed under MIT License, Copyright (c) 2017 Tua Rua Ltd.</copyright>
+    <versionNumber>0.0.1</versionNumber>
+	<platforms>
+        <platform name="Windows-x86">
+            <applicationDeployment>
+                <nativeLibrary>FreSharpExampleANE.dll</nativeLibrary>
+                <initializer>TRFSExtInizer</initializer>
+                <finalizer>TRFSExtFinizer</finalizer>
+            </applicationDeployment>
+        </platform>
+	</platforms>
+</extension>

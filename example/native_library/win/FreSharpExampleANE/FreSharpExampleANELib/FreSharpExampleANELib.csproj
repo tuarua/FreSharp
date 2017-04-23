@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{02DF5A34-4BD0-42D1-A150-64A886A335C0}</ProjectGuid>
+    <ProjectGuid>{78C09EFA-FE09-4BB0-A14A-E95A98A13E2A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>FreSharp</RootNamespace>
-    <AssemblyName>FreSharp</AssemblyName>
+    <RootNamespace>FreExampleSharpLib</RootNamespace>
+    <AssemblyName>FreSharpExampleANELib</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -21,7 +21,6 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x86</PlatformTarget>
-    <DocumentationFile>bin\Debug\FreSharp.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -31,9 +30,16 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x86</PlatformTarget>
-    <DocumentationFile>bin\Release\FreSharp.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FreSharp, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <HintPath>..\packages\TuaRua.FreSharp.1.0.1\lib\net452\FreSharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="FreSharpCore, Version=0.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <HintPath>..\packages\TuaRua.FreSharp.1.0.1\lib\net452\FreSharpCore.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -45,29 +51,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Exceptions\FreActionscriptErrorException.cs" />
-    <Compile Include="FreArraySharp.cs" />
-    <Compile Include="Exceptions\FreInvalidArgumentException.cs" />
-    <Compile Include="Exceptions\FreInvalidObjectException.cs" />
-    <Compile Include="Exceptions\FreIllegalStateException.cs" />
-    <Compile Include="Exceptions\FreInsufficientMemoryException.cs" />
-    <Compile Include="FreBitmapDataSharp.cs" />
-    <Compile Include="FreByteArraySharp.cs" />
-    <Compile Include="FreObjectSharp.cs" />
-    <Compile Include="FreObjectTypeSharp.cs" />
-    <Compile Include="Exceptions\FreReadOnlyException.cs" />
-    <Compile Include="FreResultSharp.cs" />
-    <Compile Include="FreSharp.cs" />
-    <Compile Include="Exceptions\FreTypeMismatchException.cs" />
-    <Compile Include="Exceptions\NoSuchNameException.cs" />
-    <Compile Include="Exceptions\FreWrongThreadException.cs" />
+    <Compile Include="FreSharpController.cs" />
+    <Compile Include="MainController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FRESharpCore\FRESharpCore.vcxproj">
-      <Project>{8f6a0939-4f4d-48ee-a417-17c4e1b90c57}</Project>
-      <Name>FreSharpCore</Name>
-    </ProjectReference>
+    <Content Include="README.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

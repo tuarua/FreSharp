@@ -38,9 +38,154 @@
             Sets the C# FreObject in the C# FreArray at i.
             </summary>
         </member>
+        <member name="M:FreSharp.FreArraySharp.GetAsArrayList">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:FreSharp.FreArraySharp.Get">
             <summary>
-            Returns the associated C FREObject of the C# FreArray.
+            Returns the associated C FREObject of the C# FREArray.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:FreSharp.FreBitmapDataSharp">
+            <summary>
+            FreBitmapDataSharp wraps a C FREBitmapData with helper methods.
+            </summary>
+        </member>
+        <member name="F:FreSharp.FreBitmapDataSharp.Width">
+            <summary>
+            An int that specifies the width, in pixels, of the bitmap. 
+            This value corresponds to the width property of the ActionScript BitmapData class object. 
+            This field is read-only. 
+            </summary>
+        </member>
+        <member name="F:FreSharp.FreBitmapDataSharp.Height">
+            <summary>
+            An int that specifies the height, in pixels, of the bitmap. 
+            This value corresponds to the height property of the ActionScript BitmapData class object. 
+            This field is read-only. 
+            </summary>
+        </member>
+        <member name="F:FreSharp.FreBitmapDataSharp.HasAlpha">
+            <summary>
+            A bool that indicates whether the bitmap supports per-pixel transparency. 
+            This value corresponds to the transparent property of the ActionScript BitmapData class object. 
+            If the value is non-zero, then the pixel format is ARGB32. 
+            If the value is zero, the pixel format is _RGB32. Whether the value is big endian or 
+            little endian depends on the host device. This field is read-only.
+            </summary>
+        </member>
+        <member name="F:FreSharp.FreBitmapDataSharp.IsPremultiplied">
+            <summary>
+            A bool that indicates whether the bitmap pixels are stored as premultiplied color values. 
+            This field is read-only. 
+            </summary>
+        </member>
+        <member name="F:FreSharp.FreBitmapDataSharp.IsInvertedY">
+            <summary>
+            A bool that indicates the order in which the rows of bitmap data in the image are stored. 
+            A non-zero value means that the bottom row of the image appears first in the image data 
+            (in other words, the first value in the bits32 array is the first pixel of the last row in the image). 
+            This field is read-only.
+            </summary>
+        </member>
+        <member name="F:FreSharp.FreBitmapDataSharp.LineStride32">
+            <summary>
+            An int that specifies the number of int values per scanline. 
+            This value is typically the same as the width parameter. 
+            This field is read-only.
+            </summary>
+        </member>
+        <member name="F:FreSharp.FreBitmapDataSharp.Bits32">
+            <summary>
+            A pointer to a int. This value is an array of int values. Each value is one pixel of the bitmap.
+            </summary>
+        </member>
+        <member name="M:FreSharp.FreBitmapDataSharp.#ctor">
+            <summary>
+            Creates an empty C# FREBitmapData
+            </summary>
+        </member>
+        <member name="M:FreSharp.FreBitmapDataSharp.#ctor(System.IntPtr)">
+            <summary>
+            Creates a C# FREBitmapData from a C FREBitmapData2
+            </summary>
+            <param name="freBitmapData"></param>
+        </member>
+        <member name="M:FreSharp.FreBitmapDataSharp.#ctor(System.Drawing.Bitmap)">
+            <summary>
+            Creates a C# FREBitmapData from a C# Bitmap
+            </summary>
+            <param name="bitmap"></param>
+        </member>
+        <member name="M:FreSharp.FreBitmapDataSharp.Release">
+            <summary>
+            Calls FREReleaseBitmapData on the C FREBitmapData2
+            </summary>
+        </member>
+        <member name="M:FreSharp.FreBitmapDataSharp.Acquire">
+            <summary>
+            Calls FREAcquireBitmapData2 on the C FREBitmapData2
+            </summary>
+        </member>
+        <member name="M:FreSharp.FreBitmapDataSharp.InvalidateBitmapDataRect(System.UInt32,System.UInt32,System.UInt32,System.UInt32)">
+            <summary>
+            Calls FREInvalidateBitmapDataRect on the C FREBitmapData2
+            </summary>
+        </member>
+        <member name="M:FreSharp.FreBitmapDataSharp.GetAsBitmap">
+            <summary>
+            Converts the FREBitmapData into a C# Bitmap
+            </summary>
+        </member>
+        <member name="M:FreSharp.FreBitmapDataSharp.Get">
+            <summary>
+            Returns the associated C FREBitmapData2 of the C# FREBitmapData.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:FreSharp.FreByteArraySharp">
+            <summary>
+            FreByteArraySharp wraps a C FREByteArray with helper methods.
+            </summary>
+        </member>
+        <member name="P:FreSharp.FreByteArraySharp.Length">
+            <summary>
+            The number of bytes in the bytes array.
+            </summary>
+        </member>
+        <member name="P:FreSharp.FreByteArraySharp.Bytes">
+            <summary>
+            The Byte Array 
+            </summary>
+        </member>
+        <member name="M:FreSharp.FreByteArraySharp.#ctor">
+            <summary>
+            Creates an empty C# FREByteArray
+            </summary>
+        </member>
+        <member name="M:FreSharp.FreByteArraySharp.#ctor(System.IntPtr)">
+            <summary>
+            Creates a C# FREByteArray from a C FREByteArray
+            </summary>
+            <param name="freByteArray"></param>
+        </member>
+        <member name="M:FreSharp.FreByteArraySharp.Acquire">
+            <summary>
+            Calls FREAcquireByteArray on the C FREByteArray
+            </summary>
+        </member>
+        <member name="M:FreSharp.FreByteArraySharp.Release">
+            <summary>
+            Calls FREReleaseByteArray on the C FREByteArray
+            </summary>
+        </member>
+        <member name="M:FreSharp.FreByteArraySharp.Get">
+            <summary>
+            Returns the associated C FREByteArray of the C# FREByteArray.
             </summary>
             <returns></returns>
         </member>
@@ -103,6 +248,15 @@
             </summary>
             <param name="methodName"></param>
             <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FreSharp.FreObjectSharp.CallMethod(System.String,System.Collections.ArrayList,System.Boolean)">
+            <summary>
+            
+            </summary>
+            <param name="methodName"></param>
+            <param name="args"></param>
+            <param name="returnArray"></param>
             <returns></returns>
         </member>
         <member name="M:FreSharp.FreObjectSharp.GetAsString">
@@ -190,6 +344,18 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:FreSharp.FreObjectSharp.GetAsDictionary">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FreSharp.FreObjectSharp.GetAsObject">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:FreSharp.FreObjectSharp.Get">
             <summary>
             Returns the associated C FREObject of the C# FREObject.
@@ -254,6 +420,61 @@
         <member name="F:FreSharp.FreObjectTypeSharp.Custom">
             <summary>
             Custom. A Class that the user as created
+            </summary>
+        </member>
+        <member name="T:FreSharp.FreResultSharp">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:FreSharp.FreResultSharp.Ok">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:FreSharp.FreResultSharp.NoSuchName">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:FreSharp.FreResultSharp.FreInvalidObject">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:FreSharp.FreResultSharp.FreTypeMismatch">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:FreSharp.FreResultSharp.FreActionscriptError">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:FreSharp.FreResultSharp.FreInvalidArgument">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:FreSharp.FreResultSharp.FreReadOnly">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:FreSharp.FreResultSharp.FreWrongThread">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:FreSharp.FreResultSharp.FreIllegalState">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:FreSharp.FreResultSharp.FreInsufficientMemory">
+            <summary>
+            
             </summary>
         </member>
         <member name="T:FreSharp.FreSharpHelper">

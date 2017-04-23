@@ -27,7 +27,7 @@ namespace FreSharp {
         /// <param name="name"></param>
         /// <param name="value"></param>
         public void DispatchEvent(string name, string value) {
-           Core.dispatchEvent(name, value);
+            Core.dispatchEvent(name, value);
         }
 
         /// <summary>
