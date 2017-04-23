@@ -9,6 +9,27 @@ Please see the feature rich example in https://github.com/tuarua/FreSharp/tree/m
 
 The package is hosted on NuGet at https://www.nuget.org/packages/TuaRua.FreSharp/
 
+----------
+
+### How to use
+######  The methods exposed by FreSharp are very similar to the Java API for Air Native Extensions. 
+
+Example - Convert a FREObject into a String, and String into FREObject
+
+````C#
+var inFre = argv[0];
+try {
+  var airString = new FreObjectSharp(inFre).GetAsString();
+  Trace("String passed from AIR:" + airString);
+}
+catch (Exception e) {
+  Console.WriteLine(@"caught in C#: type: {0} message: {1}", e.GetType(), e.Message);
+}
+const string sharpString = "I am a string from C#";
+return new FreObjectSharp(sharpString).Get();
+`````
+
+
 ### Tech
 
 Uses .NET 4.5.2
