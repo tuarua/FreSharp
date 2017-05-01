@@ -1,5 +1,6 @@
 package {
 
+import com.tuarua.ANEError;
 import com.tuarua.Person;
 import com.tuarua.FreSharpExampleANE;
 
@@ -43,8 +44,6 @@ public class Main extends Sprite {
         person.city.name = "Dunleer";
 
 
-
-
         var resultString:String = ane.runStringTests("I am a string from AIR with new interface");
         textField.text += resultString + "\n";
 
@@ -59,12 +58,12 @@ public class Main extends Sprite {
         var myArray:Array = new Array();
         myArray.push(3, 1, 4, 2, 6, 5);
         var resultArray:Array = ane.runArrayTests(myArray);
-        if(resultArray)
+        if (resultArray)
             textField.text += "Array: " + resultArray.toString() + "\n";
 
 
         var resultObject:Person = ane.runObjectTests(person) as Person;
-        if(resultObject){
+        if (resultObject) {
             textField.text += "Person.age: " + resultObject.age.toString() + "\n";
         }
 
@@ -77,7 +76,7 @@ public class Main extends Sprite {
         function ldr_complete(evt:Event):void {
             var bmp:Bitmap = ldr.content as Bitmap;
             var bmd:BitmapData = ane.runBitmapTests(bmp.bitmapData);
-            if(bmd){
+            if (bmd) {
                 var bitmap:Bitmap = new Bitmap(bmd);
                 bitmap.y = 150;
                 addChild(bitmap);
@@ -89,12 +88,23 @@ public class Main extends Sprite {
         myByteArray.writeUTFBytes("C# in an ANE. Say whaaaat!");
         ane.runByteArrayTests(myByteArray);
 
+        //catch the error in C# only
         ane.runErrorTests(person, "test string", 78);
+
+        //catch the error in as
+        try {
+            ane.runErrorTests2("abc");
+        } catch (e:ANEError) {
+            trace(e.message);
+            trace(e.type);
+            trace(e.errorID);
+            trace(e.getStackTrace());
+        }
 
 
         /*var inData:String = "Saved and returned"; //TODO
-        var outData:String = ane.runDataTests(inData) as String;
-        textField.text += outData + "\n";*/
+         var outData:String = ane.runDataTests(inData) as String;
+         textField.text += outData + "\n";*/
 
 
         addChild(textField);

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using FreSharp;
+using FreSharp.Exceptions;
 using FREObject = System.IntPtr;
 using FREContext = System.IntPtr;
 
@@ -21,9 +22,9 @@ namespace FreExampleSharpLib {
                     {"runByteArrayTests", RunByteArrayTests},
                     {"runErrorTests", RunErrorTests},
                     {"runDataTests", RunDataTests},
-
+                    {"runErrorTests2", RunErrorTests2},
                 };
-
+            
 
             return FunctionsDict.Select(kvp => kvp.Key).ToArray();
         }
@@ -83,7 +84,18 @@ namespace FreExampleSharpLib {
                 Trace(e.StackTrace);
             }
 
+            return FREObject.Zero;
+        }
 
+        private FREObject RunErrorTests2(FREContext ctx, uint argc, FREObject[] argv) {
+            Trace("***********Start Error Handling test 2***********");
+            var testString = new FreObjectSharp(argv[0]);
+            try {
+                testString.GetAsInt(); //get as wrong type
+            }
+            catch (Exception e) {
+                return new FreException(e).Get(); //return as3 error and throw in swc
+            }
             return FREObject.Zero;
         }
 
@@ -191,8 +203,7 @@ namespace FreExampleSharpLib {
                 Trace("Uint passed from AIR: " + airUint);
             }
             catch (Exception e) {
-                //TODO Trace with params
-                Console.WriteLine(@"caught in C#: type: {0} message: {1}", e.GetType(), e.Message);
+                Console.WriteLine($@"caught in C#: type: {e.GetType()} message: {e.Message}");
             }
             const int sharpInt = -666;
             const uint sharpUInt = 888;
@@ -224,7 +235,7 @@ namespace FreExampleSharpLib {
                 Trace("String passed from AIR:" + airString);
             }
             catch (Exception e) {
-                Console.WriteLine(@"caught in C#: type: {0} message: {1}", e.GetType(), e.Message);
+                Console.WriteLine($@"caught in C#: type: {e.GetType()} message: {e.Message}");
             }
 
             const string sharpString = "I am a string from C#";

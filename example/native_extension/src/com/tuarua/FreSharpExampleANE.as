@@ -23,7 +23,6 @@ public class FreSharpExampleANE extends EventDispatcher {
         } catch (e:Error) {
             trace("[" + NAME + "] ANE Not loaded properly.  Future calls will fail.");
         }
-
     }
 
     private function gotEvent(event:StatusEvent):void {
@@ -39,44 +38,43 @@ public class FreSharpExampleANE extends EventDispatcher {
         return extensionContext.call("runStringTests", value) as String;
     }
 
-
     public function runNumberTests(value:Number):Number {
         return extensionContext.call("runNumberTests", value) as Number;
     }
-
 
     public function runIntTests(value:int, value2:uint):int {
         return extensionContext.call("runIntTests", value, value2) as int;
     }
 
-
     public function runArrayTests(value:Array):Array {
         return extensionContext.call("runArrayTests", value) as Array;
     }
-
 
     public function runObjectTests(value:Person):Person {
         return extensionContext.call("runObjectTests", value) as Person;
     }
 
-
     public function runBitmapTests(bmd:BitmapData):BitmapData {
        return extensionContext.call("runBitmapTests", bmd) as BitmapData;
     }
-
 
     public function runByteArrayTests(byteArray:ByteArray):void {
         extensionContext.call("runByteArrayTests", byteArray);
     }
 
-
     public function runDataTests(value:String):String {
         return extensionContext.call("runDataTests", value) as String;
     }
 
+    public function runErrorTests(value:Person, string:String, int:int):void {
+        extensionContext.call("runErrorTests", value, string, int);
+    }
 
-    public function runErrorTests(value:Person, string:String, int:int):String {
-        return extensionContext.call("runErrorTests", value, string, int) as String;
+    public function runErrorTests2(string:String):void {
+        var theRet:* = extensionContext.call("runErrorTests2",string);
+        if(theRet is ANEError){
+            throw theRet as ANEError;
+        }
     }
 
     public function dispose():void {

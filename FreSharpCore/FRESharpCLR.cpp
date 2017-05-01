@@ -32,59 +32,110 @@ namespace FRESharpCore {
 	FREObjectCLR FRESharpCLR::getProperty(FREObjectCLR freObject, String^ propertyName, UInt32% freresult) {
 		std::string propertyNameStr = "";
 		MarshalString(propertyName, propertyNameStr);
-		FREObject result = nullptr;
+		FREObject ret = nullptr;
 		FREObject thrownException = nullptr;
 		freresult = FREGetObjectProperty(freObject.ToPointer(), reinterpret_cast<const uint8_t *>(propertyNameStr.data()),
-			&result, &thrownException);
-		return FREObjectCLR(result);
+			&ret, &thrownException);
+
+		if (FRE_OK == freresult) {
+			return FREObjectCLR(ret);
+		} else {
+			return FREObjectCLR(thrownException);
+		}
 	}
 
-	void FRESharpCLR::setProperty(FREObjectCLR freObject, String^ name, FREObjectCLR value, UInt32% freresult) {
+	FREObjectCLR FRESharpCLR::setProperty(FREObjectCLR freObject, String^ name, FREObjectCLR value, UInt32% freresult) {
 		std::string nameStr = "";
 		MarshalString(name, nameStr);
+		FREObject ret = nullptr;
 		FREObject thrownException = nullptr;
 		freresult = FRESetObjectProperty(freObject.ToPointer(), reinterpret_cast<const uint8_t *>(nameStr.c_str()),
 			value.ToPointer(), &thrownException);
+
+		if (FRE_OK == freresult) {
+			return FREObjectCLR(ret);
+		} else {
+			return FREObjectCLR(thrownException);
+		}
 	}
 
-	void FRESharpCLR::setProperty(FREObjectCLR freObject, String^ name, String^ value, UInt32% freresult) {
+	FREObjectCLR FRESharpCLR::setProperty(FREObjectCLR freObject, String^ name, String^ value, UInt32% freresult) {
 		std::string nameStr = "";
 		MarshalString(name, nameStr);
+		FREObject ret = nullptr;
 		FREObject thrownException = nullptr;
 		freresult = FRESetObjectProperty(freObject.ToPointer(), reinterpret_cast<const uint8_t *>(nameStr.c_str()),
 			getFREObject(value, freresult).ToPointer(), &thrownException);
+
+		if (FRE_OK == freresult) {
+			return FREObjectCLR(ret);
+		} else {
+			return FREObjectCLR(thrownException);
+		}
 	}
 
-	void FRESharpCLR::setProperty(FREObjectCLR freObject, String^ name, double value, UInt32% freresult) {
+	FREObjectCLR FRESharpCLR::setProperty(FREObjectCLR freObject, String^ name, double value, UInt32% freresult) {
 		std::string nameStr = "";
 		MarshalString(name, nameStr);
+		FREObject ret = nullptr;
+		FREObject thrownException = nullptr;
+
+		freresult = FRESetObjectProperty(freObject.ToPointer(), reinterpret_cast<const uint8_t *>(nameStr.c_str()),
+			getFREObject(value, freresult).ToPointer(), &thrownException);
+
+		if (FRE_OK == freresult) {
+			return FREObjectCLR(ret);
+		} else {
+			return FREObjectCLR(thrownException);
+		}
+	}
+
+	FREObjectCLR FRESharpCLR::setProperty(FREObjectCLR freObject, String^ name, bool value, UInt32% freresult) {
+		std::string nameStr = "";
+		MarshalString(name, nameStr);
+		FREObject ret = nullptr;
 		FREObject thrownException = nullptr;
 		freresult = FRESetObjectProperty(freObject.ToPointer(), reinterpret_cast<const uint8_t *>(nameStr.c_str()),
 			getFREObject(value, freresult).ToPointer(), &thrownException);
+
+		if (FRE_OK == freresult) {
+			return FREObjectCLR(ret);
+		}
+		else {
+			return FREObjectCLR(thrownException);
+		}
 	}
 
-	void FRESharpCLR::setProperty(FREObjectCLR freObject, String^ name, bool value, UInt32% freresult) {
+	FREObjectCLR FRESharpCLR::setProperty(FREObjectCLR freObject, String^ name, Int32 value, UInt32% freresult) {
 		std::string nameStr = "";
 		MarshalString(name, nameStr);
+		FREObject ret = nullptr;
 		FREObject thrownException = nullptr;
 		freresult = FRESetObjectProperty(freObject.ToPointer(), reinterpret_cast<const uint8_t *>(nameStr.c_str()),
 			getFREObject(value, freresult).ToPointer(), &thrownException);
+
+		if (FRE_OK == freresult) {
+			return FREObjectCLR(ret);
+		}
+		else {
+			return FREObjectCLR(thrownException);
+		}
 	}
 
-	void FRESharpCLR::setProperty(FREObjectCLR freObject, String^ name, Int32 value, UInt32% freresult) {
+	FREObjectCLR FRESharpCLR::setProperty(FREObjectCLR freObject, String^ name, UInt32 value, UInt32% freresult) {
 		std::string nameStr = "";
 		MarshalString(name, nameStr);
+		FREObject ret = nullptr;
 		FREObject thrownException = nullptr;
 		freresult = FRESetObjectProperty(freObject.ToPointer(), reinterpret_cast<const uint8_t *>(nameStr.c_str()),
 			getFREObject(value, freresult).ToPointer(), &thrownException);
-	}
 
-	void FRESharpCLR::setProperty(FREObjectCLR freObject, String^ name, UInt32 value, UInt32% freresult) {
-		std::string nameStr = "";
-		MarshalString(name, nameStr);
-		FREObject thrownException = nullptr;
-		freresult = FRESetObjectProperty(freObject.ToPointer(), reinterpret_cast<const uint8_t *>(nameStr.c_str()),
-			getFREObject(value, freresult).ToPointer(), &thrownException);
+		if (FRE_OK == freresult) {
+			return FREObjectCLR(ret);
+		}
+		else {
+			return FREObjectCLR(thrownException);
+		}
 	}
 
 	FREObjectCLR FRESharpCLR::getFREObject(bool value, UInt32% freresult) {
@@ -119,30 +170,41 @@ namespace FRESharpCore {
 
 		if (argc == 0) {
 			freresult = FRENewObject(reinterpret_cast<const uint8_t *>(classNameStr.data()), 0, nullptr, &ret, &thrownException);
-		}
-		else {
+		} else {
 			pin_ptr<FREObject> argvM = &mArr[0];
 			freresult = FRENewObject(reinterpret_cast<const uint8_t *>(classNameStr.data()), argc, argvM, &ret, &thrownException);
 		}
-
-		return FREObjectCLR(ret);
-
+		if (FRE_OK == freresult) {
+			return FREObjectCLR(ret);
+		} else {
+			return FREObjectCLR(thrownException);
+		}
 	}
 
-	FREObjectCLR FRESharpCLR::callMethod(FREObjectCLR freObject, String ^ className, array<FREObjectCLR>^ argv, UInt32 argc, UInt32% freresult) {
-		std::string classNameStr = "";
-		MarshalString(className, classNameStr);
-
+	FREObjectCLR FRESharpCLR::callMethod(FREObjectCLR freObject, String ^ methodName, array<FREObjectCLR>^ argv, UInt32 argc, UInt32% freresult) {
+		std::string methodNameStr = "";
+		MarshalString(methodName, methodNameStr);
 		array<FREObject>^ mArr = gcnew array<FREObject>(argc);
 		for (uint32_t i = 0; i < argc; i++) {
 			mArr[i] = argv[i].ToPointer();
 		}
-		pin_ptr<FREObject> argvM = &mArr[0];
-
 		FREObject ret;
 		FREObject thrownException = nullptr;
-		freresult = FRECallObjectMethod(freObject.ToPointer(), reinterpret_cast<const uint8_t *>(classNameStr.data()), argc, argvM, &ret, &thrownException);
-		return FREObjectCLR(ret);
+
+		if (argc == 0) {
+			freresult = FRECallObjectMethod(freObject.ToPointer(), reinterpret_cast<const uint8_t *>(methodNameStr.data()), 0, nullptr, &ret, &thrownException);
+		} else {
+			pin_ptr<FREObject> argvM = &mArr[0];
+			freresult = FRECallObjectMethod(freObject.ToPointer(), reinterpret_cast<const uint8_t *>(methodNameStr.data()), argc, argvM, &ret, &thrownException);
+		}
+		
+		if (FRE_OK == freresult) {
+			return FREObjectCLR(ret);
+		} else {
+			return FREObjectCLR(thrownException);//TODO LIKE THIS
+		}
+
+		
 	}
 
 	String ^ FRESharpCLR::getString(FREObjectCLR freObject, UInt32% freresult) {

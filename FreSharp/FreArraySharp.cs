@@ -30,7 +30,7 @@ namespace FreSharp {
             if (status == FreResultSharp.Ok) {
                 return ret;
             }
-            ThrowFreException(status, "cannot get FREObject as Double");
+            ThrowFreException(status, "cannot get FREObject as Double", null);
             return 0;
         }
 
@@ -83,7 +83,7 @@ namespace FreSharp {
                     case FreObjectTypeSharp.Int:
                         al.Add(GetAsInt());
                         break;
-                    case FreObjectTypeSharp.Custom:
+                    case FreObjectTypeSharp.Class:
                         break;
                     case FreObjectTypeSharp.Number:
                         al.Add(GetAsDouble());

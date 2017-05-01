@@ -44,8 +44,8 @@
         /// </summary>
         Int,
         /// <summary>
-        /// Custom. A Class that the user as created
+        /// Class. 
         /// </summary>
-        Custom
+        Class
     }
 }

@@ -12,11 +12,14 @@ namespace FreExampleSharpLib {
         public FREObject CallSharpFunction(string name, ref FREContext ctx, uint argc, FREObject[] argv) {
             return FunctionsDict[name].Invoke(ctx, argc, argv);
         }
+
         public void SetFreContext(ref FREContext freContext) {
             FreHelper.SetFreContext(ref freContext);
         }
+
         public void Trace(string value) {
             FreHelper.DispatchEvent("TRACE", value);
         }
+
     }
 }

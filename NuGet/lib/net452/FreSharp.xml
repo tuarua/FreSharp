@@ -4,6 +4,23 @@
         <name>FreSharp</name>
     </assembly>
     <members>
+        <member name="T:FreSharp.Exceptions.FreException">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:FreSharp.Exceptions.FreException.#ctor(System.Exception)">
+            <summary>
+            
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:FreSharp.Exceptions.FreException.Get">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:FreSharp.FreArraySharp">
             <summary>
              FreArraySharp wraps a C FREObject (Array or Vector) with helper methods.
@@ -417,9 +434,9 @@
             Int
             </summary>
         </member>
-        <member name="F:FreSharp.FreObjectTypeSharp.Custom">
+        <member name="F:FreSharp.FreObjectTypeSharp.Class">
             <summary>
-            Custom. A Class that the user as created
+            Class. 
             </summary>
         </member>
         <member name="T:FreSharp.FreResultSharp">

@@ -53,6 +53,7 @@
     <Compile Include="Exceptions\FreInsufficientMemoryException.cs" />
     <Compile Include="FreBitmapDataSharp.cs" />
     <Compile Include="FreByteArraySharp.cs" />
+    <Compile Include="Exceptions\FreException.cs" />
     <Compile Include="FreObjectSharp.cs" />
     <Compile Include="FreObjectTypeSharp.cs" />
     <Compile Include="Exceptions\FreReadOnlyException.cs" />
