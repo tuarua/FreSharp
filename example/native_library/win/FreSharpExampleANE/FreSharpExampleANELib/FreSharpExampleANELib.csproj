@@ -40,6 +40,7 @@
       <HintPath>..\packages\TuaRua.FreSharp.1.0.4\lib\net452\FreSharpCore.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -51,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FreRectangleSharp.cs" />
     <Compile Include="FreSharpController.cs" />
     <Compile Include="MainController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

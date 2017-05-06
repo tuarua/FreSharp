@@ -6,6 +6,7 @@ import flash.display.BitmapData;
 import flash.events.EventDispatcher;
 import flash.events.StatusEvent;
 import flash.external.ExtensionContext;
+import flash.geom.Rectangle;
 import flash.utils.ByteArray;
 
 public class FreSharpExampleANE extends EventDispatcher {
@@ -52,6 +53,10 @@ public class FreSharpExampleANE extends EventDispatcher {
 
     public function runObjectTests(value:Person):Person {
         return extensionContext.call("runObjectTests", value) as Person;
+    }
+
+    public function runExtensibleTests():Rectangle {
+        return extensionContext.call("runExtensibleTests") as Rectangle;
     }
 
     public function runBitmapTests(bmd:BitmapData):BitmapData {

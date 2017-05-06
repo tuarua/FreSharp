@@ -137,7 +137,23 @@ namespace FreSharp {
             return "";
         }
 
-        internal static void ThrowFreException(FreResultSharp status, string message, FreObjectSharp freObject) {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="status"></param>
+        /// <param name="message"></param>
+        /// <param name="freObject"></param>
+        /// <exception cref="FreActionscriptErrorException"></exception>
+        /// <exception cref="NoSuchNameException"></exception>
+        /// <exception cref="FreInvalidObjectException"></exception>
+        /// <exception cref="FreTypeMismatchException"></exception>
+        /// <exception cref="FreInvalidArgumentException"></exception>
+        /// <exception cref="FreReadOnlyException"></exception>
+        /// <exception cref="FreWrongThreadException"></exception>
+        /// <exception cref="FreIllegalStateException"></exception>
+        /// <exception cref="FreInsufficientMemoryException"></exception>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        public static void ThrowFreException(FreResultSharp status, string message, FreObjectSharp freObject) {
             if (FreObjectTypeSharp.Class == freObject?.GetType()) {
                 try {
                     var hasStackTrace = freObject.CallMethod("hasOwnProperty", new ArrayList {

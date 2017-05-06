@@ -58,7 +58,7 @@
     <Compile Include="FreObjectTypeSharp.cs" />
     <Compile Include="Exceptions\FreReadOnlyException.cs" />
     <Compile Include="FreResultSharp.cs" />
-    <Compile Include="FreSharp.cs" />
+    <Compile Include="FreSharpHelper.cs" />
     <Compile Include="Exceptions\FreTypeMismatchException.cs" />
     <Compile Include="Exceptions\NoSuchNameException.cs" />
     <Compile Include="Exceptions\FreWrongThreadException.cs" />

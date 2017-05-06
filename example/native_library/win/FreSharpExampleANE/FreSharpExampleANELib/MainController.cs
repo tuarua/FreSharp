@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
+using System.Windows.Media.Media3D;
 using FreSharp;
 using FreSharp.Exceptions;
 using FREObject = System.IntPtr;
@@ -18,6 +20,7 @@ namespace FreExampleSharpLib {
                     {"runIntTests", RunIntTests},
                     {"runArrayTests", RunArrayTests},
                     {"runObjectTests", RunObjectTests},
+                    {"runExtensibleTests", RunExtensibleTests},
                     {"runBitmapTests", RunBitmapTests},
                     {"runByteArrayTests", RunByteArrayTests},
                     {"runErrorTests", RunErrorTests},
@@ -164,7 +167,24 @@ namespace FreExampleSharpLib {
             var name = city["name"];
             Trace("what is the city name: " + name);
 
+           
+
             return person.Get();
+        }
+
+        private FREObject RunExtensibleTests(FREContext ctx, uint argc, FREObject[] argv) {
+            var rect = new Rectangle(0, 0, 200, 100);
+
+            // FreRectangleSharp is a new FreXXXSharp type which is extended from FreObjectSharp
+            // It is written within out project and not part of FreSharp.
+            // This enables more and more as3 classes to be ported to FRE !!
+
+            //var point = new Point(0,50); //as3 has equivalent
+            //var vector3D = new Vector3D(0.2,2,3); //as3 has equivalent
+
+            
+
+            return new FreRectangleSharp(rect).Get();
         }
 
         private FREObject RunArrayTests(FREContext ctx, uint argc, FREObject[] argv) {

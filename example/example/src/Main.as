@@ -13,6 +13,8 @@ import flash.display.Sprite;
 import flash.display.StageAlign;
 import flash.display.StageScaleMode;
 import flash.events.Event;
+import flash.geom.Point;
+import flash.geom.Rectangle;
 import flash.net.URLRequest;
 import flash.text.TextField;
 import flash.text.TextFormat;
@@ -66,6 +68,10 @@ public class Main extends Sprite {
         if (resultObject) {
             textField.text += "Person.age: " + resultObject.age.toString() + "\n";
         }
+
+        var resultRectangle:Rectangle = ane.runExtensibleTests() as Rectangle;
+        var pnt:Point
+        trace(resultRectangle);
 
         const IMAGE_URL:String = "http://tinyurl.com/zaky3n4";
 
