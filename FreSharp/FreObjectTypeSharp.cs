@@ -1,4 +1,4 @@
-﻿namespace FreSharp {
+﻿namespace TuaRua.FreSharp {
     /// <summary>
     /// Similar to FreObjectType. Added extra types to match Actionscript
     /// </summary>
@@ -44,8 +44,12 @@
         /// </summary>
         Int,
         /// <summary>
-        /// Class. 
+        /// Class
         /// </summary>
-        Class
+        Class,
+        /// <summary>
+        /// flash.geom.Rectangle
+        /// </summary>
+        Rectangle
     }
 }

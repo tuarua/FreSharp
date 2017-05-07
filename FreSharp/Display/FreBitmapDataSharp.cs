@@ -3,12 +3,18 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using FRESharpCore;
 
-namespace FreSharp {
+namespace TuaRua.FreSharp.Display {
     /// <summary>
     /// FreBitmapDataSharp wraps a C FREBitmapData with helper methods.
     /// </summary>
     public class FreBitmapDataSharp {
-        private readonly IntPtr _freBitmapData = IntPtr.Zero;
+        /// <summary>
+        /// Returns the associated C FREBitmapData2 of the C# FREBitmapData.
+        /// </summary>
+        /// <returns></returns>
+        public IntPtr RawValue { get; set; } = IntPtr.Zero;
+
+        //private readonly IntPtr _freBitmapData = IntPtr.Zero;
         private readonly FREBitmapDataCLR _bmd = new FREBitmapDataCLR();
 
         /// <summary>
@@ -70,7 +76,7 @@ namespace FreSharp {
         /// </summary>
         /// <param name="freBitmapData"></param>
         public FreBitmapDataSharp(IntPtr freBitmapData) {
-            _freBitmapData = freBitmapData;            
+            RawValue = freBitmapData;            
         }
 
         /*
@@ -99,21 +105,21 @@ namespace FreSharp {
         /// <param name="bitmap"></param>
         public FreBitmapDataSharp(Bitmap bitmap) {
             uint resultPtr = 0;
-            _freBitmapData = FreSharpHelper.Core.getFREObject(bitmap, _bmd, ref resultPtr);
+            RawValue = FreSharpHelper.Core.getFREObject(bitmap, _bmd, ref resultPtr);
         }
 
         /// <summary>
         /// Calls FREReleaseBitmapData on the C FREBitmapData2
         /// </summary>
         public void Release() {
-            FreSharpHelper.Core.releaseBitmapData(_freBitmapData);
+            FreSharpHelper.Core.releaseBitmapData(RawValue);
         }
 
         /// <summary>
         /// Calls FREAcquireBitmapData2 on the C FREBitmapData2
         /// </summary>
         public void Acquire() {
-            FreSharpHelper.Core.acquireBitmapData(_freBitmapData, _bmd);
+            FreSharpHelper.Core.acquireBitmapData(RawValue, _bmd);
             Width = (int)_bmd.width;
             Bits32 = _bmd.bits32;
             Height = (int)_bmd.height;
@@ -127,7 +133,7 @@ namespace FreSharp {
         /// Calls FREInvalidateBitmapDataRect on the C FREBitmapData2
         /// </summary>
         public void InvalidateBitmapDataRect(uint x, uint y, uint width, uint height) {
-            FreSharpHelper.Core.invalidateBitmapDataRect(_freBitmapData, x, y, width, height);
+            FreSharpHelper.Core.invalidateBitmapDataRect(RawValue, x, y, width, height);
         }
 
         /// <summary>
@@ -158,15 +164,6 @@ namespace FreSharp {
 
             return bitmap;
         }
-
-        /// <summary>
-        /// Returns the associated C FREBitmapData2 of the C# FREBitmapData.
-        /// </summary>
-        /// <returns></returns>
-        public IntPtr Get() {
-            return _freBitmapData;
-        }
-
 
     }
 }

@@ -7,7 +7,7 @@
     <ProjectGuid>{02DF5A34-4BD0-42D1-A150-64A886A335C0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>FreSharp</RootNamespace>
+    <RootNamespace>TuaRua.FreSharp</RootNamespace>
     <AssemblyName>FreSharp</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -51,7 +51,7 @@
     <Compile Include="Exceptions\FreInvalidObjectException.cs" />
     <Compile Include="Exceptions\FreIllegalStateException.cs" />
     <Compile Include="Exceptions\FreInsufficientMemoryException.cs" />
-    <Compile Include="FreBitmapDataSharp.cs" />
+    <Compile Include="Display\FreBitmapDataSharp.cs" />
     <Compile Include="FreByteArraySharp.cs" />
     <Compile Include="Exceptions\FreException.cs" />
     <Compile Include="FreObjectSharp.cs" />
@@ -62,6 +62,7 @@
     <Compile Include="Exceptions\FreTypeMismatchException.cs" />
     <Compile Include="Exceptions\NoSuchNameException.cs" />
     <Compile Include="Exceptions\FreWrongThreadException.cs" />
+    <Compile Include="Geom\FreRectangleSharp.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

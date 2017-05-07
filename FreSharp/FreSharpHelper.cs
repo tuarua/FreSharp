@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
+using FreSharp.Exceptions;
 using FRESharpCore;
+using TuaRua.FreSharp.Display;
 using FREContextSharp = System.IntPtr;
-namespace FreSharp {
+using FREObject = System.IntPtr;
+namespace TuaRua.FreSharp {
     /// <summary>
     /// Creates a new FreSharp Helper
     /// </summary>
-    public class FreSharpHelper {
+    public static class FreSharpHelper {
         /// <summary>
         /// 
         /// </summary>
@@ -17,7 +21,7 @@ namespace FreSharp {
         /// Sets the C# FreContext to use to dispatch events.
         /// </summary>
         /// <param name="freContext"></param>
-        public void SetFreContext(ref FREContextSharp freContext) {
+        public static void SetFreContext(ref FREContextSharp freContext) {
             Core.setFREContext(freContext);
         }
 
@@ -26,28 +30,60 @@ namespace FreSharp {
         /// </summary>
         /// <param name="name"></param>
         /// <param name="value"></param>
-        public void DispatchEvent(string name, string value) {
+        public static void DispatchEvent(string name, string value) {
             Core.dispatchEvent(name, value);
         }
 
+        private static FreObjectSharp FreObjectSharpFromObject(object value) {
+            var t = value.GetType();
+
+            if (t == typeof(FreObjectSharp)) {
+                return value as FreObjectSharp;
+            }
+
+            if (t == typeof(int) || t == typeof(long)) {
+                return new FreObjectSharp((int)value);
+            }
+
+            if (t == typeof(uint)) {
+                return new FreObjectSharp((uint)value);
+            }
+
+            if (t == typeof(string)) {
+                return new FreObjectSharp((string)value);
+            }
+            if (t == typeof(double)) {
+                return new FreObjectSharp((double)value);
+            }
+            
+            return null;
+        }
+
+
         /// <summary>
-        /// Converts ArrayList into argv which can be passed to library calls
+        /// 
         /// </summary>
         /// <param name="args"></param>
         /// <returns></returns>
-        public static FREContextSharp[] ArgsToArgv(ArrayList args) {
+        public static FREObject[] ArgsToArgv(ArrayList args) {
             var cnt = GetArgsC(args);
-            var arr = new IntPtr[cnt];
+            var arr = new FREObject[cnt];
             if (args == null) return arr;
             var argArr = args.ToArray();
+
             uint i;
             for (i = 0; i < cnt; ++i) {
-                var fre = argArr.ElementAt((int)i) as FreObjectSharp;
+                if (argArr[i] is FREObject) {
+                    arr.SetValue(argArr[i], i);
+                    continue;
+                }
+                var fre = FreObjectSharpFromObject(argArr.ElementAt((int)i));
                 if (fre == null) break;
-                arr.SetValue(fre.Get(), i);
+                arr.SetValue(fre.RawValue, i);
             }
             return arr;
         }
+
 
         /// <summary>
         /// Gets length of ArrayList as argc which can be passed to library calls
@@ -61,5 +97,325 @@ namespace FreSharp {
             }
             return cnt;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="rawValue"></param>
+        /// <returns></returns>
+        public static string GetAsString(FREObject rawValue) {
+            uint resultPtr = 0;
+            var ret = Core.getString(rawValue, ref resultPtr);
+            var status = (FreResultSharp)resultPtr;
+
+            if (status == FreResultSharp.Ok) {
+                return ret;
+            }
+            ThrowFreException(status, "cannot get FREObject as String", null);
+            return "";
+        }
+
+        /// <summary>
+        /// Returns the C# FREObject as a double.
+        /// </summary>
+        /// <returns></returns>
+        public static double GetAsDouble(FREObject rawValue) {
+            uint resultPtr = 0;
+            var ret = Core.getDouble(rawValue, ref resultPtr);
+            var status = (FreResultSharp)resultPtr;
+            if (status == FreResultSharp.Ok) {
+                return ret;
+            }
+            ThrowFreException(status, "cannot get FREObject as Double", null);
+            return 0.0;
+        }
+
+        /// <summary>
+        /// Returns the C# FREObject as a bool.
+        /// </summary>
+        /// <returns></returns>
+        public static bool GetAsBool(FREObject rawValue) {
+            uint resultPtr = 0;
+            var ret = Core.getBool(rawValue, ref resultPtr);
+            var status = (FreResultSharp)resultPtr;
+            if (status == FreResultSharp.Ok) {
+                return ret;
+            }
+            ThrowFreException(status, "cannot get FREObject as Bool", null);
+            return false;
+        }
+
+
+        /// <summary>
+        /// Returns the C# FREObject as an int.
+        /// </summary>
+        /// <returns></returns>
+        public static int GetAsInt(FREObject rawValue) {
+            uint resultPtr = 0;
+            var ret = Core.getInt32(rawValue, ref resultPtr);
+            var status = (FreResultSharp)resultPtr;
+            if (status == FreResultSharp.Ok) {
+                return ret;
+            }
+
+            ThrowFreException(status, "cannot get FREObject as Int", null);
+            return 0;
+        }
+
+
+        /// <summary>
+        /// Returns the C# FREObject as a uint.
+        /// </summary>
+        /// <returns></returns>
+        public static uint GetAsUInt(FREObject rawValue) {
+            uint resultPtr = 0;
+            var ret = Core.getUInt32(rawValue, ref resultPtr);
+            var status = (FreResultSharp)resultPtr;
+
+            if (status == FreResultSharp.Ok) {
+                return ret;
+            }
+            ThrowFreException(status, "cannot get FREObject as Uint", null);
+            return 0;
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="rawValue"></param>
+        /// <returns></returns>
+        public static FreObjectTypeSharp GetActionscriptType(FREObject rawValue) {
+            var aneUtils = new FreObjectSharp("com.tuarua.ANEUtils", null);
+            var args = new ArrayList {
+                new FreObjectSharp(rawValue)
+            };
+            var classType = aneUtils.CallMethod("getClassType", args);
+            var type = GetAsString(classType.RawValue).ToLower();
+
+            switch (type) {
+                case "object":
+                    return FreObjectTypeSharp.Object;
+                case "int":
+                    return FreObjectTypeSharp.Int;
+                case "number":
+                    return FreObjectTypeSharp.Number;
+                case "boolean":
+                    return FreObjectTypeSharp.Boolean;
+                case "flash.geom::rectangle":
+                    return FreObjectTypeSharp.Rectangle;
+                default:
+                    return FreObjectTypeSharp.Class;
+            }
+        }
+
+        internal static void SetProperty(FREObject rawValue, string name, FreObjectSharp value) {
+            uint resultPtr = 0;
+            var ret = new FreObjectSharp(Core.setProperty(rawValue, name, value.RawValue, ref resultPtr));
+            var status = (FreResultSharp)resultPtr;
+            if (status == FreResultSharp.Ok) {
+                return;
+            }
+            ThrowFreException(status, "cannot set property " + name, ret);
+        }
+
+        internal static void SetProperty(FREObject rawValue, string name, string value) {
+            uint resultPtr = 0;
+            var ret = new FreObjectSharp(Core.setProperty(rawValue, name, value, ref resultPtr));
+            var status = (FreResultSharp)resultPtr;
+            if (status == FreResultSharp.Ok) {
+                return;
+            }
+            ThrowFreException(status, "cannot set property " + name, ret);
+        }
+
+        internal static void SetProperty(FREObject rawValue, string name, double value) {
+            uint resultPtr = 0;
+            var ret = new FreObjectSharp(Core.setProperty(rawValue, name, value, ref resultPtr));
+            var status = (FreResultSharp)resultPtr;
+            if (status == FreResultSharp.Ok) {
+                return;
+            }
+            ThrowFreException(status, "cannot set property " + name, ret);
+        }
+
+        internal static void SetProperty(FREObject rawValue, string name, bool value) {
+            uint resultPtr = 0;
+            var ret = new FreObjectSharp(Core.setProperty(rawValue, name, value, ref resultPtr));
+            var status = (FreResultSharp)resultPtr;
+            if (status == FreResultSharp.Ok) {
+                return;
+            }
+            ThrowFreException(status, "cannot set property " + name, ret);
+        }
+
+        internal static void SetProperty(FREObject rawValue, string name, uint value) {
+            uint resultPtr = 0;
+            var ret = new FreObjectSharp(Core.setProperty(rawValue, name, value, ref resultPtr));
+            var status = (FreResultSharp)resultPtr;
+            if (status == FreResultSharp.Ok) {
+                return;
+            }
+            ThrowFreException(status, "cannot set property " + name, ret);
+        }
+
+        internal static void SetProperty(FREObject rawValue, string name, int value) {
+            uint resultPtr = 0;
+            var ret = new FreObjectSharp(Core.setProperty(rawValue, name, value, ref resultPtr));
+            var status = (FreResultSharp)resultPtr;
+            if (status == FreResultSharp.Ok) {
+                return;
+            }
+            ThrowFreException(status, "cannot set property " + name, ret);
+        }
+
+        /// <summary>
+        /// Returns the Actionscript type of the C# FREObject. !Important - your ane must include ANEUtils.as in com.tuarua
+        /// </summary>
+        /// <returns></returns>
+        public static FreObjectTypeSharp GetType(FREObject rawValue) {
+            uint resultPtr = 0;
+            var type = (FreObjectTypeSharp)Core.getType(rawValue, ref resultPtr);
+            return FreObjectTypeSharp.Number == type || FreObjectTypeSharp.Object == type
+                ? GetActionscriptType(rawValue)
+                : type;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="rawValue"></param>
+        /// <returns></returns>
+        public static Dictionary<string, object> GetAsDictionary(FREObject rawValue) {
+            var ret = new Dictionary<string, object>();
+            var aneUtils = new FreObjectSharp("com.tuarua.ANEUtils", null);
+            var paramsArray = new ArrayList {
+                new FreObjectSharp(rawValue)
+            };
+            var classProps = aneUtils.CallMethod("getClassProps", paramsArray, true);
+            if (classProps == null) return ret;
+            var arrayLength = classProps.GetLength();
+            for (uint i = 0; i < arrayLength; i++) {
+                var elem = classProps.GetObjectAt(i);
+                var propNameAs = elem.GetProperty("name");
+                var propName = GetAsString(propNameAs.RawValue);
+
+                var propVal = GetProperty(rawValue, propName);
+                ret.Add(propName, GetAsObject(propVal.RawValue));
+            }
+            return ret;
+        }
+
+        internal static FreObjectSharp GetProperty(FREObject rawValue, string name) {
+            uint resultPtr = 0;
+            var ret = new FreObjectSharp(Core.getProperty(rawValue, name, ref resultPtr));
+            var status = (FreResultSharp)resultPtr;
+            if (status == FreResultSharp.Ok) {
+                return ret;
+            }
+
+            ThrowFreException(status, "cannot get property " + name, ret);
+            return null;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="rawValue"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        public static object GetAsObject(FREObject rawValue) {
+            switch (GetType(rawValue)) {
+                case FreObjectTypeSharp.Object:
+                case FreObjectTypeSharp.Class:
+                    return GetAsDictionary(rawValue);
+                case FreObjectTypeSharp.Number:
+                    return GetAsDouble(rawValue);
+                case FreObjectTypeSharp.String:
+                    return GetAsString(rawValue);
+                case FreObjectTypeSharp.Bytearray: //TODO
+                    break;
+                case FreObjectTypeSharp.Array:
+                case FreObjectTypeSharp.Vector:
+                    var arrFre = new FreArraySharp(rawValue);
+                    return arrFre.GetAsArrayList();
+                case FreObjectTypeSharp.Bitmapdata:
+                    var bmdFre = new FreBitmapDataSharp(rawValue);
+                    return bmdFre.GetAsBitmap();
+                case FreObjectTypeSharp.Boolean:
+                    return GetAsBool(rawValue);
+                case FreObjectTypeSharp.Null:
+                    return null;
+                case FreObjectTypeSharp.Int:
+                    return GetAsInt(rawValue);
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="status"></param>
+        /// <param name="message"></param>
+        /// <param name="freObject"></param>
+        /// <exception cref="FreActionscriptErrorException"></exception>
+        /// <exception cref="NoSuchNameException"></exception>
+        /// <exception cref="FreInvalidObjectException"></exception>
+        /// <exception cref="FreTypeMismatchException"></exception>
+        /// <exception cref="FreInvalidArgumentException"></exception>
+        /// <exception cref="FreReadOnlyException"></exception>
+        /// <exception cref="FreWrongThreadException"></exception>
+        /// <exception cref="FreIllegalStateException"></exception>
+        /// <exception cref="FreInsufficientMemoryException"></exception>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        public static void ThrowFreException(FreResultSharp status, string message, FreObjectSharp freObject) {
+            if (FreObjectTypeSharp.Class == freObject?.GetType()) {
+                try {
+                    var hasStackTrace = GetAsBool(freObject.CallMethod("hasOwnProperty", new ArrayList
+                        {
+                            new FreObjectSharp("getStackTrace")
+                        })
+                        .RawValue);
+
+                    if (hasStackTrace) {
+                        var asStackTrace = freObject.CallMethod("getStackTrace", null);
+                        if (FreObjectTypeSharp.String == asStackTrace.GetType()) {
+                            message = GetAsString(asStackTrace.RawValue);
+                        }
+                    }
+                }
+                catch (Exception) {
+                    //ignored
+                }
+            }
+            switch (status) {
+                case FreResultSharp.FreActionscriptError:
+                    throw new FreActionscriptErrorException(message);
+                case FreResultSharp.NoSuchName:
+                    throw new NoSuchNameException(message);
+                case FreResultSharp.FreInvalidObject:
+                    throw new FreInvalidObjectException(message);
+                case FreResultSharp.FreTypeMismatch:
+                    throw new FreTypeMismatchException(message);
+                case FreResultSharp.FreInvalidArgument:
+                    throw new FreInvalidArgumentException(message);
+                case FreResultSharp.FreReadOnly:
+                    throw new FreReadOnlyException(message);
+                case FreResultSharp.FreWrongThread:
+                    throw new FreWrongThreadException(message);
+                case FreResultSharp.FreIllegalState:
+                    throw new FreIllegalStateException(message);
+                case FreResultSharp.FreInsufficientMemory:
+                    throw new FreInsufficientMemoryException(message);
+                case FreResultSharp.Ok:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(status), status, null);
+            }
+        }
+
+
     }
 }

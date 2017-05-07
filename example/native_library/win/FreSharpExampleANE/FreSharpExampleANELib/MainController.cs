@@ -3,14 +3,19 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Windows.Media.Media3D;
-using FreSharp;
-using FreSharp.Exceptions;
+using System.Windows.Interop;
+using System.Windows.Shapes;
+using FreSharp.Geom;
+using TuaRua.FreSharp;
+using TuaRua.FreSharp.Display;
+using TuaRua.FreSharp.Exceptions;
+using TuaRua.FreSharp.Geom;
 using FREObject = System.IntPtr;
 using FREContext = System.IntPtr;
-
+using Hwnd = System.IntPtr;
 namespace FreExampleSharpLib {
     public class MainController : FreSharpController {
+        private Hwnd _airWindow;
         public string[] GetFunctions() {
             FunctionsDict =
                 new Dictionary<string, Func<FREObject, uint, FREObject[], FREObject>>
@@ -26,6 +31,7 @@ namespace FreExampleSharpLib {
                     {"runErrorTests", RunErrorTests},
                     {"runDataTests", RunDataTests},
                     {"runErrorTests2", RunErrorTests2},
+                    {"runNativeTests", RunNativeTests},
                 };
             
 
@@ -36,11 +42,36 @@ namespace FreExampleSharpLib {
             return FREObject.Zero;
         }
 
+        private FREObject RunNativeTests(FREContext ctx, uint argc, FREObject[] argv) {
+            _airWindow = System.Diagnostics.Process.GetCurrentProcess().MainWindowHandle; //get the reference to the AIR Window
+
+            //build a new native window with transparency and overlay
+            var parameters = new HwndSourceParameters();
+            parameters.SetPosition(20, 20);
+            parameters.SetSize(100, 200);
+            parameters.ParentWindow = _airWindow;
+            parameters.WindowName = "AIR Native Stage Window";
+            parameters.WindowStyle = (int)(WindowStyles.WS_CHILD | WindowStyles.WS_VISIBLE);
+            parameters.ExtendedWindowStyle = (int)WindowExStyles.WS_EX_LAYERED;
+            parameters.UsesPerPixelTransparency = true;
+            parameters.AcquireHwndFocusInMenuMode = false;
+
+            var ellipse = new Ellipse {
+                Width = 100,
+                Height = 200,
+                Fill = System.Windows.Media.Brushes.Red,
+                Opacity = 0.7
+            };
+
+            var unused = new HwndSource(parameters) { RootVisual = ellipse };
+
+            return FREObject.Zero;
+        }
+
         private FREObject RunErrorTests(FREContext ctx, uint argc, FREObject[] argv) {
             Trace("***********Start Error Handling test***********");
 
             var person = new FreObjectSharp(argv[0]);
-            var testString = new FreObjectSharp(argv[1]);
 
             try {
                 person.GetProperty("doNotExist"); //calling a property that doesn't exist
@@ -66,7 +97,7 @@ namespace FreExampleSharpLib {
             try {
                 var unused = person.CallMethod("add", new ArrayList
                     {
-                        new FreObjectSharp(100)
+                        100
                     });//not passing enough args
             }
             catch (Exception e) {
@@ -77,28 +108,22 @@ namespace FreExampleSharpLib {
             }
 
 
-            try {
-                testString.GetAsInt(); //get as wrong type
-            }
-            catch (Exception e) {
-                Trace(e.GetType().ToString());
-                Trace(e.Message);
-                Trace(e.Source);
-                Trace(e.StackTrace);
-            }
-
+            
             return FREObject.Zero;
         }
 
         private FREObject RunErrorTests2(FREContext ctx, uint argc, FREObject[] argv) {
             Trace("***********Start Error Handling test 2***********");
             var testString = new FreObjectSharp(argv[0]);
-            try {
-                testString.GetAsInt(); //get as wrong type
+            try
+            {
+                testString.CallMethod("noStringFunc", null); //call method on a string
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 return new FreException(e).Get(); //return as3 error and throw in swc
             }
+            
             return FREObject.Zero;
         }
 
@@ -128,7 +153,7 @@ namespace FreExampleSharpLib {
                 Trace("C# Bitmap Height: " + bmp.Height);
                 var ret = new FreBitmapDataSharp(bmp); //convert to as3 BitmapData
 
-                return ret.Get();
+                return ret.RawValue;
             }
             catch (Exception e) {
                 Trace(e.GetType().ToString());
@@ -146,7 +171,7 @@ namespace FreExampleSharpLib {
 
             var person = new FreObjectSharp(inFre1);
             var freAge = person.GetProperty("age");
-            var oldAge = freAge.GetAsInt();
+            var oldAge = (int) freAge.Value;
             var newAge = new FreObjectSharp(oldAge + 10);
             person.SetProperty("age", newAge);
 
@@ -155,36 +180,45 @@ namespace FreExampleSharpLib {
             Trace("current person age is: " + oldAge);
             var addition = person.CallMethod("add", new ArrayList
             {
-                new FreObjectSharp(100),
-                new FreObjectSharp(33)
+                100,
+                33
             });
-            var sum = addition.GetAsInt();
+            var sum = addition.Value;
             Trace("result is: " + sum);
 
-            var dictionary = person.GetAsDictionary();
+            var dictionary = person.Value as Dictionary<string, object>;
+            if (dictionary == null) return person.RawValue;
             var city = dictionary["city"] as Dictionary<string, object>;
-            if (city == null) return person.Get();
+            if (city == null) return person.RawValue;
             var name = city["name"];
             Trace("what is the city name: " + name);
 
-           
 
-            return person.Get();
+            return person.RawValue;
         }
 
         private FREObject RunExtensibleTests(FREContext ctx, uint argc, FREObject[] argv) {
-            var rect = new Rectangle(0, 0, 200, 100);
+            Trace("***********Start Extensible test***********");
 
             // FreRectangleSharp is a new FreXXXSharp type which is extended from FreObjectSharp
-            // It is written within out project and not part of FreSharp.
+            // It lives in the package FreSharp.Geom
+            var rectangle = new FreRectangleSharp(argv[0]).Value;
+            rectangle.Width = 999;
+            rectangle.Height = 111;
+            var ret = new FreRectangleSharp(rectangle);
+
+            var point = new Point(10,88);
+            // FrePointSharp is a new FreXXXSharp type which is extended from FreObjectSharp
+            // It is created in the local project. It is based off flash.geom.Point
             // This enables more and more as3 classes to be ported to FRE !!
 
-            //var point = new Point(0,50); //as3 has equivalent
-            //var vector3D = new Vector3D(0.2,2,3); //as3 has equivalent
+            var frePoint = new FrePointSharp(point);
+            var targetPoint = new FrePointSharp(new Point(100, 444));
+            frePoint.CopyFrom(targetPoint);
 
-            
+            Trace(frePoint.RawValue.ToString());
 
-            return new FreRectangleSharp(rect).Get();
+            return ret.RawValue;
         }
 
         private FREObject RunArrayTests(FREContext ctx, uint argc, FREObject[] argv) {
@@ -197,14 +231,14 @@ namespace FreExampleSharpLib {
             Trace("AIR Array length: " + airArrayLen);
 
             var itemZero = inFre.GetObjectAt(0);
-            var itemZeroVal = itemZero.GetAsInt();
+            var itemZeroVal = (int) itemZero.Value;
 
             Trace("AIR Array item 0 before change: " + itemZeroVal);
 
             var newVal = new FreObjectSharp(56);
             inFre.SetObjectAt(newVal, 0);
 
-            return inFre.Get();
+            return inFre.RawValue;
 
         }
 
@@ -216,8 +250,8 @@ namespace FreExampleSharpLib {
             if (inFre2 == FREObject.Zero) return FREObject.Zero;
 
             try {
-                var airInt = new FreObjectSharp(inFre1).GetAsInt();
-                var airUint = new FreObjectSharp(inFre2).GetAsUInt();
+                var airInt = (int) new FreObjectSharp(inFre1).Value;
+                var airUint = Convert.ToUInt32(new FreObjectSharp(inFre2).Value);
 
                 Trace("Int passed from AIR: " + airInt);
                 Trace("Uint passed from AIR: " + airUint);
@@ -231,19 +265,20 @@ namespace FreExampleSharpLib {
             var intFreType = new FreObjectSharp(sharpUInt).GetType();
 
             Trace("uintFreType: " + intFreType);
-            return new FreObjectSharp(sharpInt).Get();
+            return new FreObjectSharp(sharpInt).RawValue;
 
 
         }
 
+       
         private FREObject RunNumberTests(FREContext ctx, uint argc, FREObject[] argv) {
             Trace("***********Start Number test***********");
             var inFre = argv[0];
             if (inFre == FREObject.Zero) return FREObject.Zero;
-            var airNumber = new FreObjectSharp(inFre).GetAsDouble();
+            var airNumber =  (double) new FreObjectSharp(inFre).Value;
             Trace("Number passed from AIR: " + airNumber);
             const double sharpDouble = 34343.31;
-            return new FreObjectSharp(sharpDouble).Get();
+            return new FreObjectSharp(sharpDouble).RawValue;
         }
 
         private FREObject RunStringTests(FREContext ctx, uint argc, FREObject[] argv) {
@@ -251,7 +286,7 @@ namespace FreExampleSharpLib {
             var inFre = argv[0];
             if (inFre == FREObject.Zero) return FREObject.Zero;
             try {
-                var airString = new FreObjectSharp(inFre).GetAsString();
+                var airString = new FreObjectSharp(inFre).Value as string;
                 Trace("String passed from AIR:" + airString);
             }
             catch (Exception e) {
@@ -259,7 +294,7 @@ namespace FreExampleSharpLib {
             }
 
             const string sharpString = "I am a string from C#";
-            return new FreObjectSharp(sharpString).Get();
+            return new FreObjectSharp(sharpString).RawValue;
         }
 
 

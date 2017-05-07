@@ -19,26 +19,84 @@ Example - Convert a FREObject into a String, and String into FREObject
 ````C#
 var inFre = argv[0];
 try {
-  var airString = new FreObjectSharp(inFre).GetAsString();
-  Trace("String passed from AIR:" + airString);
+   var airString = new FreObjectSharp(inFre).Value as string;
+   Trace("String passed from AIR:" + airString);
 }
 catch (Exception e) {
   Console.WriteLine(@"caught in C#: type: {0} message: {1}", e.GetType(), e.Message);
 }
 const string sharpString = "I am a string from C#";
-return new FreObjectSharp(sharpString).Get();
+return new FreObjectSharp(sharpString).RawValue;
 `````
 
 Example - Call a method on an FREObject
 
 ````C#
-var addition = person.CallMethod("add", new ArrayList
- {
-  new FreObjectSharp(100),
-  new FreObjectSharp(33)
- });
-var sum = addition.GetAsInt();
+var addition = person.CallMethod("add", new ArrayList {
+    100,
+    33
+});
+var sum = (int) addition.Value;
 Trace("result is: " + sum);
+`````
+
+Advanced Example - Extending FreObjectSharp. Creating a C# version of flash.geom.point
+
+````C#
+using System;
+using System.Collections;
+using System.Drawing;
+using TuaRua.FreSharp;
+
+namespace FreSharp.Geom {
+    public class FrePointSharp : FreObjectSharp {
+        public FrePointSharp() {
+        }
+
+        public FrePointSharp(IntPtr freObject) {
+            RawValue = freObject;
+        }
+
+        public FrePointSharp(Point value) {
+            uint resultPtr = 0;
+            var args = new ArrayList
+            {
+                value.X,
+                value.Y
+            };
+
+            RawValue = FreSharpHelper.Core.getFREObject("flash.geom.Point", FreSharpHelper.ArgsToArgv(args),
+                FreSharpHelper.GetArgsC(args), ref resultPtr);
+            var status = (FreResultSharp)resultPtr;
+
+            if (status == FreResultSharp.Ok) {
+                return;
+            }
+            FreSharpHelper.ThrowFreException(status, "cannot create point ", this);
+        }
+
+
+        public void CopyFrom(FrePointSharp sourcePoint) {
+            uint resultPtr = 0;
+            var args = new ArrayList
+            {
+                sourcePoint.RawValue,
+            };
+            FreSharpHelper.Core.callMethod(RawValue, "copyFrom", FreSharpHelper.ArgsToArgv(args),
+                FreSharpHelper.GetArgsC(args), ref resultPtr);
+
+            var status = (FreResultSharp)resultPtr;
+            if (status == FreResultSharp.Ok) {
+                return;
+            }
+            FreSharpHelper.ThrowFreException(status, "cannot copyFrom ", this);
+        }
+
+        public new Point Value => new Point((int)GetProperty("x").Value,
+            (int)GetProperty("y").Value);
+    }
+}
+
 `````
 
 ### Tech

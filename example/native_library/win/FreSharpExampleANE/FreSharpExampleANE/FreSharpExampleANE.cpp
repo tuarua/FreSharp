@@ -114,6 +114,7 @@ extern "C" {
 			,{ (const uint8_t *) "runErrorTests","runErrorTests", &callSharpFunction }
 			,{ (const uint8_t *) "runDataTests","runDataTests", &callSharpFunction }
 			,{ (const uint8_t *) "runErrorTests2","runErrorTests2", &callSharpFunction }
+			,{ (const uint8_t *) "runNativeTests","runNativeTests", &callSharpFunction }
 			
 		};
 

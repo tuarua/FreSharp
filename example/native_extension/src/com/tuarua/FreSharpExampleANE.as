@@ -11,7 +11,6 @@ import flash.utils.ByteArray;
 
 public class FreSharpExampleANE extends EventDispatcher {
     private static const NAME:String = "FreSharpExampleANE";
-    private var extensionContext:ExtensionContext;
     public function FreSharpExampleANE() {
         initiate()
     }
@@ -19,8 +18,8 @@ public class FreSharpExampleANE extends EventDispatcher {
     private function initiate():void {
         trace("[" + NAME + "] Initalizing ANE...");
         try {
-            extensionContext = ExtensionContext.createExtensionContext("com.tuarua.FreSharpExampleANE", null);
-            extensionContext.addEventListener(StatusEvent.STATUS, gotEvent);
+            ANEContext.ctx = ExtensionContext.createExtensionContext("com.tuarua.FreSharpExampleANE", null);
+            ANEContext.ctx.addEventListener(StatusEvent.STATUS, gotEvent);
         } catch (e:Error) {
             trace("[" + NAME + "] ANE Not loaded properly.  Future calls will fail.");
         }
@@ -36,62 +35,66 @@ public class FreSharpExampleANE extends EventDispatcher {
     }
 
     public function runStringTests(value:String):String {
-        return extensionContext.call("runStringTests", value) as String;
+        return ANEContext.ctx.call("runStringTests", value) as String;
     }
 
     public function runNumberTests(value:Number):Number {
-        return extensionContext.call("runNumberTests", value) as Number;
+        return ANEContext.ctx.call("runNumberTests", value) as Number;
     }
 
     public function runIntTests(value:int, value2:uint):int {
-        return extensionContext.call("runIntTests", value, value2) as int;
+        return ANEContext.ctx.call("runIntTests", value, value2) as int;
     }
 
     public function runArrayTests(value:Array):Array {
-        return extensionContext.call("runArrayTests", value) as Array;
+        return ANEContext.ctx.call("runArrayTests", value) as Array;
     }
 
     public function runObjectTests(value:Person):Person {
-        return extensionContext.call("runObjectTests", value) as Person;
+        return ANEContext.ctx.call("runObjectTests", value) as Person;
     }
 
-    public function runExtensibleTests():Rectangle {
-        return extensionContext.call("runExtensibleTests") as Rectangle;
+    public function runExtensibleTests(value:Rectangle):Rectangle {
+        return ANEContext.ctx.call("runExtensibleTests", value) as Rectangle;
     }
 
     public function runBitmapTests(bmd:BitmapData):BitmapData {
-       return extensionContext.call("runBitmapTests", bmd) as BitmapData;
+       return ANEContext.ctx.call("runBitmapTests", bmd) as BitmapData;
     }
 
     public function runByteArrayTests(byteArray:ByteArray):void {
-        extensionContext.call("runByteArrayTests", byteArray);
+        ANEContext.ctx.call("runByteArrayTests", byteArray);
     }
 
     public function runDataTests(value:String):String {
-        return extensionContext.call("runDataTests", value) as String;
+        return ANEContext.ctx.call("runDataTests", value) as String;
     }
 
     public function runErrorTests(value:Person, string:String, int:int):void {
-        extensionContext.call("runErrorTests", value, string, int);
+        ANEContext.ctx.call("runErrorTests", value, string, int);
     }
 
     public function runErrorTests2(string:String):void {
-        var theRet:* = extensionContext.call("runErrorTests2",string);
+        var theRet:* = ANEContext.ctx.call("runErrorTests2",string);
         if(theRet is ANEError){
             throw theRet as ANEError;
         }
     }
 
+    public function runNativeTests():void {
+        ANEContext.ctx.call("runNativeTests");
+    }
+
     public function dispose():void {
-        if (!extensionContext) {
+        if (!ANEContext.ctx) {
             trace("[" + NAME + "] Error. ANE Already in a disposed or failed state...");
             return;
         }
 
         trace("[" + NAME + "] Unloading ANE...");
-        extensionContext.removeEventListener(StatusEvent.STATUS, gotEvent);
-        extensionContext.dispose();
-        extensionContext = null;
+        ANEContext.ctx.removeEventListener(StatusEvent.STATUS, gotEvent);
+        ANEContext.ctx.dispose();
+        ANEContext.ctx = null;
     }
 }
 }

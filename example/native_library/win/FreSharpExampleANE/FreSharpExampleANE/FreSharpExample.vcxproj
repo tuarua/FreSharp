@@ -22,7 +22,7 @@
     <ProjectGuid>{8161C194-25D6-4DC7-817A-AE5FFDFB7D6D}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>FreSharpExample</RootNamespace>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
     <ProjectName>FreSharpExampleANE</ProjectName>
   </PropertyGroup>

@@ -23,11 +23,15 @@ import flash.utils.ByteArray;
 
 public class Main extends Sprite {
     private var ane:FreSharpExampleANE = new FreSharpExampleANE();
+    private var hasActivated:Boolean = false;
 
     public function Main() {
         super();
         stage.align = StageAlign.TOP_LEFT;
         stage.scaleMode = StageScaleMode.NO_SCALE;
+
+        this.addEventListener(Event.ACTIVATE, onActivated);
+
 
         var textField:TextField = new TextField();
         var tf:TextFormat = new TextFormat();
@@ -44,7 +48,6 @@ public class Main extends Sprite {
         person.age = 21;
         person.name = "Tom";
         person.city.name = "Dunleer";
-
 
         var resultString:String = ane.runStringTests("I am a string from AIR with new interface");
         textField.text += resultString + "\n";
@@ -69,9 +72,18 @@ public class Main extends Sprite {
             textField.text += "Person.age: " + resultObject.age.toString() + "\n";
         }
 
-        var resultRectangle:Rectangle = ane.runExtensibleTests() as Rectangle;
-        var pnt:Point
-        trace(resultRectangle);
+        try {
+            var inRect:Rectangle = new Rectangle(50, 60, 70, 80);
+            var resultRectangle:Rectangle = ane.runExtensibleTests(inRect) as Rectangle;
+            var pnt:Point;
+            trace("resultRectangle", resultRectangle);
+        } catch (e:ANEError) {
+            trace(e.message);
+            trace(e.type);
+            trace(e.errorID);
+            trace(e.getStackTrace());
+        }
+
 
         const IMAGE_URL:String = "http://tinyurl.com/zaky3n4";
 
@@ -101,6 +113,7 @@ public class Main extends Sprite {
         try {
             ane.runErrorTests2("abc");
         } catch (e:ANEError) {
+            trace("e is",e)
             trace(e.message);
             trace(e.type);
             trace(e.errorID);
@@ -114,6 +127,15 @@ public class Main extends Sprite {
 
 
         addChild(textField);
+    }
+
+    private function onActivated(event:Event):void {
+        if (!hasActivated) {
+            // adds a native window over our AIR window and draws an ellipse
+            // Supports transparency on Windows 8.1+ requires .NET4.6+
+            ane.runNativeTests();
+        }
+        hasActivated = true;
     }
 }
 }

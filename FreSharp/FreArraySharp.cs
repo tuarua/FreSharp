@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections;
+using TuaRua.FreSharp.Display;
 
-namespace FreSharp {
+namespace TuaRua.FreSharp {
     /// <summary>
     ///  FreArraySharp wraps a C FREObject (Array or Vector) with helper methods.
     /// </summary>
     public class FreArraySharp : FreObjectSharp {
-        private readonly IntPtr _freArray = IntPtr.Zero;
         /// <summary>
         /// Creates an Empty C# FreArray.
         /// </summary>
@@ -16,7 +16,7 @@ namespace FreSharp {
         /// </summary>
         /// <param name="freArray"></param>
         public FreArraySharp(IntPtr freArray) {
-            _freArray = freArray;
+            RawValue = freArray;
         }
 
         /// <summary>
@@ -25,12 +25,12 @@ namespace FreSharp {
         /// <returns></returns>
         public uint GetLength() {
             uint resultPtr = 0;
-            var ret = FreSharpHelper.Core.getArrayLength(_freArray, ref resultPtr);
+            var ret = FreSharpHelper.Core.getArrayLength(RawValue, ref resultPtr);
             var status = (FreResultSharp)resultPtr;
             if (status == FreResultSharp.Ok) {
                 return ret;
             }
-            ThrowFreException(status, "cannot get FREObject as Double", null);
+            FreSharpHelper.ThrowFreException(status, "cannot get length of array", null);
             return 0;
         }
 
@@ -41,7 +41,7 @@ namespace FreSharp {
         /// <returns></returns>
         public FreObjectSharp GetObjectAt(uint i) {
             uint resultPtr = 0;
-            return new FreObjectSharp(FreSharpHelper.Core.getObjectAt(_freArray, i, ref resultPtr));
+            return new FreObjectSharp(FreSharpHelper.Core.getObjectAt(RawValue, i, ref resultPtr));
         }
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace FreSharp {
         /// </summary>
         public void SetObjectAt(FreObjectSharp value, uint i) {
             uint resultPtr = 0;
-            FreSharpHelper.Core.setObjectAt(_freArray, i, value.Get(), ref resultPtr);
+            FreSharpHelper.Core.setObjectAt(RawValue, i, value.RawValue, ref resultPtr);
         }
 
         /// <summary>
@@ -63,45 +63,38 @@ namespace FreSharp {
             var type = GetType();
             for (uint i = 0; i < GetLength(); i++) {
                 switch (type) {
-                    case FreObjectTypeSharp.Object:
-                        break;
                     case FreObjectTypeSharp.String:
-                        al.Add(GetAsString());
+                        al.Add(FreSharpHelper.GetAsString(RawValue));
                         break;
-                    case FreObjectTypeSharp.Bytearray:
+                    case FreObjectTypeSharp.Bytearray: //TODO
                         break;
                     case FreObjectTypeSharp.Array:
-                    case FreObjectTypeSharp.Vector:
+                    case FreObjectTypeSharp.Vector: //TODO
                         break;
                     case FreObjectTypeSharp.Bitmapdata:
+                        var bmdFre = new FreBitmapDataSharp(RawValue);
+                        al.Add(bmdFre.GetAsBitmap());
                         break;
                     case FreObjectTypeSharp.Boolean:
-                        al.Add(GetAsBool());
+                        al.Add(FreSharpHelper.GetAsBool(RawValue));
                         break;
                     case FreObjectTypeSharp.Null:
                         break;
                     case FreObjectTypeSharp.Int:
-                        al.Add(GetAsInt());
+                        al.Add(FreSharpHelper.GetAsInt(RawValue));
                         break;
+                    case FreObjectTypeSharp.Object:
                     case FreObjectTypeSharp.Class:
+                        al.Add(FreSharpHelper.GetAsDictionary(RawValue));
                         break;
                     case FreObjectTypeSharp.Number:
-                        al.Add(GetAsDouble());
+                        al.Add(FreSharpHelper.GetAsDouble(RawValue));
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
             }
-
             return al;
-        }
-
-        /// <summary>
-        /// Returns the associated C FREObject of the C# FREArray.
-        /// </summary>
-        /// <returns></returns>
-        public new IntPtr Get() {
-            return _freArray;
         }
 
     }

@@ -1,4 +1,4 @@
-﻿namespace FreSharp {
+﻿namespace TuaRua.FreSharp {
     /// <summary>
     /// 
     /// </summary>

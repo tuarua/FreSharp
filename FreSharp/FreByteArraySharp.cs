@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using FRESharpCore;
 
-namespace FreSharp {
+namespace TuaRua.FreSharp {
     /// <summary>
     /// FreByteArraySharp wraps a C FREByteArray with helper methods.
     /// </summary>
@@ -16,8 +16,14 @@ namespace FreSharp {
         /// </summary>
         public byte[] Bytes { get; set; }
 
-        private readonly IntPtr _freByteArray = IntPtr.Zero;
         private readonly FREByteArrayCLR _byteArray = new FREByteArrayCLR();
+
+        /// <summary>
+        /// Returns the associated C FREByteArray of the C# FREByteArray.
+        /// </summary>
+        /// <returns></returns>
+        public IntPtr RawValue { get; } = IntPtr.Zero;
+
         /// <summary>
         /// Creates an empty C# FREByteArray
         /// </summary>
@@ -28,14 +34,14 @@ namespace FreSharp {
         /// </summary>
         /// <param name="freByteArray"></param>
         public FreByteArraySharp(IntPtr freByteArray) {
-            _freByteArray = freByteArray;
+            RawValue = freByteArray;
         }
 
         /// <summary>
         /// Calls FREAcquireByteArray on the C FREByteArray
         /// </summary>
         public void Acquire() {
-            FreSharpHelper.Core.acquireByteArrayData(_freByteArray, _byteArray);
+            FreSharpHelper.Core.acquireByteArrayData(RawValue, _byteArray);
             Length = (int)_byteArray.length;
             Bytes = new byte[Length];
             Marshal.Copy(_byteArray.bytes, Bytes, 0, Length);
@@ -45,15 +51,7 @@ namespace FreSharp {
         /// Calls FREReleaseByteArray on the C FREByteArray
         /// </summary>
         public void Release() {
-            FreSharpHelper.Core.releaseByteArrayData(_freByteArray);
-        }
-
-        /// <summary>
-        /// Returns the associated C FREByteArray of the C# FREByteArray.
-        /// </summary>
-        /// <returns></returns>
-        public IntPtr Get() {
-            return _freByteArray;
+            FreSharpHelper.Core.releaseByteArrayData(RawValue);
         }
 
     }

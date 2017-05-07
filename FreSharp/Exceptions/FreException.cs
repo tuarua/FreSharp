@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 using FREObject = System.IntPtr;
-namespace FreSharp.Exceptions {
+namespace TuaRua.FreSharp.Exceptions {
     /// <summary>
     /// 
     /// </summary>
@@ -26,7 +26,7 @@ namespace FreSharp.Exceptions {
         /// </summary>
         /// <returns></returns>
         public FREObject Get() {
-            return _aneError.Get();
+            return _aneError.RawValue;
         }
     }
 }
