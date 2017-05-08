@@ -59,85 +59,6 @@ namespace FRESharpCore {
 		}
 	}
 
-	FREObjectCLR FRESharpCLR::setProperty(FREObjectCLR freObject, String^ name, String^ value, UInt32% freresult) {
-		std::string nameStr = "";
-		MarshalString(name, nameStr);
-		FREObject ret = nullptr;
-		FREObject thrownException = nullptr;
-		freresult = FRESetObjectProperty(freObject.ToPointer(), reinterpret_cast<const uint8_t *>(nameStr.c_str()),
-			getFREObject(value, freresult).ToPointer(), &thrownException);
-
-		if (FRE_OK == freresult) {
-			return FREObjectCLR(ret);
-		} else {
-			return FREObjectCLR(thrownException);
-		}
-	}
-
-	FREObjectCLR FRESharpCLR::setProperty(FREObjectCLR freObject, String^ name, double value, UInt32% freresult) {
-		std::string nameStr = "";
-		MarshalString(name, nameStr);
-		FREObject ret = nullptr;
-		FREObject thrownException = nullptr;
-
-		freresult = FRESetObjectProperty(freObject.ToPointer(), reinterpret_cast<const uint8_t *>(nameStr.c_str()),
-			getFREObject(value, freresult).ToPointer(), &thrownException);
-
-		if (FRE_OK == freresult) {
-			return FREObjectCLR(ret);
-		} else {
-			return FREObjectCLR(thrownException);
-		}
-	}
-
-	FREObjectCLR FRESharpCLR::setProperty(FREObjectCLR freObject, String^ name, bool value, UInt32% freresult) {
-		std::string nameStr = "";
-		MarshalString(name, nameStr);
-		FREObject ret = nullptr;
-		FREObject thrownException = nullptr;
-		freresult = FRESetObjectProperty(freObject.ToPointer(), reinterpret_cast<const uint8_t *>(nameStr.c_str()),
-			getFREObject(value, freresult).ToPointer(), &thrownException);
-
-		if (FRE_OK == freresult) {
-			return FREObjectCLR(ret);
-		}
-		else {
-			return FREObjectCLR(thrownException);
-		}
-	}
-
-	FREObjectCLR FRESharpCLR::setProperty(FREObjectCLR freObject, String^ name, Int32 value, UInt32% freresult) {
-		std::string nameStr = "";
-		MarshalString(name, nameStr);
-		FREObject ret = nullptr;
-		FREObject thrownException = nullptr;
-		freresult = FRESetObjectProperty(freObject.ToPointer(), reinterpret_cast<const uint8_t *>(nameStr.c_str()),
-			getFREObject(value, freresult).ToPointer(), &thrownException);
-
-		if (FRE_OK == freresult) {
-			return FREObjectCLR(ret);
-		}
-		else {
-			return FREObjectCLR(thrownException);
-		}
-	}
-
-	FREObjectCLR FRESharpCLR::setProperty(FREObjectCLR freObject, String^ name, UInt32 value, UInt32% freresult) {
-		std::string nameStr = "";
-		MarshalString(name, nameStr);
-		FREObject ret = nullptr;
-		FREObject thrownException = nullptr;
-		freresult = FRESetObjectProperty(freObject.ToPointer(), reinterpret_cast<const uint8_t *>(nameStr.c_str()),
-			getFREObject(value, freresult).ToPointer(), &thrownException);
-
-		if (FRE_OK == freresult) {
-			return FREObjectCLR(ret);
-		}
-		else {
-			return FREObjectCLR(thrownException);
-		}
-	}
-
 	FREObjectCLR FRESharpCLR::getFREObject(bool value, UInt32% freresult) {
 		FREObject result;
 		freresult = FRENewObjectFromBool(value, &result);
@@ -201,10 +122,9 @@ namespace FRESharpCore {
 		if (FRE_OK == freresult) {
 			return FREObjectCLR(ret);
 		} else {
-			return FREObjectCLR(thrownException);//TODO LIKE THIS
+			return FREObjectCLR(thrownException);
 		}
 
-		
 	}
 
 	String ^ FRESharpCLR::getString(FREObjectCLR freObject, UInt32% freresult) {
@@ -279,8 +199,6 @@ namespace FRESharpCore {
 		freresult = FREGetObjectType(freObject.ToPointer(), &val);
 		return val;
 	}
-
-	//
 
 	void FRESharpCLR::acquireBitmapData(FREObjectCLR freObject, FREBitmapDataCLR^ descriptorToSet) {
 		FREBitmapData2 bitmapData;

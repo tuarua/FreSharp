@@ -26,7 +26,7 @@ namespace TuaRua.FreSharp {
         /// Creates a C# FREObject from a C FREObject
         /// </summary>
         /// <param name="freObject"></param>
-        public FreObjectSharp(IntPtr freObject) {
+        public FreObjectSharp(FREObject freObject) {
             RawValue = freObject;
         }
         /// <summary>
@@ -137,59 +137,16 @@ namespace TuaRua.FreSharp {
         }
 
         /// <summary>
-        /// Sets the property of the C# FREObject as a C# FREObject value.
+        /// 
         /// </summary>
         /// <param name="name"></param>
         /// <param name="value"></param>
-        public void SetProperty(string name, FreObjectSharp value) {
+        public void SetProperty(string name, object value)
+        {
             FreSharpHelper.SetProperty(RawValue, name, value);
         }
 
-        /// <summary>
-        /// Sets the property of the C# FREObject as a string.
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="value"></param>
-        public void SetProperty(string name, string value) {
-            FreSharpHelper.SetProperty(RawValue, name, value);
-        }
-
-        /// <summary>
-        /// Sets the property of the C# FREObject as a double.
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="value"></param>
-        public void SetProperty(string name, double value) {
-            FreSharpHelper.SetProperty(RawValue, name, value);
-        }
-
-        /// <summary>
-        /// Sets the property of the C# FREObject as a bool.
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="value"></param>
-        public void SetProperty(string name, bool value) {
-            FreSharpHelper.SetProperty(RawValue, name, value);
-        }
-
-        /// <summary>
-        /// Sets the property of the C# FREObject as an int.
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="value"></param>
-        public void SetProperty(string name, int value) {
-            FreSharpHelper.SetProperty(RawValue, name, value);
-        }
-
-        /// <summary>
-        /// Sets the property of the C# FREObject as a uint.
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="value"></param>
-        public void SetProperty(string name, uint value) {
-            FreSharpHelper.SetProperty(RawValue, name, value);
-        }
-
+        
         /// <summary>
         /// Returns the Actionscript type of the C# FREObject. !Important - your ane must include ANEUtils.as in com.tuarua
         /// </summary>

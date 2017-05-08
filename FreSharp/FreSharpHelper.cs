@@ -52,6 +52,7 @@ namespace TuaRua.FreSharp {
             if (t == typeof(string)) {
                 return new FreObjectSharp((string)value);
             }
+
             if (t == typeof(double)) {
                 return new FreObjectSharp((double)value);
             }
@@ -209,9 +210,9 @@ namespace TuaRua.FreSharp {
             }
         }
 
-        internal static void SetProperty(FREObject rawValue, string name, FreObjectSharp value) {
+        internal static void SetProperty(FREObject rawValue, string name, object value) {
             uint resultPtr = 0;
-            var ret = new FreObjectSharp(Core.setProperty(rawValue, name, value.RawValue, ref resultPtr));
+            var ret = new FreObjectSharp(Core.setProperty(rawValue, name, FreObjectSharpFromObject(value).RawValue, ref resultPtr));
             var status = (FreResultSharp)resultPtr;
             if (status == FreResultSharp.Ok) {
                 return;
@@ -219,56 +220,7 @@ namespace TuaRua.FreSharp {
             ThrowFreException(status, "cannot set property " + name, ret);
         }
 
-        internal static void SetProperty(FREObject rawValue, string name, string value) {
-            uint resultPtr = 0;
-            var ret = new FreObjectSharp(Core.setProperty(rawValue, name, value, ref resultPtr));
-            var status = (FreResultSharp)resultPtr;
-            if (status == FreResultSharp.Ok) {
-                return;
-            }
-            ThrowFreException(status, "cannot set property " + name, ret);
-        }
-
-        internal static void SetProperty(FREObject rawValue, string name, double value) {
-            uint resultPtr = 0;
-            var ret = new FreObjectSharp(Core.setProperty(rawValue, name, value, ref resultPtr));
-            var status = (FreResultSharp)resultPtr;
-            if (status == FreResultSharp.Ok) {
-                return;
-            }
-            ThrowFreException(status, "cannot set property " + name, ret);
-        }
-
-        internal static void SetProperty(FREObject rawValue, string name, bool value) {
-            uint resultPtr = 0;
-            var ret = new FreObjectSharp(Core.setProperty(rawValue, name, value, ref resultPtr));
-            var status = (FreResultSharp)resultPtr;
-            if (status == FreResultSharp.Ok) {
-                return;
-            }
-            ThrowFreException(status, "cannot set property " + name, ret);
-        }
-
-        internal static void SetProperty(FREObject rawValue, string name, uint value) {
-            uint resultPtr = 0;
-            var ret = new FreObjectSharp(Core.setProperty(rawValue, name, value, ref resultPtr));
-            var status = (FreResultSharp)resultPtr;
-            if (status == FreResultSharp.Ok) {
-                return;
-            }
-            ThrowFreException(status, "cannot set property " + name, ret);
-        }
-
-        internal static void SetProperty(FREObject rawValue, string name, int value) {
-            uint resultPtr = 0;
-            var ret = new FreObjectSharp(Core.setProperty(rawValue, name, value, ref resultPtr));
-            var status = (FreResultSharp)resultPtr;
-            if (status == FreResultSharp.Ok) {
-                return;
-            }
-            ThrowFreException(status, "cannot set property " + name, ret);
-        }
-
+        
         /// <summary>
         /// Returns the Actionscript type of the C# FREObject. !Important - your ane must include ANEUtils.as in com.tuarua
         /// </summary>

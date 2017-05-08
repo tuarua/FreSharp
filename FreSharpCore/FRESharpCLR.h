@@ -43,13 +43,7 @@ namespace FRESharpCore {
 		double getDouble(FREObjectCLR freObject, UInt32% freresult);
 		void dispatchEvent(String^ name, String^ value);
 		FREObjectCLR getProperty(FREObjectCLR freObject, String^ propertyName, UInt32% freresult);
-
 		FREObjectCLR setProperty(FREObjectCLR freObject, String^ name, FREObjectCLR value, UInt32% freresult);
-		FREObjectCLR setProperty(FREObjectCLR freObject, String^ name, String^ value, UInt32% freresult);
-		FREObjectCLR setProperty(FREObjectCLR freObject, String^ name, double value, UInt32% freresult);
-		FREObjectCLR setProperty(FREObjectCLR freObject, String^ name, bool value, UInt32% freresult);
-		FREObjectCLR setProperty(FREObjectCLR freObject, String^ name, Int32 value, UInt32% freresult);
-		FREObjectCLR setProperty(FREObjectCLR freObject, String^ name, UInt32 value, UInt32% freresult);
 
 		FREObjectCLR getFREObject(String^ value, UInt32% freresult);
 		FREObjectCLR getFREObject(double value, UInt32% freresult);
