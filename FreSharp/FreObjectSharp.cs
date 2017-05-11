@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using FREObject = System.IntPtr;
 namespace TuaRua.FreSharp {
