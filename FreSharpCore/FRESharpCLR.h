@@ -32,7 +32,6 @@ namespace FRESharpCore {
 	public:
 		FRESharpCLR();
 
-		void setFREContext(FREContextCLR freContext);
 		String^ getString(FREObjectCLR freObject, UInt32% freresult);
 		Int32 getInt32(FREObjectCLR freObject, UInt32% freresult);
 		UInt32 getUInt32(FREObjectCLR freObject, UInt32% freresult);
@@ -41,7 +40,7 @@ namespace FRESharpCore {
 		void setObjectAt(FREObjectCLR freObject, UInt32 i, FREObjectCLR value, UInt32% freresult);
 		bool getBool(FREObjectCLR freObject, UInt32% freresult);
 		double getDouble(FREObjectCLR freObject, UInt32% freresult);
-		void dispatchEvent(String^ name, String^ value);
+		void dispatchEvent(FREContextCLR freContext, String^ name, String^ value);
 		FREObjectCLR getProperty(FREObjectCLR freObject, String^ propertyName, UInt32% freresult);
 		FREObjectCLR setProperty(FREObjectCLR freObject, String^ name, FREObjectCLR value, UInt32% freresult);
 
@@ -63,8 +62,6 @@ namespace FRESharpCore {
 		void acquireByteArrayData(FREObjectCLR freObject, FREByteArrayCLR^ byteArrayToSet);
 		void releaseByteArrayData(FREObjectCLR freObject);
 
-	private:
-		FREContextCLR dllContext;
 	};
 
 }

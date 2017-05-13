@@ -12,7 +12,6 @@ The package is hosted on NuGet at https://www.nuget.org/packages/TuaRua.FreSharp
 ----------
 
 ### How to use
-######  The methods exposed by FreSharp are very similar to the Java API for Air Native Extensions. 
 
 Example - Convert a FREObject into a String, and String into FREObject
 

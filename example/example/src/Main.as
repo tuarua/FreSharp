@@ -113,11 +113,11 @@ public class Main extends Sprite {
         try {
             ane.runErrorTests2("abc");
         } catch (e:ANEError) {
-            trace("e is",e)
-            trace(e.message);
-            trace(e.type);
-            trace(e.errorID);
-            trace(e.getStackTrace());
+            //trace("e is",e)
+            trace("e.message: ",e.message);
+            trace("e.type: ",e.type);
+            trace("e.errorID",e.errorID);
+            trace("e.getStackTrace",e.getStackTrace());
         }
 
 

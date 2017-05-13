@@ -12,19 +12,19 @@ namespace ManagedCode {
 	using namespace System::Windows::Interop;
 	using namespace System::Windows::Media;
 	using namespace System::Collections::Generic;
-	using FREObjectSharp = IntPtr;
-	using FREContextSharp = IntPtr;
-	using FREArgvSharp = array<FREObjectSharp>^;
+	using FREObjectCLR = IntPtr;
+	using FREContextCLR = IntPtr;
+	using FREArgvSharp = array<FREObjectCLR>^;
 
 	ref class ManagedGlobals {
 	public:
 		static FreExampleSharpLib::MainController^ controller = nullptr;
 	};
 
-	array<FREObjectSharp>^ MarshalFREArray(array<FREObject>^ argv, uint32_t argc) {
-		array<FREObjectSharp>^ arr = gcnew array<FREObjectSharp>(argc);
+	array<FREObjectCLR>^ MarshalFREArray(array<FREObject>^ argv, uint32_t argc) {
+		array<FREObjectCLR>^ arr = gcnew array<FREObjectCLR>(argc);
 		for (uint32_t i = 0; i < argc; i++) {
-			arr[i] = FREObjectSharp(argv[i]);
+			arr[i] = FREObjectCLR(argv[i]);
 		}
 		return arr;
 	}
@@ -34,16 +34,16 @@ namespace ManagedCode {
 		const char* chars =
 			(const char*)(Marshal::StringToHGlobalAnsi(s)).ToPointer();
 		os = chars;
-		Marshal::FreeHGlobal(FREObjectSharp((void*)chars));
+		Marshal::FreeHGlobal(FREObjectCLR((void*)chars));
 	}
 
 
 	FREObject CallSharpFunction(String^ name, FREContext context, array<FREObject>^ argv, uint32_t argc) {
-		return (FREObject)ManagedGlobals::controller->CallSharpFunction(name, FREContextSharp(context), argc, MarshalFREArray(argv, argc));
+		return (FREObject)ManagedGlobals::controller->CallSharpFunction(name, FREContextCLR(context), argc, MarshalFREArray(argv, argc));
 	}
 
 	void SetFREContext(FREContext freContext) {
-		ManagedGlobals::controller->SetFreContext(FREContextSharp(freContext));
+		ManagedGlobals::controller->SetFreContext(FREContextCLR(freContext));
 	}
 
 	void InitController() {
