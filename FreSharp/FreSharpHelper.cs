@@ -5,7 +5,8 @@ using System.Linq;
 using FreSharp.Exceptions;
 using FRESharpCore;
 using TuaRua.FreSharp.Display;
-using FREContextSharp = System.IntPtr;
+using TuaRua.FreSharp.Geom;
+using FREContext = System.IntPtr;
 using FREObject = System.IntPtr;
 namespace TuaRua.FreSharp {
     /// <summary>
@@ -18,20 +19,13 @@ namespace TuaRua.FreSharp {
         public static FRESharpCLR Core = new FRESharpCLR();
 
         /// <summary>
-        /// Sets the C# FreContext to use to dispatch events.
-        /// </summary>
-        /// <param name="freContext"></param>
-        public static void SetFreContext(ref FREContextSharp freContext) {
-            Core.setFREContext(freContext);
-        }
-
-        /// <summary>
         /// Dispatches an event. Mimics FREDispatchStatusEventAsync
         /// </summary>
+        /// <param name="freContext"></param>
         /// <param name="name"></param>
         /// <param name="value"></param>
-        public static void DispatchEvent(string name, string value) {
-            Core.dispatchEvent(name, value);
+        public static void DispatchEvent(ref FREContext freContext, string name, string value) {
+            Core.dispatchEvent(freContext, name, value);
         }
 
         private static FreObjectSharp FreObjectSharpFromObject(object value) {
@@ -41,12 +35,18 @@ namespace TuaRua.FreSharp {
                 return value as FreObjectSharp;
             }
 
+            //TODO others Bitmap, arrayList
+
             if (t == typeof(int) || t == typeof(long)) {
                 return new FreObjectSharp((int)value);
             }
 
             if (t == typeof(uint)) {
                 return new FreObjectSharp((uint)value);
+            }
+
+            if (t == typeof(bool)) {
+                return new FreObjectSharp((bool)value);
             }
 
             if (t == typeof(string)) {
@@ -56,7 +56,7 @@ namespace TuaRua.FreSharp {
             if (t == typeof(double)) {
                 return new FreObjectSharp((double)value);
             }
-            
+
             return null;
         }
 
@@ -188,12 +188,8 @@ namespace TuaRua.FreSharp {
         /// <returns></returns>
         public static FreObjectTypeSharp GetActionscriptType(FREObject rawValue) {
             var aneUtils = new FreObjectSharp("com.tuarua.ANEUtils", null);
-            var args = new ArrayList {
-                new FreObjectSharp(rawValue)
-            };
-            var classType = aneUtils.CallMethod("getClassType", args);
+            var classType = aneUtils.CallMethod("getClassType", rawValue);
             var type = GetAsString(classType.RawValue).ToLower();
-
             switch (type) {
                 case "object":
                     return FreObjectTypeSharp.Object;
@@ -220,7 +216,7 @@ namespace TuaRua.FreSharp {
             ThrowFreException(status, "cannot set property " + name, ret);
         }
 
-        
+
         /// <summary>
         /// Returns the Actionscript type of the C# FREObject. !Important - your ane must include ANEUtils.as in com.tuarua
         /// </summary>
@@ -244,7 +240,7 @@ namespace TuaRua.FreSharp {
             var paramsArray = new ArrayList {
                 new FreObjectSharp(rawValue)
             };
-            var classProps = aneUtils.CallMethod("getClassProps", paramsArray, true);
+            var classProps = aneUtils.CallMethod("getClassProps", paramsArray);
             if (classProps == null) return ret;
             var arrayLength = classProps.GetLength();
             for (uint i = 0; i < arrayLength; i++) {
@@ -285,8 +281,12 @@ namespace TuaRua.FreSharp {
                     return GetAsDouble(rawValue);
                 case FreObjectTypeSharp.String:
                     return GetAsString(rawValue);
-                case FreObjectTypeSharp.Bytearray: //TODO
-                    break;
+                case FreObjectTypeSharp.Bytearray:
+                    var ba = new FreByteArraySharp(rawValue);
+                    ba.Acquire();
+                    var byteData = ba.Bytes;
+                    ba.Release();
+                    return byteData;
                 case FreObjectTypeSharp.Array:
                 case FreObjectTypeSharp.Vector:
                     var arrFre = new FreArraySharp(rawValue);
@@ -300,10 +300,11 @@ namespace TuaRua.FreSharp {
                     return null;
                 case FreObjectTypeSharp.Int:
                     return GetAsInt(rawValue);
+                case FreObjectTypeSharp.Rectangle:
+                    return new FreRectangleSharp(rawValue).Value;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-            return true;
         }
 
         /// <summary>
@@ -325,14 +326,10 @@ namespace TuaRua.FreSharp {
         public static void ThrowFreException(FreResultSharp status, string message, FreObjectSharp freObject) {
             if (FreObjectTypeSharp.Class == freObject?.GetType()) {
                 try {
-                    var hasStackTrace = GetAsBool(freObject.CallMethod("hasOwnProperty", new ArrayList
-                        {
-                            new FreObjectSharp("getStackTrace")
-                        })
-                        .RawValue);
+                    var hasStackTrace = GetAsBool(freObject.CallMethod("hasOwnProperty", "getStackTrace").RawValue);
 
                     if (hasStackTrace) {
-                        var asStackTrace = freObject.CallMethod("getStackTrace", null);
+                        var asStackTrace = freObject.CallMethod("getStackTrace");
                         if (FreObjectTypeSharp.String == asStackTrace.GetType()) {
                             message = GetAsString(asStackTrace.RawValue);
                         }

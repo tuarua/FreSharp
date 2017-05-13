@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Linq;
 using FREObject = System.IntPtr;
 namespace TuaRua.FreSharp {
     /// <summary>
@@ -74,10 +75,17 @@ namespace TuaRua.FreSharp {
         /// </summary>
         /// <param name="className"></param>
         /// <param name="args"></param>
-        public FreObjectSharp(string className, ArrayList args) {
+        public FreObjectSharp(string className, params object[] args) {
             uint resultPtr = 0;
-            RawValue = FreSharpHelper.Core.getFREObject(className, FreSharpHelper.ArgsToArgv(args),
-                FreSharpHelper.GetArgsC(args), ref resultPtr);
+            var argsArr = new ArrayList();
+            if (args != null) {
+                for (var i = 0; i < args.Length; i++) {
+                    argsArr.Add(args.ElementAt(i));
+                }
+            }
+
+            RawValue = FreSharpHelper.Core.getFREObject(className, FreSharpHelper.ArgsToArgv(argsArr),
+                FreSharpHelper.GetArgsC(argsArr), ref resultPtr);
             var status = (FreResultSharp)resultPtr;
             if (status == FreResultSharp.Ok) {
                 return;
@@ -92,10 +100,17 @@ namespace TuaRua.FreSharp {
         /// <param name="methodName"></param>
         /// <param name="args"></param>
         /// <returns></returns>
-        public FreObjectSharp CallMethod(string methodName, ArrayList args) {
+        public FreObjectSharp CallMethod(string methodName, params object[] args) {
             uint resultPtr = 0;
+            var argsArr = new ArrayList();
+            if (args != null) {
+                for (var i = 0; i < args.Length; i++) {
+                    argsArr.Add(args.ElementAt(i));
+                }
+            }
             var ret = new FreObjectSharp(FreSharpHelper.Core.callMethod(RawValue, methodName,
-                FreSharpHelper.ArgsToArgv(args), FreSharpHelper.GetArgsC(args), ref resultPtr));
+                FreSharpHelper.ArgsToArgv(argsArr), FreSharpHelper.GetArgsC(argsArr), ref resultPtr));
+
             var status = (FreResultSharp)resultPtr;
 
             if (status == FreResultSharp.Ok) {
@@ -111,9 +126,8 @@ namespace TuaRua.FreSharp {
         /// </summary>
         /// <param name="methodName"></param>
         /// <param name="args"></param>
-        /// <param name="returnArray"></param>
         /// <returns></returns>
-        public FreArraySharp CallMethod(string methodName, ArrayList args, bool returnArray) {
+        public FreArraySharp CallMethod(string methodName, ArrayList args) {
             uint resultPtr = 0;
             var ret = new FreArraySharp(FreSharpHelper.Core.callMethod(RawValue, methodName,
                 FreSharpHelper.ArgsToArgv(args), FreSharpHelper.GetArgsC(args), ref resultPtr));
@@ -140,12 +154,11 @@ namespace TuaRua.FreSharp {
         /// </summary>
         /// <param name="name"></param>
         /// <param name="value"></param>
-        public void SetProperty(string name, object value)
-        {
+        public void SetProperty(string name, object value) {
             FreSharpHelper.SetProperty(RawValue, name, value);
         }
 
-        
+
         /// <summary>
         /// Returns the Actionscript type of the C# FREObject. !Important - your ane must include ANEUtils.as in com.tuarua
         /// </summary>

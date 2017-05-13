@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -33,7 +32,7 @@ namespace FreExampleSharpLib {
                     {"runErrorTests2", RunErrorTests2},
                     {"runNativeTests", RunNativeTests},
                 };
-            
+
 
             return FunctionsDict.Select(kvp => kvp.Key).ToArray();
         }
@@ -84,7 +83,7 @@ namespace FreExampleSharpLib {
             }
 
             try {
-                person.CallMethod("noMethod", null); //calling an nonexistent method
+                person.CallMethod("noMethod"); //calling an nonexistent method
             }
             catch (Exception e) {
                 Trace(e.GetType().ToString());
@@ -95,10 +94,7 @@ namespace FreExampleSharpLib {
 
 
             try {
-                var unused = person.CallMethod("add", new ArrayList
-                    {
-                        100
-                    });//not passing enough args
+                var unused = person.CallMethod("add", 100);//not passing enough args
             }
             catch (Exception e) {
                 Trace(e.GetType().ToString());
@@ -107,23 +103,19 @@ namespace FreExampleSharpLib {
                 Trace(e.StackTrace);
             }
 
-
-            
             return FREObject.Zero;
         }
 
         private FREObject RunErrorTests2(FREContext ctx, uint argc, FREObject[] argv) {
             Trace("***********Start Error Handling test 2***********");
             var testString = new FreObjectSharp(argv[0]);
-            try
-            {
-                testString.CallMethod("noStringFunc", null); //call method on a string
+            try {
+                testString.CallMethod("noStringFunc"); //call method on a string
             }
-            catch (Exception e)
-            {
-                return new FreException(e).Get(); //return as3 error and throw in swc
+            catch (Exception e) {
+                return new FreException(e).RawValue; //return as3 error and throw in swc
             }
-            
+
             return FREObject.Zero;
         }
 
@@ -171,18 +163,14 @@ namespace FreExampleSharpLib {
 
             var person = new FreObjectSharp(inFre1);
             var freAge = person.GetProperty("age");
-            var oldAge = (int) freAge.Value;
+            var oldAge = Convert.ToInt32(freAge.Value);
             var newAge = new FreObjectSharp(oldAge + 10);
             person.SetProperty("age", newAge);
 
             var personType = person.GetType();
             Trace("person type is:" + personType);
             Trace("current person age is: " + oldAge);
-            var addition = person.CallMethod("add", new ArrayList
-            {
-                100,
-                33
-            });
+            var addition = person.CallMethod("add", 100, 33);
             var sum = addition.Value;
             Trace("result is: " + sum);
 
@@ -207,7 +195,7 @@ namespace FreExampleSharpLib {
             rectangle.Height = 111;
             var ret = new FreRectangleSharp(rectangle);
 
-            var point = new Point(10,88);
+            var point = new Point(10, 88);
             // FrePointSharp is a new FreXXXSharp type which is extended from FreObjectSharp
             // It is created in the local project. It is based off flash.geom.Point
             // This enables more and more as3 classes to be ported to FRE !!
@@ -231,7 +219,7 @@ namespace FreExampleSharpLib {
             Trace("AIR Array length: " + airArrayLen);
 
             var itemZero = inFre.GetObjectAt(0);
-            var itemZeroVal = (int) itemZero.Value;
+            var itemZeroVal = Convert.ToInt32(itemZero.Value);
 
             Trace("AIR Array item 0 before change: " + itemZeroVal);
 
@@ -250,7 +238,7 @@ namespace FreExampleSharpLib {
             if (inFre2 == FREObject.Zero) return FREObject.Zero;
 
             try {
-                var airInt = (int) new FreObjectSharp(inFre1).Value;
+                var airInt = Convert.ToInt32(new FreObjectSharp(inFre1).Value);
                 var airUint = Convert.ToUInt32(new FreObjectSharp(inFre2).Value);
 
                 Trace("Int passed from AIR: " + airInt);
@@ -270,12 +258,12 @@ namespace FreExampleSharpLib {
 
         }
 
-       
+
         private FREObject RunNumberTests(FREContext ctx, uint argc, FREObject[] argv) {
             Trace("***********Start Number test***********");
             var inFre = argv[0];
             if (inFre == FREObject.Zero) return FREObject.Zero;
-            var airNumber =  (double) new FreObjectSharp(inFre).Value;
+            var airNumber = (double)new FreObjectSharp(inFre).Value;
             Trace("Number passed from AIR: " + airNumber);
             const double sharpDouble = 34343.31;
             return new FreObjectSharp(sharpDouble).RawValue;
@@ -286,7 +274,7 @@ namespace FreExampleSharpLib {
             var inFre = argv[0];
             if (inFre == FREObject.Zero) return FREObject.Zero;
             try {
-                var airString = new FreObjectSharp(inFre).Value as string;
+                var airString = Convert.ToString(new FreObjectSharp(inFre).Value);
                 Trace("String passed from AIR:" + airString);
             }
             catch (Exception e) {

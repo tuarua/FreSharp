@@ -54,6 +54,7 @@
     <Compile Include="Display\FreBitmapDataSharp.cs" />
     <Compile Include="FreByteArraySharp.cs" />
     <Compile Include="Exceptions\FreException.cs" />
+    <Compile Include="FreContextSharp.cs" />
     <Compile Include="FreObjectSharp.cs" />
     <Compile Include="FreObjectTypeSharp.cs" />
     <Compile Include="Exceptions\FreReadOnlyException.cs" />
@@ -66,7 +67,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FRESharpCore\FRESharpCore.vcxproj">
+    <ProjectReference Include="..\FreSharpCore\FreSharpCore.vcxproj">
       <Project>{8f6a0939-4f4d-48ee-a417-17c4e1b90c57}</Project>
       <Name>FreSharpCore</Name>
     </ProjectReference>

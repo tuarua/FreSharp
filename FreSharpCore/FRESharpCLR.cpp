@@ -182,14 +182,14 @@ namespace FRESharpCore {
 		return val;
 	}
 
-	void FRESharpCLR::dispatchEvent(String^ name, String^ value) {
+	void FRESharpCLR::dispatchEvent(FREContextCLR freContext, String^ name, String^ value) {
 		std::string nameStr = "";
 		MarshalString(name, nameStr);
 
 		std::string valueStr = "";
 		MarshalString(value, valueStr);
 
-		FREDispatchStatusEventAsync(dllContext.ToPointer(), reinterpret_cast<const uint8_t *>(valueStr.data()),
+		FREDispatchStatusEventAsync(freContext.ToPointer(), reinterpret_cast<const uint8_t *>(valueStr.data()),
 			reinterpret_cast<const uint8_t *>(nameStr.data()));
 	}
 
@@ -290,10 +290,6 @@ namespace FRESharpCore {
 
 	void FRESharpCLR::releaseByteArrayData(FREObjectCLR freObject) {
 		FREReleaseByteArray(freObject.ToPointer());
-	}
-
-	void FRESharpCLR::setFREContext(FREObjectCLR freContext) {
-		dllContext = freContext;
 	}
 
 }

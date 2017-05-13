@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using FREObject = System.IntPtr;
 namespace TuaRua.FreSharp.Exceptions {
     /// <summary>
@@ -8,25 +7,17 @@ namespace TuaRua.FreSharp.Exceptions {
     public class FreException {
         private readonly FreObjectSharp _aneError;
         /// <summary>
-        /// 
+        /// Returns a ANEError as a FREObject
+        /// </summary>
+        public FREObject RawValue => _aneError.RawValue;
+
+        /// <summary>
+        /// Creates a FreException from a C# Exception
         /// </summary>
         /// <param name="e"></param>
         public FreException(Exception e) {
-            _aneError = new FreObjectSharp("com.tuarua.ANEError", new ArrayList
-            {
-                new FreObjectSharp(e.Message),
-                new FreObjectSharp(0),
-                new FreObjectSharp(e.GetType().ToString()),
-                new FreObjectSharp(e.Source),
-                new FreObjectSharp(e.StackTrace)
-            });
+            _aneError = new FreObjectSharp("com.tuarua.ANEError", e.Message, 0, e.GetType().ToString(), e.Source, e.StackTrace);
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public FREObject Get() {
-            return _aneError.RawValue;
-        }
+
     }
 }

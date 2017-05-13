@@ -188,17 +188,39 @@
             
             </summary>
         </member>
+        <member name="P:TuaRua.FreSharp.Exceptions.FreException.RawValue">
+            <summary>
+            Returns a ANEError as a FREObject
+            </summary>
+        </member>
         <member name="M:TuaRua.FreSharp.Exceptions.FreException.#ctor(System.Exception)">
             <summary>
-            
+            Creates a FreException from a C# Exception
             </summary>
             <param name="e"></param>
         </member>
-        <member name="M:TuaRua.FreSharp.Exceptions.FreException.Get">
+        <member name="T:TuaRua.FreSharp.FreContextSharp">
             <summary>
             
             </summary>
-            <returns></returns>
+        </member>
+        <member name="M:TuaRua.FreSharp.FreContextSharp.#ctor">
+            <summary>
+            Creates an empty C# FREContext
+            </summary>
+        </member>
+        <member name="M:TuaRua.FreSharp.FreContextSharp.#ctor(System.IntPtr)">
+            <summary>
+            Creates a C# FREObject from a C FREObject
+            </summary>
+            <param name="freContext"></param>
+        </member>
+        <member name="M:TuaRua.FreSharp.FreContextSharp.DispatchEvent(System.String,System.String)">
+            <summary>
+            Dispatches an event. Mimics FREDispatchStatusEventAsync
+            </summary>
+            <param name="name"></param>
+            <param name="value"></param>
         </member>
         <member name="T:TuaRua.FreSharp.FreObjectSharp">
             <summary>
@@ -257,14 +279,14 @@
             </summary>
             <param name="value"></param>
         </member>
-        <member name="M:TuaRua.FreSharp.FreObjectSharp.#ctor(System.String,System.Collections.ArrayList)">
+        <member name="M:TuaRua.FreSharp.FreObjectSharp.#ctor(System.String,System.Object[])">
             <summary>
             Creates a C# FREObject with given class name
             </summary>
             <param name="className"></param>
             <param name="args"></param>
         </member>
-        <member name="M:TuaRua.FreSharp.FreObjectSharp.CallMethod(System.String,System.Collections.ArrayList)">
+        <member name="M:TuaRua.FreSharp.FreObjectSharp.CallMethod(System.String,System.Object[])">
             <summary>
             Calls a method on a C# FREObject.
             </summary>
@@ -272,13 +294,12 @@
             <param name="args"></param>
             <returns></returns>
         </member>
-        <member name="M:TuaRua.FreSharp.FreObjectSharp.CallMethod(System.String,System.Collections.ArrayList,System.Boolean)">
+        <member name="M:TuaRua.FreSharp.FreObjectSharp.CallMethod(System.String,System.Collections.ArrayList)">
             <summary>
             
             </summary>
             <param name="methodName"></param>
             <param name="args"></param>
-            <param name="returnArray"></param>
             <returns></returns>
         </member>
         <member name="M:TuaRua.FreSharp.FreObjectSharp.GetProperty(System.String)">
@@ -431,16 +452,11 @@
             
             </summary>
         </member>
-        <member name="M:TuaRua.FreSharp.FreSharpHelper.SetFreContext(System.IntPtr@)">
-            <summary>
-            Sets the C# FreContext to use to dispatch events.
-            </summary>
-            <param name="freContext"></param>
-        </member>
-        <member name="M:TuaRua.FreSharp.FreSharpHelper.DispatchEvent(System.String,System.String)">
+        <member name="M:TuaRua.FreSharp.FreSharpHelper.DispatchEvent(System.IntPtr@,System.String,System.String)">
             <summary>
             Dispatches an event. Mimics FREDispatchStatusEventAsync
             </summary>
+            <param name="freContext"></param>
             <param name="name"></param>
             <param name="value"></param>
         </member>
