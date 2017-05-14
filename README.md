@@ -1,3 +1,4 @@
+
 # FreSharp
 
 [![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=5UR2T52J633RC)
@@ -32,7 +33,7 @@ Example - Call a method on an FREObject
 
 ````C#
 var addition = person.CallMethod("add", 100, 33);
-var sum = (int) addition.Value;
+var sum = Convert.ToInt32(addition.Value);
 Trace("result is: " + sum);
 `````
 
