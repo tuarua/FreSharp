@@ -31,10 +31,7 @@ return new FreObjectSharp(sharpString).RawValue;
 Example - Call a method on an FREObject
 
 ````C#
-var addition = person.CallMethod("add", new ArrayList {
-    100,
-    33
-});
+var addition = person.CallMethod("add", 100, 33);
 var sum = (int) addition.Value;
 Trace("result is: " + sum);
 `````
