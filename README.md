@@ -18,7 +18,7 @@ Example - Convert a FREObject into a String, and String into FREObject
 ````C#
 var inFre = argv[0];
 try {
-   var airString = new FreObjectSharp(inFre).Value as string;
+   var airString = Convert.ToString(new FreObjectSharp(inFre).Value);
    Trace("String passed from AIR:" + airString);
 }
 catch (Exception e) {
