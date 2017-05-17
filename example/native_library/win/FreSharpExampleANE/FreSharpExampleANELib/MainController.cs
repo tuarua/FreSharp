@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Windows.Interop;
 using System.Windows.Shapes;
 using FreSharp.Geom;
@@ -12,6 +13,7 @@ using TuaRua.FreSharp.Geom;
 using FREObject = System.IntPtr;
 using FREContext = System.IntPtr;
 using Hwnd = System.IntPtr;
+
 namespace FreExampleSharpLib {
     public class MainController : FreSharpController {
         private Hwnd _airWindow;
@@ -132,20 +134,37 @@ namespace FreExampleSharpLib {
             return FREObject.Zero;
         }
 
+
+        private static void SepiaTone(FreBitmapDataSharp freBitmapDataSharp) {
+            freBitmapDataSharp.Acquire();
+            var ptr = freBitmapDataSharp.Bits32;
+            var byteBuffer = new byte[freBitmapDataSharp.LineStride32 * freBitmapDataSharp.Height * 4];
+            Marshal.Copy(ptr, byteBuffer, 0, byteBuffer.Length);
+            const byte maxValue = 255;
+            for (var k = 0; k < byteBuffer.Length; k += 4) {
+                var r = byteBuffer[k] * 0.189f + byteBuffer[k + 1] * 0.769f + byteBuffer[k + 2] * 0.393f;
+                var g = byteBuffer[k] * 0.168f + byteBuffer[k + 1] * 0.686f + byteBuffer[k + 2] * 0.349f;
+                var b = byteBuffer[k] * 0.131f + byteBuffer[k + 1] * 0.534f + byteBuffer[k + 2] * 0.272f;
+
+                byteBuffer[k + 2] = r > maxValue ? maxValue : (byte)r;
+                byteBuffer[k + 1] = g > maxValue ? maxValue : (byte)g;
+                byteBuffer[k] = b > maxValue ? maxValue : (byte)b;
+            }
+
+            Marshal.Copy(byteBuffer, 0, ptr, byteBuffer.Length);
+            freBitmapDataSharp.InvalidateBitmapDataRect(0, 0, Convert.ToUInt32(freBitmapDataSharp.Width), Convert.ToUInt32(freBitmapDataSharp.Height));
+            freBitmapDataSharp.Release();
+        }
+
         private FREObject RunBitmapTests(FREContext ctx, uint argc, FREObject[] argv) {
             Trace("***********Start Bitmap test***********");
             var inFre = argv[0];
             if (inFre == FREObject.Zero) return FREObject.Zero;
 
             try {
-                var bmp = new FreBitmapDataSharp(inFre).GetAsBitmap();
-
-                if (bmp == null) return FREObject.Zero;
-                Trace("C# Bitmap Width: " + bmp.Width);
-                Trace("C# Bitmap Height: " + bmp.Height);
-                var ret = new FreBitmapDataSharp(bmp); //convert to as3 BitmapData
-
-                return ret.RawValue;
+                var bmd = new FreBitmapDataSharp(inFre);
+                SepiaTone(bmd);
+                //var bmp = bmd.GetAsBitmap(); //makes a bitmap copy
             }
             catch (Exception e) {
                 Trace(e.GetType().ToString());

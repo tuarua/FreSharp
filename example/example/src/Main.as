@@ -20,7 +20,7 @@ import flash.text.TextField;
 import flash.text.TextFormat;
 import flash.text.TextFormatAlign;
 import flash.utils.ByteArray;
-
+[SWF(width="640", height="640", frameRate="60", backgroundColor="#F1F1F1")]
 public class Main extends Sprite {
     private var ane:FreSharpExampleANE = new FreSharpExampleANE();
     private var hasActivated:Boolean = false;
@@ -85,7 +85,7 @@ public class Main extends Sprite {
         }
 
 
-        const IMAGE_URL:String = "http://tinyurl.com/zaky3n4";
+        const IMAGE_URL:String = "https://scontent.cdninstagram.com/t/s320x320/17126819_1827746530776184_5999931637335326720_n.jpg";
 
         var ldr:Loader = new Loader();
         ldr.contentLoaderInfo.addEventListener(Event.COMPLETE, ldr_complete);
@@ -93,12 +93,15 @@ public class Main extends Sprite {
 
         function ldr_complete(evt:Event):void {
             var bmp:Bitmap = ldr.content as Bitmap;
-            var bmd:BitmapData = ane.runBitmapTests(bmp.bitmapData);
-            if (bmd) {
+            bmp.y = 150;
+            addChild(bmp);
+
+            /*var bmd:BitmapData =*/ ane.runBitmapTests(bmp.bitmapData);
+            /*if (bmd) {
                 var bitmap:Bitmap = new Bitmap(bmd);
                 bitmap.y = 150;
                 addChild(bitmap);
-            }
+            }*/
         }
 
 

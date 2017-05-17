@@ -11,6 +11,7 @@ import flash.utils.ByteArray;
 
 public class FreSharpExampleANE extends EventDispatcher {
     private static const NAME:String = "FreSharpExampleANE";
+
     public function FreSharpExampleANE() {
         initiate()
     }
@@ -58,8 +59,8 @@ public class FreSharpExampleANE extends EventDispatcher {
         return ANEContext.ctx.call("runExtensibleTests", value) as Rectangle;
     }
 
-    public function runBitmapTests(bmd:BitmapData):BitmapData {
-       return ANEContext.ctx.call("runBitmapTests", bmd) as BitmapData;
+    public function runBitmapTests(bmd:BitmapData):void {
+        ANEContext.ctx.call("runBitmapTests", bmd);
     }
 
     public function runByteArrayTests(byteArray:ByteArray):void {
@@ -75,8 +76,8 @@ public class FreSharpExampleANE extends EventDispatcher {
     }
 
     public function runErrorTests2(string:String):void {
-        var theRet:* = ANEContext.ctx.call("runErrorTests2",string);
-        if(theRet is ANEError){
+        var theRet:* = ANEContext.ctx.call("runErrorTests2", string);
+        if (theRet is ANEError) {
             throw theRet as ANEError;
         }
     }
