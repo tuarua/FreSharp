@@ -82,8 +82,8 @@ public class FreSharpExampleANE extends EventDispatcher {
         }
     }
 
-    public function runNativeTests():void {
-        ANEContext.ctx.call("runNativeTests");
+    public function runNativeTests(bmd:BitmapData):void {
+        ANEContext.ctx.call("runNativeTests", bmd);
     }
 
     public function dispose():void {

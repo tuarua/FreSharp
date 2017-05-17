@@ -20,8 +20,12 @@ import flash.text.TextField;
 import flash.text.TextFormat;
 import flash.text.TextFormatAlign;
 import flash.utils.ByteArray;
+
 [SWF(width="640", height="640", frameRate="60", backgroundColor="#F1F1F1")]
 public class Main extends Sprite {
+    [Embed(source="adobeair.png")]
+    public static const TestImage:Class;
+
     private var ane:FreSharpExampleANE = new FreSharpExampleANE();
     private var hasActivated:Boolean = false;
 
@@ -39,8 +43,8 @@ public class Main extends Sprite {
         tf.color = 0x333333;
         tf.align = TextFormatAlign.LEFT;
         textField.defaultTextFormat = tf;
-        textField.width = 800;
-        textField.height = 800;
+        textField.width = 400;
+        textField.height = 250;
         textField.multiline = true;
         textField.wordWrap = true;
 
@@ -92,16 +96,28 @@ public class Main extends Sprite {
         ldr.load(new URLRequest(IMAGE_URL));
 
         function ldr_complete(evt:Event):void {
-            var bmp:Bitmap = ldr.content as Bitmap;
-            bmp.y = 150;
-            addChild(bmp);
 
-            /*var bmd:BitmapData =*/ ane.runBitmapTests(bmp.bitmapData);
-            /*if (bmd) {
-                var bitmap:Bitmap = new Bitmap(bmd);
-                bitmap.y = 150;
-                addChild(bitmap);
-            }*/
+            var spr:Sprite = new Sprite();
+
+
+
+            var bmp:Bitmap = ldr.content as Bitmap;
+            spr.addChild(bmp);
+            var overlay:Sprite = new Sprite();
+            overlay.graphics.beginFill(0x33FFCC);
+            overlay.graphics.drawCircle(120, 100, 50);
+            overlay.graphics.endFill();
+            spr.addChild(overlay);
+
+            var bmd:BitmapData = new BitmapData(320, 320, true, 0xFFFFFF);
+            bmd.draw(spr);
+            var sprBmp:Bitmap = new Bitmap(bmd,"auto",true);
+
+
+            sprBmp.y = 150;
+            addChild(sprBmp);
+
+            ane.runBitmapTests(sprBmp.bitmapData);
         }
 
 
@@ -117,10 +133,10 @@ public class Main extends Sprite {
             ane.runErrorTests2("abc");
         } catch (e:ANEError) {
             //trace("e is",e)
-            trace("e.message: ",e.message);
-            trace("e.type: ",e.type);
-            trace("e.errorID",e.errorID);
-            trace("e.getStackTrace",e.getStackTrace());
+            trace("e.message: ", e.message);
+            trace("e.type: ", e.type);
+            trace("e.errorID", e.errorID);
+            trace("e.getStackTrace", e.getStackTrace());
         }
 
 
@@ -136,7 +152,9 @@ public class Main extends Sprite {
         if (!hasActivated) {
             // adds a native window over our AIR window and draws an ellipse
             // Supports transparency on Windows 8.1+ requires .NET4.6+
-            ane.runNativeTests();
+
+            var bmp:Bitmap = new TestImage();
+            ane.runNativeTests(bmp.bitmapData);
         }
         hasActivated = true;
     }

@@ -4,7 +4,6 @@ using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Interop;
-using System.Windows.Shapes;
 using FreSharp.Geom;
 using TuaRua.FreSharp;
 using TuaRua.FreSharp.Display;
@@ -44,28 +43,39 @@ namespace FreExampleSharpLib {
         }
 
         private FREObject RunNativeTests(FREContext ctx, uint argc, FREObject[] argv) {
-            _airWindow = System.Diagnostics.Process.GetCurrentProcess().MainWindowHandle; //get the reference to the AIR Window
+            var inFre = argv[0];
+            if (inFre == FREObject.Zero) return FREObject.Zero;
 
-            //build a new native window with transparency and overlay
-            var parameters = new HwndSourceParameters();
-            parameters.SetPosition(20, 20);
-            parameters.SetSize(100, 200);
-            parameters.ParentWindow = _airWindow;
-            parameters.WindowName = "AIR Native Stage Window";
-            parameters.WindowStyle = (int)(WindowStyles.WS_CHILD | WindowStyles.WS_VISIBLE);
-            parameters.ExtendedWindowStyle = (int)WindowExStyles.WS_EX_LAYERED;
-            parameters.UsesPerPixelTransparency = true;
-            parameters.AcquireHwndFocusInMenuMode = false;
+            try {
+                var bitmapDatamd = new FreBitmapDataSharp(inFre);
+                var logoBitmap = bitmapDatamd.GetAsBitmap(); //makes a bitmap copy
 
-            var ellipse = new Ellipse {
-                Width = 100,
-                Height = 200,
-                Fill = System.Windows.Media.Brushes.Red,
-                Opacity = 0.7
-            };
+                _airWindow = System.Diagnostics.Process.GetCurrentProcess().MainWindowHandle; //get the reference to the AIR Window
 
-            var unused = new HwndSource(parameters) { RootVisual = ellipse };
+                //build a new native window with transparency and overlay
+                var parameters = new HwndSourceParameters();
+                parameters.SetPosition(0, 0);
+                parameters.SetSize(logoBitmap.Width + 256, logoBitmap.Height);
+                parameters.ParentWindow = _airWindow;
+                parameters.WindowName = "AIR Native Stage Window";
+                parameters.WindowStyle = (int)(WindowStyles.WS_CHILD | WindowStyles.WS_VISIBLE);
+                parameters.ExtendedWindowStyle = (int)WindowExStyles.WS_EX_LAYERED;
+                parameters.UsesPerPixelTransparency = true;
+                parameters.AcquireHwndFocusInMenuMode = false;
 
+                var nativeView = new NativeView();
+                var unused = new HwndSource(parameters) { RootVisual = nativeView };
+                nativeView.Init();
+                nativeView.AddImage(logoBitmap);
+
+
+            }
+            catch (Exception e) {
+                Trace(e.GetType().ToString());
+                Trace(e.Message);
+                Trace(e.Source);
+                Trace(e.StackTrace);
+            }
             return FREObject.Zero;
         }
 
