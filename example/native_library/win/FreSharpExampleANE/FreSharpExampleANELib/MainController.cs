@@ -3,23 +3,23 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Windows.Interop;
 using FreSharp.Geom;
 using TuaRua.FreSharp;
 using TuaRua.FreSharp.Display;
 using TuaRua.FreSharp.Exceptions;
 using TuaRua.FreSharp.Geom;
+using TuaRua.FreSharp.Internal;
 using FREObject = System.IntPtr;
 using FREContext = System.IntPtr;
-using Hwnd = System.IntPtr;
+
+//Resharper slow
+//https://resharper-support.jetbrains.com/hc/en-us/articles/206546919-Visual-Studio-with-ReSharper-is-slow
 
 namespace FreExampleSharpLib {
     public class MainController : FreSharpController {
-        private Hwnd _airWindow;
         public string[] GetFunctions() {
             FunctionsDict =
-                new Dictionary<string, Func<FREObject, uint, FREObject[], FREObject>>
-                {
+                new Dictionary<string, Func<FREObject, uint, FREObject[], FREObject>> {
                     {"runStringTests", RunStringTests},
                     {"runNumberTests", RunNumberTests},
                     {"runIntTests", RunIntTests},
@@ -31,7 +31,12 @@ namespace FreExampleSharpLib {
                     {"runErrorTests", RunErrorTests},
                     {"runDataTests", RunDataTests},
                     {"runErrorTests2", RunErrorTests2},
-                    {"runNativeTests", RunNativeTests},
+
+                    {"initNativeStage", FreStageSharp.Init},
+                    {"addNativeStage", FreStageSharp.AddRoot},
+                    {"updateNativeStage", FreStageSharp.Update},
+                    {"addNativeChild", FreDisplayList.AddChild},
+                    {"updateNativeChild", FreDisplayList.UpdateChild},
                 };
 
 
@@ -39,43 +44,6 @@ namespace FreExampleSharpLib {
         }
 
         private FREObject RunDataTests(FREContext ctx, uint argc, FREObject[] argv) {
-            return FREObject.Zero;
-        }
-
-        private FREObject RunNativeTests(FREContext ctx, uint argc, FREObject[] argv) {
-            var inFre = argv[0];
-            if (inFre == FREObject.Zero) return FREObject.Zero;
-
-            try {
-                var bitmapDatamd = new FreBitmapDataSharp(inFre);
-                var logoBitmap = bitmapDatamd.GetAsBitmap(); //makes a bitmap copy
-
-                _airWindow = System.Diagnostics.Process.GetCurrentProcess().MainWindowHandle; //get the reference to the AIR Window
-
-                //build a new native window with transparency and overlay
-                var parameters = new HwndSourceParameters();
-                parameters.SetPosition(0, 0);
-                parameters.SetSize(logoBitmap.Width + 256, logoBitmap.Height);
-                parameters.ParentWindow = _airWindow;
-                parameters.WindowName = "AIR Native Stage Window";
-                parameters.WindowStyle = (int)(WindowStyles.WS_CHILD | WindowStyles.WS_VISIBLE);
-                parameters.ExtendedWindowStyle = (int)WindowExStyles.WS_EX_LAYERED;
-                parameters.UsesPerPixelTransparency = true;
-                parameters.AcquireHwndFocusInMenuMode = false;
-
-                var nativeView = new NativeView();
-                var unused = new HwndSource(parameters) { RootVisual = nativeView };
-                nativeView.Init();
-                nativeView.AddImage(logoBitmap);
-
-
-            }
-            catch (Exception e) {
-                Trace(e.GetType().ToString());
-                Trace(e.Message);
-                Trace(e.Source);
-                Trace(e.StackTrace);
-            }
             return FREObject.Zero;
         }
 
@@ -106,7 +74,7 @@ namespace FreExampleSharpLib {
 
 
             try {
-                var unused = person.CallMethod("add", 100);//not passing enough args
+                var unused = person.CallMethod("add", 100); //not passing enough args
             }
             catch (Exception e) {
                 Trace(e.GetType().ToString());
@@ -156,13 +124,14 @@ namespace FreExampleSharpLib {
                 var g = byteBuffer[k] * 0.168f + byteBuffer[k + 1] * 0.686f + byteBuffer[k + 2] * 0.349f;
                 var b = byteBuffer[k] * 0.131f + byteBuffer[k + 1] * 0.534f + byteBuffer[k + 2] * 0.272f;
 
-                byteBuffer[k + 2] = r > maxValue ? maxValue : (byte)r;
-                byteBuffer[k + 1] = g > maxValue ? maxValue : (byte)g;
-                byteBuffer[k] = b > maxValue ? maxValue : (byte)b;
+                byteBuffer[k + 2] = r > maxValue ? maxValue : (byte) r;
+                byteBuffer[k + 1] = g > maxValue ? maxValue : (byte) g;
+                byteBuffer[k] = b > maxValue ? maxValue : (byte) b;
             }
 
             Marshal.Copy(byteBuffer, 0, ptr, byteBuffer.Length);
-            freBitmapDataSharp.InvalidateBitmapDataRect(0, 0, Convert.ToUInt32(freBitmapDataSharp.Width), Convert.ToUInt32(freBitmapDataSharp.Height));
+            freBitmapDataSharp.InvalidateBitmapDataRect(0, 0, Convert.ToUInt32(freBitmapDataSharp.Width),
+                Convert.ToUInt32(freBitmapDataSharp.Height));
             freBitmapDataSharp.Release();
         }
 
@@ -242,7 +211,7 @@ namespace FreExampleSharpLib {
             Trace("***********Start Array test***********");
             var inFre = new FreArraySharp(argv[0]);
             var airArray = inFre.GetAsArrayList();
-            var airArrayLen = inFre.GetLength();
+            var airArrayLen = inFre.Length;
 
             Trace("Array passed from AIR: " + airArray);
             Trace("AIR Array length: " + airArrayLen);
@@ -256,7 +225,6 @@ namespace FreExampleSharpLib {
             inFre.SetObjectAt(newVal, 0);
 
             return inFre.RawValue;
-
         }
 
         private FREObject RunIntTests(FREContext ctx, uint argc, FREObject[] argv) {
@@ -283,8 +251,6 @@ namespace FreExampleSharpLib {
 
             Trace("uintFreType: " + intFreType);
             return new FreObjectSharp(sharpInt).RawValue;
-
-
         }
 
 
@@ -292,7 +258,7 @@ namespace FreExampleSharpLib {
             Trace("***********Start Number test***********");
             var inFre = argv[0];
             if (inFre == FREObject.Zero) return FREObject.Zero;
-            var airNumber = (double)new FreObjectSharp(inFre).Value;
+            var airNumber = (double) new FreObjectSharp(inFre).Value;
             Trace("Number passed from AIR: " + airNumber);
             const double sharpDouble = 34343.31;
             return new FreObjectSharp(sharpDouble).RawValue;
@@ -313,8 +279,5 @@ namespace FreExampleSharpLib {
             const string sharpString = "I am a string from C#";
             return new FreObjectSharp(sharpString).RawValue;
         }
-
-
-
     }
 }

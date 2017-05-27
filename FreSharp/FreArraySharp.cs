@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using TuaRua.FreSharp.Display;
+using TuaRua.FreSharp.Geom;
 
 namespace TuaRua.FreSharp {
     /// <summary>
@@ -11,6 +12,7 @@ namespace TuaRua.FreSharp {
         /// Creates an Empty C# FreArray.
         /// </summary>
         public FreArraySharp() { }
+
         /// <summary>
         /// Creates a C# FreArray from a C FREObject.
         /// </summary>
@@ -22,16 +24,17 @@ namespace TuaRua.FreSharp {
         /// <summary>
         /// Returns the length of the C# FreArray.
         /// </summary>
-        /// <returns></returns>
-        public uint GetLength() {
-            uint resultPtr = 0;
-            var ret = FreSharpHelper.Core.getArrayLength(RawValue, ref resultPtr);
-            var status = (FreResultSharp)resultPtr;
-            if (status == FreResultSharp.Ok) {
-                return ret;
+        public uint Length {
+            get {
+                uint resultPtr = 0;
+                var ret = FreSharpHelper.Core.getArrayLength(RawValue, ref resultPtr);
+                var status = (FreResultSharp) resultPtr;
+                if (status == FreResultSharp.Ok) {
+                    return ret;
+                }
+                FreSharpHelper.ThrowFreException(status, "cannot get length of array", null);
+                return 0;
             }
-            FreSharpHelper.ThrowFreException(status, "cannot get length of array", null);
-            return 0;
         }
 
         /// <summary>
@@ -58,13 +61,14 @@ namespace TuaRua.FreSharp {
         /// <returns></returns>
         public ArrayList GetAsArrayList() {
             var al = new ArrayList();
-            var len = GetLength();
+            var len = Length;
             if (len <= 0) return al;
-            var type = GetType();
-            for (uint i = 0; i < GetLength(); i++) {
+            for (uint i = 0; i < len; i++) {
+                var itm = GetObjectAt(i);
+                var type = itm.GetType();
                 switch (type) {
                     case FreObjectTypeSharp.String:
-                        al.Add(FreSharpHelper.GetAsString(RawValue));
+                        al.Add(FreSharpHelper.GetAsString(itm.RawValue));
                         break;
                     case FreObjectTypeSharp.Bytearray: //TODO
                         break;
@@ -72,23 +76,27 @@ namespace TuaRua.FreSharp {
                     case FreObjectTypeSharp.Vector: //TODO
                         break;
                     case FreObjectTypeSharp.Bitmapdata:
-                        var bmdFre = new FreBitmapDataSharp(RawValue);
+                        var bmdFre = new FreBitmapDataSharp(itm.RawValue);
                         al.Add(bmdFre.GetAsBitmap());
                         break;
                     case FreObjectTypeSharp.Boolean:
-                        al.Add(FreSharpHelper.GetAsBool(RawValue));
+                        al.Add(FreSharpHelper.GetAsBool(itm.RawValue));
                         break;
                     case FreObjectTypeSharp.Null:
                         break;
                     case FreObjectTypeSharp.Int:
-                        al.Add(FreSharpHelper.GetAsInt(RawValue));
+                        al.Add(FreSharpHelper.GetAsInt(itm.RawValue));
                         break;
                     case FreObjectTypeSharp.Object:
                     case FreObjectTypeSharp.Class:
-                        al.Add(FreSharpHelper.GetAsDictionary(RawValue));
+                        al.Add(FreSharpHelper.GetAsDictionary(itm.RawValue));
                         break;
                     case FreObjectTypeSharp.Number:
-                        al.Add(FreSharpHelper.GetAsDouble(RawValue));
+                        al.Add(FreSharpHelper.GetAsDouble(itm.RawValue));
+                        break;
+                    case FreObjectTypeSharp.Rectangle:
+                        var rectFre = new FreRectangleSharp(itm.RawValue);
+                        al.Add(rectFre.Value);
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
@@ -96,6 +104,5 @@ namespace TuaRua.FreSharp {
             }
             return al;
         }
-
     }
 }

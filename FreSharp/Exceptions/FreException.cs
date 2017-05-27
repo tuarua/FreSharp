@@ -16,7 +16,7 @@ namespace TuaRua.FreSharp.Exceptions {
         /// </summary>
         /// <param name="e"></param>
         public FreException(Exception e) {
-            _aneError = new FreObjectSharp("com.tuarua.ANEError", e.Message, 0, e.GetType().ToString(), e.Source, e.StackTrace);
+            _aneError = new FreObjectSharp("com.tuarua.fre.ANEError", e.Message, 0, e.GetType().ToString(), e.Source, e.StackTrace);
         }
 
     }

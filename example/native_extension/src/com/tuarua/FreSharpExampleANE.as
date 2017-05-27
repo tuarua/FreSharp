@@ -2,6 +2,10 @@
  * Created by Eoin Landy on 20/04/2017.
  */
 package com.tuarua {
+import com.tuarua.fre.ANEContext;
+import com.tuarua.fre.ANEError;
+import com.tuarua.fre.display.NativeImage;
+
 import flash.display.BitmapData;
 import flash.events.EventDispatcher;
 import flash.events.StatusEvent;
@@ -13,13 +17,13 @@ public class FreSharpExampleANE extends EventDispatcher {
     private static const NAME:String = "FreSharpExampleANE";
 
     public function FreSharpExampleANE() {
-        initiate()
+        initiate();
     }
 
     private function initiate():void {
         trace("[" + NAME + "] Initalizing ANE...");
         try {
-            ANEContext.ctx = ExtensionContext.createExtensionContext("com.tuarua.FreSharpExampleANE", null);
+            ANEContext.ctx = ExtensionContext.createExtensionContext("com.tuarua."+NAME, null);
             ANEContext.ctx.addEventListener(StatusEvent.STATUS, gotEvent);
         } catch (e:Error) {
             trace("[" + NAME + "] ANE Not loaded properly.  Future calls will fail.");
@@ -80,10 +84,6 @@ public class FreSharpExampleANE extends EventDispatcher {
         if (theRet is ANEError) {
             throw theRet as ANEError;
         }
-    }
-
-    public function runNativeTests(bmd:BitmapData):void {
-        ANEContext.ctx.call("runNativeTests", bmd);
     }
 
     public function dispose():void {

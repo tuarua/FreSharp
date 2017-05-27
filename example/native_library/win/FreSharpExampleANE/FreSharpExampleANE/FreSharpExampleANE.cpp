@@ -1,89 +1,12 @@
 #include "FreSharpExampleANE.h"
 #include "FlashRuntimeExtensions.h"
-#include <vector>
-
-std::vector<std::string> funcArray;
-
 #include "stdafx.h"
-
-namespace ManagedCode {
-	using namespace System;
-	using namespace System::Windows;
-	using namespace System::Windows::Interop;
-	using namespace System::Windows::Media;
-	using namespace System::Collections::Generic;
-	using FREObjectCLR = IntPtr;
-	using FREContextCLR = IntPtr;
-	using FREArgvSharp = array<FREObjectCLR>^;
-
-	ref class ManagedGlobals {
-	public:
-		static FreExampleSharpLib::MainController^ controller = nullptr;
-	};
-
-	array<FREObjectCLR>^ MarshalFREArray(array<FREObject>^ argv, uint32_t argc) {
-		array<FREObjectCLR>^ arr = gcnew array<FREObjectCLR>(argc);
-		for (uint32_t i = 0; i < argc; i++) {
-			arr[i] = FREObjectCLR(argv[i]);
-		}
-		return arr;
-	}
-
-	void MarshalString(String ^ s, std::string& os) {
-		using namespace Runtime::InteropServices;
-		const char* chars =
-			(const char*)(Marshal::StringToHGlobalAnsi(s)).ToPointer();
-		os = chars;
-		Marshal::FreeHGlobal(FREObjectCLR((void*)chars));
-	}
-
-
-	FREObject CallSharpFunction(String^ name, FREContext context, array<FREObject>^ argv, uint32_t argc) {
-		return (FREObject)ManagedGlobals::controller->CallSharpFunction(name, FREContextCLR(context), argc, MarshalFREArray(argv, argc));
-	}
-
-	void SetFREContext(FREContext freContext) {
-		ManagedGlobals::controller->SetFreContext(FREContextCLR(freContext));
-	}
-
-	void InitController() {
-		ManagedGlobals::controller = gcnew FreExampleSharpLib::MainController();
-	}
-
-
-	std::vector<std::string> GetFunctions() {
-		std::vector<std::string> ret;
-		array<String^>^ mArray = ManagedGlobals::controller->GetFunctions();
-		int i = 0;
-		for (i = 0; i < mArray->Length; ++i) {
-			std::string itemStr = "";
-			MarshalString(mArray[i], itemStr);
-			ret.push_back(itemStr);
-		}
-		return ret;
-	}
-
-}
+#include "FreSharpBridge.h"
 
 extern "C" {
 
-#define FRE_FUNCTION(fn) FREObject (fn)(FREContext context, void* functionData, uint32_t argc, FREObject argv[])
-
-	array<FREObject>^ getArgvAsArray(FREObject argv[], uint32_t argc) {
-		array<FREObject>^ arr = gcnew array<FREObject>(argc);
-		for (uint32_t i = 0; i < argc; i++) {
-			arr[i] = argv[i];
-		}
-		return arr;
-	}
-
-	FRE_FUNCTION(callSharpFunction) {
-		std::string fName = std::string((const char*)functionData);
-		return ManagedCode::CallSharpFunction(gcnew System::String(fName.c_str()), context, getArgvAsArray(argv, argc), argc);
-	}
-
 	[System::STAThreadAttribute]
-	BOOL APIENTRY WebViewANEMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved) {
+	BOOL APIENTRY FreSharpExampleANEMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved) {
 		switch (ul_reason_for_call) {
 		case DLL_PROCESS_ATTACH:
 		case DLL_THREAD_ATTACH:
@@ -96,9 +19,11 @@ extern "C" {
 
 	void contextInitializer(void* extData, const uint8_t* ctxType, FREContext ctx, uint32_t* numFunctionsToSet, const FRENamedFunction** functionsToSet) {
 
-		ManagedCode::InitController();
-		ManagedCode::SetFREContext(ctx);
-		funcArray = ManagedCode::GetFunctions();
+		
+
+		FreSharpBridge::InitController();
+		FreSharpBridge::SetFREContext(ctx);
+		FreSharpBridge::GetFunctions();
 
 		//TODO how to pass functionData without losing the string reference
 
@@ -114,10 +39,15 @@ extern "C" {
 			,{ (const uint8_t *) "runErrorTests","runErrorTests", &callSharpFunction }
 			,{ (const uint8_t *) "runDataTests","runDataTests", &callSharpFunction }
 			,{ (const uint8_t *) "runErrorTests2","runErrorTests2", &callSharpFunction }
-			,{ (const uint8_t *) "runNativeTests","runNativeTests", &callSharpFunction }
+			// Here are the functions for FreNativeStage
+			,{ (const uint8_t *) "initNativeStage","initNativeStage", &callSharpFunction }
+			,{ (const uint8_t *) "addNativeStage","addNativeStage", &callSharpFunction }
+			,{ (const uint8_t *) "updateNativeStage","updateNativeStage", &callSharpFunction }
+			,{ (const uint8_t *) "addNativeChild","addNativeChild", &callSharpFunction }
+			,{ (const uint8_t *) "updateNativeChild","updateNativeChild", &callSharpFunction }
+			//
 			
 		};
-
 
 
 		*numFunctionsToSet = sizeof(extensionFunctions) / sizeof(FRENamedFunction);

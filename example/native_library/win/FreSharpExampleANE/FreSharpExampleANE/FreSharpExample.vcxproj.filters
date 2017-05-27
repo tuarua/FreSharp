@@ -24,9 +24,18 @@
     <ClInclude Include="FreSharpExampleANE.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="FreSharpBridge.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FreNamespace.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FreSharpExampleANE.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FreSharpBridge.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
