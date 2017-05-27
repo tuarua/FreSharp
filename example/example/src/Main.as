@@ -1,18 +1,24 @@
 package {
 
-import com.tuarua.ANEError;
 import com.tuarua.Person;
 import com.tuarua.FreSharpExampleANE;
+import com.tuarua.fre.ANEError;
+import com.tuarua.fre.NativeStage;
+import com.tuarua.fre.display.NativeButton;
+import com.tuarua.fre.display.NativeImage;
+import com.tuarua.fre.display.NativeSprite;
 
 import flash.display.Bitmap;
 import flash.display.BitmapData;
 
 import flash.display.Loader;
+import flash.display.SimpleButton;
 
 import flash.display.Sprite;
 import flash.display.StageAlign;
 import flash.display.StageScaleMode;
 import flash.events.Event;
+import flash.events.MouseEvent;
 import flash.geom.Point;
 import flash.geom.Rectangle;
 import flash.net.URLRequest;
@@ -20,14 +26,22 @@ import flash.text.TextField;
 import flash.text.TextFormat;
 import flash.text.TextFormatAlign;
 import flash.utils.ByteArray;
+import flash.utils.describeType;
 
 [SWF(width="640", height="640", frameRate="60", backgroundColor="#F1F1F1")]
 public class Main extends Sprite {
     [Embed(source="adobeair.png")]
     public static const TestImage:Class;
 
+    [Embed(source="play.png")]
+    public static const TestButton:Class;
+
+    [Embed(source="play-hover.png")]
+    public static const TestButtonHover:Class;
+
     private var ane:FreSharpExampleANE = new FreSharpExampleANE();
     private var hasActivated:Boolean = false;
+    private var nativeButton:NativeButton;
 
     public function Main() {
         super();
@@ -44,7 +58,7 @@ public class Main extends Sprite {
         tf.align = TextFormatAlign.LEFT;
         textField.defaultTextFormat = tf;
         textField.width = 400;
-        textField.height = 250;
+        textField.height = 150;
         textField.multiline = true;
         textField.wordWrap = true;
 
@@ -56,10 +70,8 @@ public class Main extends Sprite {
         var resultString:String = ane.runStringTests("I am a string from AIR with new interface");
         textField.text += resultString + "\n";
 
-
         var resultNumber:Number = ane.runNumberTests(31.99);
         textField.text += "Number: " + resultNumber + "\n";
-
 
         var resultInt:int = ane.runIntTests(-54, 66);
         textField.text += "Int: " + resultInt + "\n";
@@ -100,7 +112,6 @@ public class Main extends Sprite {
             var spr:Sprite = new Sprite();
 
 
-
             var bmp:Bitmap = ldr.content as Bitmap;
             spr.addChild(bmp);
             var overlay:Sprite = new Sprite();
@@ -111,7 +122,7 @@ public class Main extends Sprite {
 
             var bmd:BitmapData = new BitmapData(320, 320, true, 0xFFFFFF);
             bmd.draw(spr);
-            var sprBmp:Bitmap = new Bitmap(bmd,"auto",true);
+            var sprBmp:Bitmap = new Bitmap(bmd, "auto", true);
 
 
             sprBmp.y = 150;
@@ -129,6 +140,7 @@ public class Main extends Sprite {
         ane.runErrorTests(person, "test string", 78);
 
         //catch the error in as
+
         try {
             ane.runErrorTests2("abc");
         } catch (e:ANEError) {
@@ -144,19 +156,55 @@ public class Main extends Sprite {
          var outData:String = ane.runDataTests(inData) as String;
          textField.text += outData + "\n";*/
 
-
         addChild(textField);
+
     }
+
 
     private function onActivated(event:Event):void {
         if (!hasActivated) {
-            // adds a native window over our AIR window and draws an ellipse
+            // adds a native window over our AIR window
             // Supports transparency on Windows 8.1+ requires .NET4.6+
+            NativeStage.init(new Rectangle(100, 0, 400, 600), true, true);
+            NativeStage.add();
 
-            var bmp:Bitmap = new TestImage();
-            ane.runNativeTests(bmp.bitmapData);
+            //NativeStage.viewPort = new Rectangle(0,0,400,200);
+            //NativeStage.visible = false;
+
+            var nativeSprite:NativeSprite = new NativeSprite();
+            nativeSprite.x = 150;
+
+            var nativeImage:NativeImage = new NativeImage(new TestImage());
+            var nativeImage2:NativeImage = new NativeImage(new TestImage());
+            nativeImage2.y = 180;
+            nativeImage2.alpha = 0.5
+            nativeButton = new NativeButton(new TestButton(), new TestButtonHover());
+            nativeButton.addEventListener(MouseEvent.CLICK, onNativeClick);
+            nativeButton.addEventListener(MouseEvent.MOUSE_OVER, onNativeOver);
+            nativeButton.addEventListener(MouseEvent.MOUSE_OUT, onNativeOut);
+            nativeButton.y = 200;
+
+
+            NativeStage.addChild(nativeSprite);
+            nativeSprite.addChild(nativeImage2);
+            nativeSprite.addChild(nativeImage); //have to add after the sprite is on stage, can i improve this
+
+
+            NativeStage.addChild(nativeButton);
+
+
         }
         hasActivated = true;
+    }
+
+    private function onNativeOut(event:MouseEvent):void {
+    }
+
+    private function onNativeOver(event:MouseEvent):void {
+    }
+
+    private function onNativeClick(event:MouseEvent):void {
+        nativeButton.alpha = 0.5;
     }
 }
 }

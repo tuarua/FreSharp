@@ -160,7 +160,7 @@ namespace TuaRua.FreSharp {
 
 
         /// <summary>
-        /// Returns the Actionscript type of the C# FREObject. !Important - your ane must include ANEUtils.as in com.tuarua
+        /// Returns the Actionscript type of the C# FREObject. !Important - your ane must include ANEUtils.as in com.tuarua.fre
         /// </summary>
         /// <returns></returns>
         public new FreObjectTypeSharp GetType() {

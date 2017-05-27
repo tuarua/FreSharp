@@ -187,9 +187,10 @@ namespace TuaRua.FreSharp {
         /// <param name="rawValue"></param>
         /// <returns></returns>
         public static FreObjectTypeSharp GetActionscriptType(FREObject rawValue) {
-            var aneUtils = new FreObjectSharp("com.tuarua.ANEUtils", null);
+            var aneUtils = new FreObjectSharp("com.tuarua.fre.ANEUtils", null);
             var classType = aneUtils.CallMethod("getClassType", rawValue);
             var type = GetAsString(classType.RawValue).ToLower();
+
             switch (type) {
                 case "object":
                     return FreObjectTypeSharp.Object;
@@ -218,7 +219,7 @@ namespace TuaRua.FreSharp {
 
 
         /// <summary>
-        /// Returns the Actionscript type of the C# FREObject. !Important - your ane must include ANEUtils.as in com.tuarua
+        /// Returns the Actionscript type of the C# FREObject. !Important - your ane must include ANEUtils.as in com.tuarua.fre
         /// </summary>
         /// <returns></returns>
         public static FreObjectTypeSharp GetType(FREObject rawValue) {
@@ -236,13 +237,13 @@ namespace TuaRua.FreSharp {
         /// <returns></returns>
         public static Dictionary<string, object> GetAsDictionary(FREObject rawValue) {
             var ret = new Dictionary<string, object>();
-            var aneUtils = new FreObjectSharp("com.tuarua.ANEUtils", null);
+            var aneUtils = new FreObjectSharp("com.tuarua.fre.ANEUtils", null);
             var paramsArray = new ArrayList {
                 new FreObjectSharp(rawValue)
             };
             var classProps = aneUtils.CallMethod("getClassProps", paramsArray);
             if (classProps == null) return ret;
-            var arrayLength = classProps.GetLength();
+            var arrayLength = classProps.Length;
             for (uint i = 0; i < arrayLength; i++) {
                 var elem = classProps.GetObjectAt(i);
                 var propNameAs = elem.GetProperty("name");

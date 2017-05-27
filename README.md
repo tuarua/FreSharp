@@ -1,4 +1,3 @@
-
 # FreSharp
 
 [![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=5UR2T52J633RC)
@@ -36,7 +35,25 @@ var addition = person.CallMethod("add", 100, 33);
 var sum = Convert.ToInt32(addition.Value);
 Trace("result is: " + sum);
 `````
+Native Stage - Adding native elements over the AIR window  
+FreSharp includes helpers for creating a child Window which can be used to contain WPF controls and graphics.
+In Windows 8.1+ the Window can be transparent. 
+Buttons and images can be added easily from actionscript.
 
+````actionscript
+NativeStage.init(new Rectangle(100, 0, 400, 600), true, true,0xFFFFFF);
+NativeStage.add();
+
+var nativeButton = new NativeButton(new TestButton(), new TestButtonHover());
+nativeButton.addEventListener(MouseEvent.CLICK, onNativeClick);
+var nativeSprite:NativeSprite = new NativeSprite();
+nativeSprite.x = 150;
+
+var nativeImage:NativeImage = new NativeImage(new TestImage());
+NativeStage.addChild(nativeSprite);
+nativeSprite.addChild(nativeImage);
+NativeStage.addChild(nativeButton);
+`````
 Advanced Example - Extending FreObjectSharp. Creating a C# version of flash.geom.point
 
 ````C#
@@ -98,13 +115,13 @@ namespace FreSharp.Geom {
 
 ### Tech
 
-Uses .NET 4.5.2
+Uses .NET 4.6
 
 ### Prerequisites
 
 You will need
  
- - Visual Studio 2015
+ - Visual Studio 2017
  - AIR 19+ SDK
 
 ### Todos
