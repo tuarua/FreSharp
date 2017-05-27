@@ -105,7 +105,7 @@ public class Main extends Sprite {
 
         var ldr:Loader = new Loader();
         ldr.contentLoaderInfo.addEventListener(Event.COMPLETE, ldr_complete);
-        //ldr.load(new URLRequest(IMAGE_URL));
+        ldr.load(new URLRequest(IMAGE_URL));
 
         function ldr_complete(evt:Event):void {
 
