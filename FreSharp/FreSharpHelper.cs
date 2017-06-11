@@ -37,7 +37,7 @@ namespace TuaRua.FreSharp {
 
             //TODO others Bitmap, arrayList
 
-            if (t == typeof(int) || t == typeof(long)) {
+            if (t == typeof(int) || t == typeof(long) || t == typeof(short)) {
                 return new FreObjectSharp((int)value);
             }
 

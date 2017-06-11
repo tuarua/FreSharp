@@ -21,14 +21,14 @@ public class NativeButton extends NativeDisplayObject {
     private static const AS_CALLBACK_EVENT:String = "TRFRESHARP.as.CALLBACK";
     public var listeners:Vector.<Object> = new <Object>[];
 
-    public function NativeButton(upState:Bitmap, overState:Bitmap, downState:Bitmap=null) {
+    public function NativeButton(upState:Bitmap, overState:Bitmap, downState:Bitmap = null) {
         _upState = upState;
         _overState = overState;
         _downState = (downState) ? downState : _upState;
 
         upStateData = _upState.bitmapData;
         overStateData = _overState.bitmapData;
-        downStateData = _downState.bitmapData;
+        downStateData = _downState.bitmapData.clone();
         this.type = BUTTON_TYPE;
         ANEContext.ctx.addEventListener(StatusEvent.STATUS, gotNativeEvent);
     }
@@ -50,13 +50,13 @@ public class NativeButton extends NativeDisplayObject {
                     for each (var listener:Object in listeners) {
                         if (argsAsJSON.id == _id && argsAsJSON.event == listener.type) {
                             var func:Function = listener.listener as Function;
-                            func.call(null,new MouseEvent(listener.type));
+                            func.call(null, new MouseEvent(listener.type));
                         }
                     }
 
                     //get id and type from JSON
                 } catch (e:Error) {
-                    trace(e.message);
+                    trace("JSON decode error NativeButton", e.message);
                     break;
                 }
                 break;

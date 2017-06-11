@@ -165,7 +165,7 @@ public class Main extends Sprite {
         if (!hasActivated) {
             // adds a native window over our AIR window
             // Supports transparency on Windows 8.1+ requires .NET4.6+
-            NativeStage.init(new Rectangle(100, 0, 400, 600), true, true);
+            NativeStage.init(stage, new Rectangle(100, 0, 400, 600), true, true);
             NativeStage.add();
 
             //NativeStage.viewPort = new Rectangle(0,0,400,200);
