@@ -36,23 +36,23 @@ var sum = Convert.ToInt32(addition.Value);
 Trace("result is: " + sum);
 `````
 Native Stage - Adding native elements over the AIR window  
-FreSharp includes helpers for creating a child Window which can be used to contain WPF controls and graphics.
+The example includes AIRNativeANE for creating a child Window which can be used to contain WPF controls and graphics.
 In Windows 8.1+ the Window can be transparent. 
 Buttons and images can be added easily from actionscript.
 
 ````actionscript
-NativeStage.init(new Rectangle(100, 0, 400, 600), true, true,0xFFFFFF);
-NativeStage.add();
+ANStage.init(stage, new Rectangle(100, 0, 400, 600), true, true);
+ANStage.add();
 
-var nativeButton = new NativeButton(new TestButton(), new TestButtonHover());
+var nativeButton = new ANButton(new TestButton(), new TestButtonHover());
 nativeButton.addEventListener(MouseEvent.CLICK, onNativeClick);
-var nativeSprite:NativeSprite = new NativeSprite();
+var nativeSprite:ANSprite = new ANSprite();
 nativeSprite.x = 150;
 
-var nativeImage:NativeImage = new NativeImage(new TestImage());
-NativeStage.addChild(nativeSprite);
-nativeSprite.addChild(nativeImage);
-NativeStage.addChild(nativeButton);
+var nativeImage:ANImage = new ANImage(new TestImage());
+ANStage.addChild(nativeSprite);
+ANStage.addChild(nativeImage);
+ANStage.addChild(nativeButton);
 `````
 Advanced Example - Extending FreObjectSharp. Creating a C# version of flash.geom.point
 
