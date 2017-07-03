@@ -19,8 +19,6 @@ extern "C" {
 
 	void contextInitializer(void* extData, const uint8_t* ctxType, FREContext ctx, uint32_t* numFunctionsToSet, const FRENamedFunction** functionsToSet) {
 
-		
-
 		FreSharpBridge::InitController();
 		FreSharpBridge::SetFREContext(ctx);
 		FreSharpBridge::GetFunctions();
@@ -39,16 +37,9 @@ extern "C" {
 			,{ (const uint8_t *) "runErrorTests","runErrorTests", &callSharpFunction }
 			,{ (const uint8_t *) "runDataTests","runDataTests", &callSharpFunction }
 			,{ (const uint8_t *) "runErrorTests2","runErrorTests2", &callSharpFunction }
-			// Here are the functions for FreNativeStage
-			,{ (const uint8_t *) "initNativeStage","initNativeStage", &callSharpFunction }
-			,{ (const uint8_t *) "addNativeStage","addNativeStage", &callSharpFunction }
-			,{ (const uint8_t *) "updateNativeStage","updateNativeStage", &callSharpFunction }
-			,{ (const uint8_t *) "addNativeChild","addNativeChild", &callSharpFunction }
-			,{ (const uint8_t *) "updateNativeChild","updateNativeChild", &callSharpFunction }
-			//
+			
 			
 		};
-
 
 		*numFunctionsToSet = sizeof(extensionFunctions) / sizeof(FRENamedFunction);
 		*functionsToSet = extensionFunctions;

@@ -8,6 +8,7 @@ using TuaRua.FreSharp.Display;
 using TuaRua.FreSharp.Geom;
 using FREContext = System.IntPtr;
 using FREObject = System.IntPtr;
+
 namespace TuaRua.FreSharp {
     /// <summary>
     /// Creates a new FreSharp Helper
@@ -35,26 +36,24 @@ namespace TuaRua.FreSharp {
                 return value as FreObjectSharp;
             }
 
-            //TODO others Bitmap, arrayList
-
             if (t == typeof(int) || t == typeof(long) || t == typeof(short)) {
-                return new FreObjectSharp((int)value);
+                return new FreObjectSharp((int) value);
             }
 
             if (t == typeof(uint)) {
-                return new FreObjectSharp((uint)value);
+                return new FreObjectSharp((uint) value);
             }
 
             if (t == typeof(bool)) {
-                return new FreObjectSharp((bool)value);
+                return new FreObjectSharp((bool) value);
             }
 
             if (t == typeof(string)) {
-                return new FreObjectSharp((string)value);
+                return new FreObjectSharp((string) value);
             }
 
             if (t == typeof(double)) {
-                return new FreObjectSharp((double)value);
+                return new FreObjectSharp((double) value);
             }
 
             return null;
@@ -78,7 +77,7 @@ namespace TuaRua.FreSharp {
                     arr.SetValue(argArr[i], i);
                     continue;
                 }
-                var fre = FreObjectSharpFromObject(argArr.ElementAt((int)i));
+                var fre = FreObjectSharpFromObject(argArr.ElementAt((int) i));
                 if (fre == null) break;
                 arr.SetValue(fre.RawValue, i);
             }
@@ -94,7 +93,7 @@ namespace TuaRua.FreSharp {
         public static uint GetArgsC(ArrayList args) {
             uint cnt = 0;
             if (args != null) {
-                cnt = (uint)args.Count;
+                cnt = (uint) args.Count;
             }
             return cnt;
         }
@@ -107,7 +106,7 @@ namespace TuaRua.FreSharp {
         public static string GetAsString(FREObject rawValue) {
             uint resultPtr = 0;
             var ret = Core.getString(rawValue, ref resultPtr);
-            var status = (FreResultSharp)resultPtr;
+            var status = (FreResultSharp) resultPtr;
 
             if (status == FreResultSharp.Ok) {
                 return ret;
@@ -123,7 +122,7 @@ namespace TuaRua.FreSharp {
         public static double GetAsDouble(FREObject rawValue) {
             uint resultPtr = 0;
             var ret = Core.getDouble(rawValue, ref resultPtr);
-            var status = (FreResultSharp)resultPtr;
+            var status = (FreResultSharp) resultPtr;
             if (status == FreResultSharp.Ok) {
                 return ret;
             }
@@ -138,7 +137,7 @@ namespace TuaRua.FreSharp {
         public static bool GetAsBool(FREObject rawValue) {
             uint resultPtr = 0;
             var ret = Core.getBool(rawValue, ref resultPtr);
-            var status = (FreResultSharp)resultPtr;
+            var status = (FreResultSharp) resultPtr;
             if (status == FreResultSharp.Ok) {
                 return ret;
             }
@@ -154,7 +153,7 @@ namespace TuaRua.FreSharp {
         public static int GetAsInt(FREObject rawValue) {
             uint resultPtr = 0;
             var ret = Core.getInt32(rawValue, ref resultPtr);
-            var status = (FreResultSharp)resultPtr;
+            var status = (FreResultSharp) resultPtr;
             if (status == FreResultSharp.Ok) {
                 return ret;
             }
@@ -171,7 +170,7 @@ namespace TuaRua.FreSharp {
         public static uint GetAsUInt(FREObject rawValue) {
             uint resultPtr = 0;
             var ret = Core.getUInt32(rawValue, ref resultPtr);
-            var status = (FreResultSharp)resultPtr;
+            var status = (FreResultSharp) resultPtr;
 
             if (status == FreResultSharp.Ok) {
                 return ret;
@@ -209,8 +208,9 @@ namespace TuaRua.FreSharp {
 
         internal static void SetProperty(FREObject rawValue, string name, object value) {
             uint resultPtr = 0;
-            var ret = new FreObjectSharp(Core.setProperty(rawValue, name, FreObjectSharpFromObject(value).RawValue, ref resultPtr));
-            var status = (FreResultSharp)resultPtr;
+            var ret = new FreObjectSharp(Core.setProperty(rawValue, name, FreObjectSharpFromObject(value).RawValue,
+                ref resultPtr));
+            var status = (FreResultSharp) resultPtr;
             if (status == FreResultSharp.Ok) {
                 return;
             }
@@ -224,7 +224,7 @@ namespace TuaRua.FreSharp {
         /// <returns></returns>
         public static FreObjectTypeSharp GetType(FREObject rawValue) {
             uint resultPtr = 0;
-            var type = (FreObjectTypeSharp)Core.getType(rawValue, ref resultPtr);
+            var type = (FreObjectTypeSharp) Core.getType(rawValue, ref resultPtr);
             return FreObjectTypeSharp.Number == type || FreObjectTypeSharp.Object == type
                 ? GetActionscriptType(rawValue)
                 : type;
@@ -258,7 +258,7 @@ namespace TuaRua.FreSharp {
         internal static FreObjectSharp GetProperty(FREObject rawValue, string name) {
             uint resultPtr = 0;
             var ret = new FreObjectSharp(Core.getProperty(rawValue, name, ref resultPtr));
-            var status = (FreResultSharp)resultPtr;
+            var status = (FreResultSharp) resultPtr;
             if (status == FreResultSharp.Ok) {
                 return ret;
             }
@@ -365,7 +365,5 @@ namespace TuaRua.FreSharp {
                     throw new ArgumentOutOfRangeException(nameof(status), status, null);
             }
         }
-
-
     }
 }

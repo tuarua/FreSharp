@@ -1,7 +1,7 @@
 REM Get the path to the script and trim to get the directory.
 @echo off
 SET SZIP="C:\Program Files\7-Zip\7z.exe"
-SET AIR_PATH="D:\dev\sdks\AIR\AIRSDK_25\bin\"
+SET AIR_PATH="D:\dev\sdks\AIR\AIRSDK_26\bin\"
 echo Setting path to current directory to:
 SET pathtome=%~dp0
 echo %pathtome%
@@ -56,6 +56,7 @@ copy %pathtome%..\..\native_library\win\%projectName%\Debug\FreSharp.pdb %AIR_PA
 
 copy %pathtome%..\..\native_library\win\%projectName%\Release\FreSharpCore.dll %pathtome%..\..\c_sharp_libs\FreSharpCore.dll
 copy %pathtome%..\..\native_library\win\%projectName%\Release\FreSharp.dll %pathtome%..\..\c_sharp_libs\FreSharp.dll
+copy %pathtome%..\..\c_sharp_libs\AIRNative.dll %AIR_PATH%AIRNative.dll
 
 REM Run the build command.
 echo Building Release.

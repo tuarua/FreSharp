@@ -1,4 +1,4 @@
-<application xmlns="http://ns.adobe.com/air/application/25.0">
+<application xmlns="http://ns.adobe.com/air/application/26.0">
   <!-- A universally unique application identifier. Must be unique across all AIR applications.
          Using a reverse DNS-style name as the id is recommended. (Eg. com.example.ExampleApplication.) Required. -->
   <id>Main</id>
@@ -23,6 +23,7 @@
   <!-- Identifies the ActionScript extensions used by an application. -->
   <extensions>
     <extensionID>com.tuarua.FreSharpExampleANE</extensionID>
+    <extensionID>com.tuarua.AIRNativeANE</extensionID>
   </extensions>
   <!-- Settings for the application's initial window. Required. -->
   <initialWindow>
