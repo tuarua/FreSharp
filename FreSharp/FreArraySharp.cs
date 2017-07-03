@@ -70,10 +70,18 @@ namespace TuaRua.FreSharp {
                     case FreObjectTypeSharp.String:
                         al.Add(FreSharpHelper.GetAsString(itm.RawValue));
                         break;
-                    case FreObjectTypeSharp.Bytearray: //TODO
+                    case FreObjectTypeSharp.Bytearray:
+                        var ba = new FreByteArraySharp(itm.RawValue);
+                        ba.Acquire();
+                        var baTarget = new byte[ba.Length];
+                        ba.Bytes.CopyTo(baTarget, 0);
+                        al.Add(baTarget);
+                        ba.Release();
                         break;
                     case FreObjectTypeSharp.Array:
-                    case FreObjectTypeSharp.Vector: //TODO
+                    case FreObjectTypeSharp.Vector:
+                        var arrFre = new FreArraySharp(itm.RawValue);
+                        al.Add(arrFre.GetAsArrayList());
                         break;
                     case FreObjectTypeSharp.Bitmapdata:
                         var bmdFre = new FreBitmapDataSharp(itm.RawValue);

@@ -11,6 +11,7 @@ namespace TuaRua.FreSharp {
         /// The number of bytes in the bytes array.
         /// </summary>
         public int Length { get; set; }
+
         /// <summary>
         /// The Byte Array 
         /// </summary>
@@ -42,7 +43,7 @@ namespace TuaRua.FreSharp {
         /// </summary>
         public void Acquire() {
             FreSharpHelper.Core.acquireByteArrayData(RawValue, _byteArray);
-            Length = (int)_byteArray.length;
+            Length = (int) _byteArray.length;
             Bytes = new byte[Length];
             Marshal.Copy(_byteArray.bytes, Bytes, 0, Length);
         }
@@ -53,6 +54,5 @@ namespace TuaRua.FreSharp {
         public void Release() {
             FreSharpHelper.Core.releaseByteArrayData(RawValue);
         }
-
     }
 }

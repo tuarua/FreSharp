@@ -76,7 +76,7 @@ namespace TuaRua.FreSharp.Display {
         /// </summary>
         /// <param name="freBitmapData"></param>
         public FreBitmapDataSharp(IntPtr freBitmapData) {
-            RawValue = freBitmapData;            
+            RawValue = freBitmapData;
         }
 
         /*
@@ -120,13 +120,13 @@ namespace TuaRua.FreSharp.Display {
         /// </summary>
         public void Acquire() {
             FreSharpHelper.Core.acquireBitmapData(RawValue, _bmd);
-            Width = (int)_bmd.width;
+            Width = (int) _bmd.width;
             Bits32 = _bmd.bits32;
-            Height = (int)_bmd.height;
+            Height = (int) _bmd.height;
             HasAlpha = _bmd.hasAlpha == 1;
             IsInvertedY = _bmd.isInvertedY == 1;
             IsPremultiplied = _bmd.isPremultiplied == 1;
-            LineStride32 = (int)_bmd.lineStride32;
+            LineStride32 = (int) _bmd.lineStride32;
         }
 
         /// <summary>
@@ -140,7 +140,7 @@ namespace TuaRua.FreSharp.Display {
         /// Converts the FREBitmapData into a C# Bitmap
         /// </summary>
         public Bitmap GetAsBitmap() {
-            var bitmap = new Bitmap(1,1);
+            var bitmap = new Bitmap(1, 1);
             Acquire();
             /*
             ///https://msdn.microsoft.com/en-us/library/zy1a2d14(v=vs.110).aspx
@@ -148,11 +148,10 @@ namespace TuaRua.FreSharp.Display {
 
             try {
                 bitmap = new Bitmap(Width, Height, LineStride32 * 4,
-                                PixelFormat.Format32bppArgb, Bits32);
+                    PixelFormat.Format32bppArgb, Bits32);
                 if (IsInvertedY) {
                     bitmap.RotateFlip(RotateFlipType.RotateNoneFlipY);
                 }
-
             }
             catch (Exception e) {
                 Console.WriteLine(e.Message);
@@ -164,6 +163,5 @@ namespace TuaRua.FreSharp.Display {
 
             return bitmap;
         }
-
     }
 }

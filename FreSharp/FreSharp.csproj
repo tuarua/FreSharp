@@ -51,9 +51,6 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Display\FreNativeButton.cs" />
-    <Compile Include="Display\FreNativeImage.cs" />
-    <Compile Include="Display\FreNativeSprite.cs" />
     <Compile Include="Exceptions\FreActionscriptErrorException.cs" />
     <Compile Include="FreArraySharp.cs" />
     <Compile Include="Exceptions\FreInvalidArgumentException.cs" />
@@ -64,9 +61,6 @@
     <Compile Include="FreByteArraySharp.cs" />
     <Compile Include="Exceptions\FreException.cs" />
     <Compile Include="FreContextSharp.cs" />
-    <Compile Include="Internal\FreDisplayList.cs" />
-    <Compile Include="Internal\FreNativeRoot.cs" />
-    <Compile Include="FreStageSharp.cs" />
     <Compile Include="FreObjectSharp.cs" />
     <Compile Include="FreObjectTypeSharp.cs" />
     <Compile Include="Exceptions\FreReadOnlyException.cs" />
@@ -79,12 +73,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\BitmapUtils.cs" />
     <Compile Include="Utils\WinAPI.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Page Include="Internal\FreNativeRoot.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FreSharpCore\FreSharpCore.vcxproj">

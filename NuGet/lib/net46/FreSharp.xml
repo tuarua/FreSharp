@@ -4,89 +4,44 @@
         <name>FreSharp</name>
     </assembly>
     <members>
-        <member name="T:TuaRua.FreSharp.Display.FreNativeButton">
+        <member name="T:TuaRua.FreSharp.FreArraySharp">
             <summary>
-            
+             FreArraySharp wraps a C FREObject (Array or Vector) with helper methods.
             </summary>
         </member>
-        <member name="P:TuaRua.FreSharp.Display.FreNativeButton.X">
+        <member name="M:TuaRua.FreSharp.FreArraySharp.#ctor">
             <summary>
-            
+            Creates an Empty C# FreArray.
             </summary>
         </member>
-        <member name="P:TuaRua.FreSharp.Display.FreNativeButton.Y">
+        <member name="M:TuaRua.FreSharp.FreArraySharp.#ctor(System.IntPtr)">
             <summary>
-            
+            Creates a C# FreArray from a C FREObject.
+            </summary>
+            <param name="freArray"></param>
+        </member>
+        <member name="P:TuaRua.FreSharp.FreArraySharp.Length">
+            <summary>
+            Returns the length of the C# FreArray.
             </summary>
         </member>
-        <member name="M:TuaRua.FreSharp.Display.FreNativeButton.#ctor">
+        <member name="M:TuaRua.FreSharp.FreArraySharp.GetObjectAt(System.UInt32)">
             <summary>
-            
+            Returns the C# FreObject from the C# FreArray at i.
+            </summary>
+            <param name="i"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TuaRua.FreSharp.FreArraySharp.SetObjectAt(TuaRua.FreSharp.FreObjectSharp,System.UInt32)">
+            <summary>
+            Sets the C# FreObject in the C# FreArray at i.
             </summary>
         </member>
-        <member name="M:TuaRua.FreSharp.Display.FreNativeButton.#ctor(TuaRua.FreSharp.FreObjectSharp,System.String,System.IntPtr@)">
+        <member name="M:TuaRua.FreSharp.FreArraySharp.GetAsArrayList">
             <summary>
             
             </summary>
-            <param name="freObjectSharp"></param>
-            <param name="id"></param>
-            <param name="ctx"></param>
-        </member>
-        <member name="M:TuaRua.FreSharp.Display.FreNativeButton.Update(System.IntPtr,System.IntPtr)">
-            <summary>
-            
-            </summary>
-            <param name="prop"></param>
-            <param name="value"></param>
-        </member>
-        <member name="T:TuaRua.FreSharp.Display.FreNativeImage">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="P:TuaRua.FreSharp.Display.FreNativeImage.X">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="P:TuaRua.FreSharp.Display.FreNativeImage.Y">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="M:TuaRua.FreSharp.Display.FreNativeImage.#ctor">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="M:TuaRua.FreSharp.Display.FreNativeImage.Update(System.IntPtr,System.IntPtr)">
-            <summary>
-            
-            </summary>
-            <param name="prop"></param>
-            <param name="value"></param>
-        </member>
-        <member name="M:TuaRua.FreSharp.Display.FreNativeImage.#ctor(TuaRua.FreSharp.FreObjectSharp)">
-            <summary>
-            
-            </summary>
-            <param name="freObjectSharp"></param>
-        </member>
-        <member name="P:TuaRua.FreSharp.Display.FreNativeSprite.X">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="P:TuaRua.FreSharp.Display.FreNativeSprite.Y">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="M:TuaRua.FreSharp.Display.FreNativeSprite.AddChild(System.Windows.UIElement)">
-            <summary>
-            
-            </summary>
-            <param name="child"></param>
+            <returns></returns>
         </member>
         <member name="T:TuaRua.FreSharp.Display.FreBitmapDataSharp">
             <summary>
@@ -185,45 +140,6 @@
             Converts the FREBitmapData into a C# Bitmap
             </summary>
         </member>
-        <member name="T:TuaRua.FreSharp.FreArraySharp">
-            <summary>
-             FreArraySharp wraps a C FREObject (Array or Vector) with helper methods.
-            </summary>
-        </member>
-        <member name="M:TuaRua.FreSharp.FreArraySharp.#ctor">
-            <summary>
-            Creates an Empty C# FreArray.
-            </summary>
-        </member>
-        <member name="M:TuaRua.FreSharp.FreArraySharp.#ctor(System.IntPtr)">
-            <summary>
-            Creates a C# FreArray from a C FREObject.
-            </summary>
-            <param name="freArray"></param>
-        </member>
-        <member name="P:TuaRua.FreSharp.FreArraySharp.Length">
-            <summary>
-            Returns the length of the C# FreArray.
-            </summary>
-        </member>
-        <member name="M:TuaRua.FreSharp.FreArraySharp.GetObjectAt(System.UInt32)">
-            <summary>
-            Returns the C# FreObject from the C# FreArray at i.
-            </summary>
-            <param name="i"></param>
-            <returns></returns>
-        </member>
-        <member name="M:TuaRua.FreSharp.FreArraySharp.SetObjectAt(TuaRua.FreSharp.FreObjectSharp,System.UInt32)">
-            <summary>
-            Sets the C# FreObject in the C# FreArray at i.
-            </summary>
-        </member>
-        <member name="M:TuaRua.FreSharp.FreArraySharp.GetAsArrayList">
-            <summary>
-            
-            </summary>
-            <returns></returns>
-        </member>
         <member name="T:TuaRua.FreSharp.FreByteArraySharp">
             <summary>
             FreByteArraySharp wraps a C FREByteArray with helper methods.
@@ -304,136 +220,6 @@
             </summary>
             <param name="name"></param>
             <param name="value"></param>
-        </member>
-        <member name="T:TuaRua.FreSharp.Internal.FreDisplayList">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="F:TuaRua.FreSharp.Internal.FreDisplayList.Children">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="M:TuaRua.FreSharp.Internal.FreDisplayList.AddChild(System.IntPtr,System.UInt32,System.IntPtr[])">
-            <summary>
-            
-            </summary>
-            <param name="ctx"></param>
-            <param name="argc"></param>
-            <param name="argv"></param>
-            <returns></returns>
-            <exception cref="T:System.ArgumentOutOfRangeException"></exception>
-        </member>
-        <member name="M:TuaRua.FreSharp.Internal.FreDisplayList.UpdateChild(System.IntPtr,System.UInt32,System.IntPtr[])">
-            <summary>
-            
-            </summary>
-            <param name="ctx"></param>
-            <param name="argc"></param>
-            <param name="argv"></param>
-            <returns></returns>
-        </member>
-        <member name="T:TuaRua.FreSharp.FreNativeRoot">
-            <summary>
-            FreNativeRoot
-            </summary>
-        </member>
-        <member name="M:TuaRua.FreSharp.FreNativeRoot.Init">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="M:TuaRua.FreSharp.FreNativeRoot.AddChild(System.Windows.UIElement)">
-            <summary>
-            
-            </summary>
-            <param name="child"></param>
-        </member>
-        <member name="M:TuaRua.FreSharp.FreNativeRoot.InitializeComponent">
-            <summary>
-            InitializeComponent
-            </summary>
-        </member>
-        <member name="T:TuaRua.FreSharp.FreStageSharp">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="F:TuaRua.FreSharp.FreStageSharp.Transparent">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="F:TuaRua.FreSharp.FreStageSharp.BackgroundColor">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="T:TuaRua.FreSharp.FreStageSharp.FreNativeType">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="F:TuaRua.FreSharp.FreStageSharp.FreNativeType.Image">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="F:TuaRua.FreSharp.FreStageSharp.FreNativeType.Button">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="F:TuaRua.FreSharp.FreStageSharp.FreNativeType.Sprite">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="M:TuaRua.FreSharp.FreStageSharp.Init(System.IntPtr,System.UInt32,System.IntPtr[])">
-            <summary>
-            
-            </summary>
-            <param name="ctx"></param>
-            <param name="argc"></param>
-            <param name="argv"></param>
-            <returns></returns>
-        </member>
-        <member name="M:TuaRua.FreSharp.FreStageSharp.AddRoot(System.IntPtr,System.UInt32,System.IntPtr[])">
-            <summary>
-            
-            </summary>
-            <param name="ctx"></param>
-            <param name="argc"></param>
-            <param name="argv"></param>
-            <returns></returns>
-        </member>
-        <member name="M:TuaRua.FreSharp.FreStageSharp.Update(System.IntPtr,System.UInt32,System.IntPtr[])">
-            <summary>
-            
-            </summary>
-            <param name="ctx"></param>
-            <param name="argc"></param>
-            <param name="argv"></param>
-            <returns></returns>
-        </member>
-        <member name="M:TuaRua.FreSharp.FreStageSharp.SetVisibility(System.Boolean)">
-            <summary>
-            
-            </summary>
-            <param name="value"></param>
-        </member>
-        <member name="M:TuaRua.FreSharp.FreStageSharp.GetRootView">
-            <summary>
-            
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:TuaRua.FreSharp.FreStageSharp.IsAdded">
-            <summary>
-            
-            </summary>
-            <returns></returns>
         </member>
         <member name="T:TuaRua.FreSharp.FreObjectSharp">
             <summary>

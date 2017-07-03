@@ -1,10 +1,12 @@
 ﻿using FREContext = System.IntPtr;
+
 namespace TuaRua.FreSharp {
     /// <summary>
     /// 
     /// </summary>
     public class FreContextSharp {
         private FREContext _rawValue = FREContext.Zero;
+
         //public FREContext RawValue { get; set; } = FREContext.Zero;
         /// <summary>
         /// Creates an empty C# FREContext

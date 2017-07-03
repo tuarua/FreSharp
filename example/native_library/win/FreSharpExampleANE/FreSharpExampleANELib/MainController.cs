@@ -3,17 +3,18 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Windows.Media;
+using System.Windows.Shapes;
 using FreSharp.Geom;
+using TuaRua.AIRNative;
 using TuaRua.FreSharp;
 using TuaRua.FreSharp.Display;
 using TuaRua.FreSharp.Exceptions;
 using TuaRua.FreSharp.Geom;
-using TuaRua.FreSharp.Internal;
+using static System.Windows.Media.Brushes;
+using static System.Windows.Media.Color;
 using FREObject = System.IntPtr;
 using FREContext = System.IntPtr;
-
-//Resharper slow
-//https://resharper-support.jetbrains.com/hc/en-us/articles/206546919-Visual-Studio-with-ReSharper-is-slow
 
 namespace FreExampleSharpLib {
     public class MainController : FreSharpController {
@@ -32,11 +33,7 @@ namespace FreExampleSharpLib {
                     {"runDataTests", RunDataTests},
                     {"runErrorTests2", RunErrorTests2},
 
-                    {"initNativeStage", FreStageSharp.Init},
-                    {"addNativeStage", FreStageSharp.AddRoot},
-                    {"updateNativeStage", FreStageSharp.Update},
-                    {"addNativeChild", FreDisplayList.AddChild},
-                    {"updateNativeChild", FreDisplayList.UpdateChild},
+                    
                 };
 
 
@@ -264,6 +261,7 @@ namespace FreExampleSharpLib {
             return new FreObjectSharp(sharpDouble).RawValue;
         }
 
+
         private FREObject RunStringTests(FREContext ctx, uint argc, FREObject[] argv) {
             Trace(@"***********Start String test***********");
             var inFre = argv[0];
@@ -275,6 +273,24 @@ namespace FreExampleSharpLib {
             catch (Exception e) {
                 Console.WriteLine($@"caught in C#: type: {e.GetType()} message: {e.Message}");
             }
+
+            //nativeRoot is actually created as a pointer when we call NativeStage.add() from AIRNativeANE
+            var nativeRoot = FreStageSharp.GetRootView() as FreNativeRoot;
+
+            var myEllipse = new Ellipse();
+            var mySolidColorBrush = new SolidColorBrush {Color = FromArgb(255, 255, 255, 0)};
+
+            // Describes the brush's color using RGB values. 
+            // Each value has a range of 0-255.
+            myEllipse.Fill = mySolidColorBrush;
+            myEllipse.StrokeThickness = 2;
+            myEllipse.Stroke = Black;
+
+            // Set the width and height of the Ellipse.
+            myEllipse.Width = 200;
+            myEllipse.Height = 100;
+
+            nativeRoot?.AddChild(myEllipse);
 
             const string sharpString = "I am a string from C#";
             return new FreObjectSharp(sharpString).RawValue;
