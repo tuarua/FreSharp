@@ -10,6 +10,8 @@ import com.tuarua.fre.display.ANButton;
 import com.tuarua.fre.display.ANImage;
 import com.tuarua.fre.display.ANSprite;
 
+import flash.desktop.NativeApplication;
+
 import flash.display.Bitmap;
 import flash.display.BitmapData;
 
@@ -51,6 +53,7 @@ public class Main extends Sprite {
         stage.align = StageAlign.TOP_LEFT;
         stage.scaleMode = StageScaleMode.NO_SCALE;
 
+        NativeApplication.nativeApplication.addEventListener(Event.EXITING, onExiting);
         this.addEventListener(Event.ACTIVATE, onActivated);
 
 
@@ -216,6 +219,13 @@ public class Main extends Sprite {
 
     private function goFullscreen():void {
         stage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE;
+    }
+
+    /**
+     * It's very important to call webView.dispose(); when the app is exiting.
+     */
+    private function onExiting(event:Event):void {
+        ane.dispose();
     }
 
 }
