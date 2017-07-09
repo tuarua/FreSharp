@@ -220,10 +220,7 @@ public class Main extends Sprite {
     private function goFullscreen():void {
         stage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE;
     }
-
-    /**
-     * It's very important to call webView.dispose(); when the app is exiting.
-     */
+    
     private function onExiting(event:Event):void {
         ane.dispose();
     }
