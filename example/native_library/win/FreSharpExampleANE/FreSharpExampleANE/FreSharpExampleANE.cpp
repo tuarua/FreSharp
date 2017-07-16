@@ -1,3 +1,4 @@
+#include "FreSharpMacros.h"
 #include "FreSharpExampleANE.h"
 #include "FlashRuntimeExtensions.h"
 #include "stdafx.h"
@@ -13,52 +14,38 @@ extern "C" {
 		case DLL_THREAD_DETACH:
 		case DLL_PROCESS_DETACH:
 			break;
+		default: ;
 		}
 		return true;
 	}
 
-	void contextInitializer(void* extData, const uint8_t* ctxType, FREContext ctx, uint32_t* numFunctionsToSet, const FRENamedFunction** functionsToSet) {
+	CONTEXT_INIT(TRFS) {
 
-		FreSharpBridge::InitController();
-		FreSharpBridge::SetFREContext(ctx);
-		FreSharpBridge::GetFunctions();
-
-		//TODO how to pass functionData without losing the string reference
+		FREBRIDGE_INIT
 
 		static FRENamedFunction extensionFunctions[] = {
-			{ (const uint8_t *) "runStringTests","runStringTests", &callSharpFunction }
-			,{ (const uint8_t *) "runNumberTests","runNumberTests", &callSharpFunction }
-			,{ (const uint8_t *) "runIntTests","runIntTests", &callSharpFunction }
-			,{ (const uint8_t *) "runArrayTests","runArrayTests", &callSharpFunction }
-			,{ (const uint8_t *) "runObjectTests","runObjectTests", &callSharpFunction }
-			,{ (const uint8_t *) "runExtensibleTests","runExtensibleTests", &callSharpFunction }
-			,{ (const uint8_t *) "runBitmapTests","runBitmapTests", &callSharpFunction }
-			,{ (const uint8_t *) "runByteArrayTests","runByteArrayTests", &callSharpFunction }
-			,{ (const uint8_t *) "runErrorTests","runErrorTests", &callSharpFunction }
-			,{ (const uint8_t *) "runDataTests","runDataTests", &callSharpFunction }
-			,{ (const uint8_t *) "runErrorTests2","runErrorTests2", &callSharpFunction }
-			
-			
+			 MAP_FUNCTION(runStringTests)
+			,MAP_FUNCTION(runNumberTests)
+			,MAP_FUNCTION(runIntTests)
+			,MAP_FUNCTION(runArrayTests)
+			,MAP_FUNCTION(runObjectTests)
+			,MAP_FUNCTION(runExtensibleTests)
+			,MAP_FUNCTION(runBitmapTests)
+			,MAP_FUNCTION(runByteArrayTests)
+			,MAP_FUNCTION(runErrorTests)
+			,MAP_FUNCTION(runDataTests)
+			,MAP_FUNCTION(runErrorTests2)
 		};
 
-		*numFunctionsToSet = sizeof(extensionFunctions) / sizeof(FRENamedFunction);
-		*functionsToSet = extensionFunctions;
+		SET_FUNCTIONS
 
 	}
 
-	void contextFinalizer(FREContext ctx) {
-		return;
+	CONTEXT_FIN(TRFS) {
 	}
 
-	void TRFSExtInizer(void** extData, FREContextInitializer* ctxInitializer, FREContextFinalizer* ctxFinalizer) {
-		*ctxInitializer = &contextInitializer;
-		*ctxFinalizer = &contextFinalizer;
-	}
+	EXTENSION_INIT(TRFS)
 
-	void TRFSExtFinizer(void* extData) {
-		FREContext nullCTX;
-		nullCTX = 0;
-		contextFinalizer(nullCTX);
-		return;
-	}
+	EXTENSION_FIN(TRFS)
+
 }

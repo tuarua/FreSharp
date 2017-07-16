@@ -19,6 +19,9 @@
 *.nupkg
 *.nuspec
 
+/Nuget
+/Nuget-Output
+
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
