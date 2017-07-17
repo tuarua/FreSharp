@@ -12,5 +12,12 @@
                 <finalizer>TRFSExtFinizer</finalizer>
             </applicationDeployment>
         </platform>
+         <platform name="Windows-x86-64">
+            <applicationDeployment>
+                <nativeLibrary>FreSharpExampleANE.dll</nativeLibrary>
+                <initializer>TRFSExtInizer</initializer>
+                <finalizer>TRFSExtFinizer</finalizer>
+            </applicationDeployment>
+        </platform>
 	</platforms>
 </extension>

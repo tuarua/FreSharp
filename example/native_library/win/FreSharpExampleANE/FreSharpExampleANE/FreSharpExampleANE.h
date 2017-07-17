@@ -1,7 +1,9 @@
 #pragma once
+#include "FreSharpMacros.h"
 #include "FlashRuntimeExtensions.h"
 extern "C" {
-	__declspec(dllexport) void TRFSExtInizer(void** extData, FREContextInitializer* ctxInitializer, FREContextFinalizer* ctxFinalizer);
-	__declspec(dllexport) void TRFSExtFinizer(void* extData);
+	__declspec(dllexport) EXTENSION_INIT_DECL(TRFS);
+	__declspec(dllexport) EXTENSION_FIN_DECL(TRFS);
+
 }
 

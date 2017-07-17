@@ -172,24 +172,24 @@ public class Main extends Sprite {
             }
 
 
-             var myByteArray:ByteArray = new ByteArray();
-             myByteArray.writeUTFBytes("C# in an ANE. Say whaaaat!");
-             ane.runByteArrayTests(myByteArray);
+            var myByteArray:ByteArray = new ByteArray();
+            myByteArray.writeUTFBytes("C# in an ANE. Say whaaaat!");
+            ane.runByteArrayTests(myByteArray);
 
-             //catch the error in C# only
-             ane.runErrorTests(person, "test string", 78);
+            //catch the error in C# only
+            ane.runErrorTests(person, "test string", 78);
 
-             //catch the error in as
+            //catch the error in as
 
-             try {
-             ane.runErrorTests2("abc");
-             } catch (e:ANEError) {
-             //trace("e is",e)
-             trace("e.message: ", e.message);
-             trace("e.type: ", e.type);
-             trace("e.errorID", e.errorID);
-             trace("e.getStackTrace", e.getStackTrace());
-             }
+            try {
+                ane.runErrorTests2("abc");
+            } catch (e:ANEError) {
+                //trace("e is",e)
+                trace("e.message: ", e.message);
+                trace("e.type: ", e.type);
+                trace("e.errorID", e.errorID);
+                trace("e.getStackTrace", e.getStackTrace());
+            }
 
 
             /*var inData:String = "Saved and returned"; //TODO
@@ -221,9 +221,6 @@ public class Main extends Sprite {
         stage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE;
     }
 
-    /**
-     * It's very important to call webView.dispose(); when the app is exiting.
-     */
     private function onExiting(event:Event):void {
         ane.dispose();
     }
