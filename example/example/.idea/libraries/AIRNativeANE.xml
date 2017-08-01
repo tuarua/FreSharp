@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="AIRNativeANE" type="flex">
+    <CLASSES>
+      <root url="jar://$DOCUMENTS$/FreSharp/example/native_extension/ane/AIRNativeANE.ane!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

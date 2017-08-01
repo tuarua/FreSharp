@@ -28,7 +28,7 @@
   <!-- Settings for the application's initial window. Required. -->
   <initialWindow>
     <!-- The main SWF or HTML file of the application. Required. -->
-    <content>Main.swf</content>
+    <content>FreSharp_64bit_Example.swf</content>
     <!-- The title of the main window. Optional. -->
     <!--<title></title>-->
     <!-- The type of system chrome to use (either "standard" or "none"). Optional. Default standard. -->
