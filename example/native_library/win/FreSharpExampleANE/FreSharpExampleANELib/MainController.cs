@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
+//using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Media;
@@ -15,6 +15,7 @@ using static System.Windows.Media.Brushes;
 using static System.Windows.Media.Color;
 using FREObject = System.IntPtr;
 using FREContext = System.IntPtr;
+using System.Windows;
 
 namespace FreExampleSharpLib {
     public class MainController : FreSharpController {

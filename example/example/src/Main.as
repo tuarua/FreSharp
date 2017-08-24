@@ -129,7 +129,7 @@ public class Main extends Sprite {
                 textField.text += "Person.age: " + resultObject.age.toString() + "\n";
             }
 
-            try {
+           try {
                 var inRect:Rectangle = new Rectangle(50, 60, 70, 80);
                 var resultRectangle:Rectangle = ane.runExtensibleTests(inRect) as Rectangle;
                 trace("resultRectangle", resultRectangle);

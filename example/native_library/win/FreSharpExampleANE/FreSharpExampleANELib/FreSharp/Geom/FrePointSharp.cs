@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections;
-using System.Drawing;
+using System.Windows;
 using TuaRua.FreSharp;
 
 namespace FreSharp.Geom {
@@ -28,7 +28,6 @@ namespace FreSharp.Geom {
             FreSharpHelper.ThrowFreException(status, "cannot create point ", this);
         }
 
-
         public void CopyFrom(FrePointSharp sourcePoint) {
             uint resultPtr = 0;
             var args = new ArrayList {
@@ -37,6 +36,7 @@ namespace FreSharp.Geom {
             FreSharpHelper.Core.callMethod(RawValue, "copyFrom", FreSharpHelper.ArgsToArgv(args),
                 FreSharpHelper.GetArgsC(args), ref resultPtr);
 
+
             var status = (FreResultSharp) resultPtr;
             if (status == FreResultSharp.Ok) {
                 return;
@@ -44,7 +44,8 @@ namespace FreSharp.Geom {
             FreSharpHelper.ThrowFreException(status, "cannot copyFrom ", this);
         }
 
-        public new Point Value => new Point((int) GetProperty("x").Value,
-            (int) GetProperty("y").Value);
+        public new Point Value => new Point(
+            Convert.ToDouble(GetProperty("x").Value),
+            Convert.ToDouble(GetProperty("y").Value));
     }
 }

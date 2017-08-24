@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections;
-using System.Drawing;
+using System.Windows;
 
 namespace TuaRua.FreSharp.Geom {
     /// <summary>
@@ -23,7 +23,7 @@ namespace TuaRua.FreSharp.Geom {
         /// Creates a C# FREObject from a Rectangle
         /// </summary>
         /// <param name="value"></param>
-        public FreRectangleSharp(Rectangle value) {
+        public FreRectangleSharp(Rect value) {
             uint resultPtr = 0;
             var args = new ArrayList {
                value.X,
@@ -43,11 +43,12 @@ namespace TuaRua.FreSharp.Geom {
         }
 
         /// <summary>
-        /// Returns the C# FREObject as a Rectangle.
+        /// Returns the C# FREObject as a Rect.
         /// </summary>
-        public new Rectangle Value => new Rectangle((int)GetProperty("x").Value,
-            (int)GetProperty("y").Value,
-            (int)GetProperty("width").Value,
-            (int)GetProperty("height").Value);
+        public new Rect Value => new Rect(
+            Convert.ToDouble(GetProperty("x").Value),
+            Convert.ToDouble(GetProperty("y").Value),
+            Convert.ToDouble(GetProperty("width").Value),
+            Convert.ToDouble(GetProperty("height").Value));
     }
 }
