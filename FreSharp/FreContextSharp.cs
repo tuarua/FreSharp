@@ -26,7 +26,7 @@ namespace TuaRua.FreSharp {
         /// </summary>
         /// <param name="name"></param>
         /// <param name="value"></param>
-        public void DispatchEvent(string name, string value) {
+        public void SendEvent(string name, string value) {
             FreSharpHelper.DispatchEvent(ref _rawValue, name, value);
         }
     }

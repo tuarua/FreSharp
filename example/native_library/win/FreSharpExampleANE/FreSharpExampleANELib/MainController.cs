@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-//using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Media;
@@ -10,7 +9,6 @@ using TuaRua.AIRNative;
 using TuaRua.FreSharp;
 using TuaRua.FreSharp.Display;
 using TuaRua.FreSharp.Exceptions;
-using TuaRua.FreSharp.Geom;
 using static System.Windows.Media.Brushes;
 using static System.Windows.Media.Color;
 using FREObject = System.IntPtr;
@@ -18,7 +16,7 @@ using FREContext = System.IntPtr;
 using System.Windows;
 
 namespace FreExampleSharpLib {
-    public class MainController : FreSharpController {
+    public class MainController : FreSharpMainController {
         public string[] GetFunctions() {
             FunctionsDict =
                 new Dictionary<string, Func<FREObject, uint, FREObject[], FREObject>> {
@@ -33,8 +31,6 @@ namespace FreExampleSharpLib {
                     {"runErrorTests", RunErrorTests},
                     {"runDataTests", RunDataTests},
                     {"runErrorTests2", RunErrorTests2},
-
-                    
                 };
 
 
@@ -48,23 +44,23 @@ namespace FreExampleSharpLib {
         private FREObject RunErrorTests(FREContext ctx, uint argc, FREObject[] argv) {
             Trace("***********Start Error Handling test***********");
 
-            var person = new FreObjectSharp(argv[0]);
+            var person = argv[0];
 
             try {
-                person.GetProperty("doNotExist"); //calling a property that doesn't exist
+                person.GetProp("doNotExist"); //calling a property that doesn't exist
             }
             catch (Exception e) {
-                Trace(e.GetType().ToString());
+                Trace(e.GetType());
                 Trace(e.Message);
                 Trace(e.Source);
                 Trace(e.StackTrace);
             }
 
             try {
-                person.CallMethod("noMethod"); //calling an nonexistent method
+                person.Call("noMethod"); //calling an nonexistent method
             }
             catch (Exception e) {
-                Trace(e.GetType().ToString());
+                Trace(e.GetType());
                 Trace(e.Message);
                 Trace(e.Source);
                 Trace(e.StackTrace);
@@ -72,10 +68,10 @@ namespace FreExampleSharpLib {
 
 
             try {
-                var unused = person.CallMethod("add", 100); //not passing enough args
+                var unused = person.Call("add", 100); //not passing enough args
             }
             catch (Exception e) {
-                Trace(e.GetType().ToString());
+                Trace(e.GetType());
                 Trace(e.Message);
                 Trace(e.Source);
                 Trace(e.StackTrace);
@@ -86,9 +82,9 @@ namespace FreExampleSharpLib {
 
         private FREObject RunErrorTests2(FREContext ctx, uint argc, FREObject[] argv) {
             Trace("***********Start Error Handling test 2***********");
-            var testString = new FreObjectSharp(argv[0]);
+            var testString = argv[0];
             try {
-                testString.CallMethod("noStringFunc"); //call method on a string
+                testString.Call("noStringFunc"); //call method on a string
             }
             catch (Exception e) {
                 return new FreException(e).RawValue; //return as3 error and throw in swc
@@ -106,7 +102,7 @@ namespace FreExampleSharpLib {
             var byteData = ba.Bytes;
             var base64Encoded = Convert.ToBase64String(byteData);
             ba.Release();
-            Trace("Encoded to Base64: " + base64Encoded);
+            Trace("Encoded to Base64: ", base64Encoded);
             return FREObject.Zero;
         }
 
@@ -144,7 +140,7 @@ namespace FreExampleSharpLib {
                 //var bmp = bmd.GetAsBitmap(); //makes a bitmap copy
             }
             catch (Exception e) {
-                Trace(e.GetType().ToString());
+                Trace(e.GetType());
                 Trace(e.Message);
                 Trace(e.Source);
                 Trace(e.StackTrace);
@@ -154,126 +150,114 @@ namespace FreExampleSharpLib {
 
         private FREObject RunObjectTests(FREContext ctx, uint argc, FREObject[] argv) {
             Trace("***********Start Object test***********");
-            var inFre1 = argv[0];
-            if (inFre1 == FREObject.Zero) return FREObject.Zero;
+            var person = argv[0];
+            if (person == FREObject.Zero) return FREObject.Zero;
 
-            var person = new FreObjectSharp(inFre1);
-            var freAge = person.GetProperty("age");
-            var oldAge = Convert.ToInt32(freAge.Value);
-            var newAge = new FreObjectSharp(oldAge + 10);
-            person.SetProperty("age", newAge);
+            var oldAge = person.GetProp("age").AsInt();
+            var newAge = oldAge + 10;
+            person.SetProp("age", newAge);
 
-            var personType = person.GetType();
-            Trace("person type is:" + personType);
-            Trace("current person age is: " + oldAge);
-            var addition = person.CallMethod("add", 100, 33);
-            var sum = addition.Value;
-            Trace("result is: " + sum);
+            var personType = person.Type();
+            Trace("person type is:", personType);
+            Trace("current person age is: ", oldAge);
+            var addition = person.Call("add", 100, 33);
+            Trace("result is: ", addition.AsInt());
 
-            var dictionary = person.Value as Dictionary<string, object>;
-            if (dictionary == null) return person.RawValue;
-            var city = dictionary["city"] as Dictionary<string, object>;
-            if (city == null) return person.RawValue;
-            var name = city["name"];
-            Trace("what is the city name: " + name);
-
-
-            return person.RawValue;
+            try {
+                var dictionary = person.AsDictionary();
+                if (dictionary == null) return person;
+                var city = dictionary["city"] as Dictionary<string, object>;
+                if (city == null) return person;
+                var name = city["name"];
+                Trace("what is the city name: ", name);
+            }
+            catch (Exception e) {
+                Trace(e.GetType());
+                Trace(e.Message);
+                Trace(e.Source);
+                Trace(e.StackTrace);
+            }
+            return person;
         }
 
         private FREObject RunExtensibleTests(FREContext ctx, uint argc, FREObject[] argv) {
             Trace("***********Start Extensible test***********");
-
-            // FreRectangleSharp is a new FreXXXSharp type which is extended from FreObjectSharp
-            // It lives in the package FreSharp.Geom
-            var rectangle = new FreRectangleSharp(argv[0]).Value;
+            var rectangle = argv[0].AsRect();
             rectangle.Width = 999;
             rectangle.Height = 111;
-            var ret = new FreRectangleSharp(rectangle);
 
             var point = new Point(10, 88);
-            // FrePointSharp is a new FreXXXSharp type which is extended from FreObjectSharp
-            // It is created in the local project. It is based off flash.geom.Point
-            // This enables more and more as3 classes to be ported to FRE !!
-
             var frePoint = new FrePointSharp(point);
             var targetPoint = new FrePointSharp(new Point(100, 444));
             frePoint.CopyFrom(targetPoint);
-
-            Trace(frePoint.RawValue.ToString());
-
-            return ret.RawValue;
+            return rectangle.ToFREObject();
         }
 
         private FREObject RunArrayTests(FREContext ctx, uint argc, FREObject[] argv) {
             Trace("***********Start Array test***********");
-            var inFre = new FreArraySharp(argv[0]);
-            var airArray = inFre.GetAsArrayList();
+            var inFre = new FREArray(argv[0]);
+
+            var airArray = argv[0].ToArrayList();
             var airArrayLen = inFre.Length;
 
-            Trace("Array passed from AIR: " + airArray);
-            Trace("AIR Array length: " + airArrayLen);
+            Trace("Array passed from AIR:", airArray);
+            Trace("AIR Array length:", airArrayLen);
 
-            var itemZero = inFre.GetObjectAt(0);
-            var itemZeroVal = Convert.ToInt32(itemZero.Value);
+            var itemZero = inFre.At(0);
+            var itemZeroVal = itemZero.AsInt();
 
-            Trace("AIR Array item 0 before change: " + itemZeroVal);
+            Trace("AIR Array item 0 before change:", itemZeroVal);
 
-            var newVal = new FreObjectSharp(56);
-            inFre.SetObjectAt(newVal, 0);
+            inFre.Set(0, 56);
 
             return inFre.RawValue;
         }
 
         private FREObject RunIntTests(FREContext ctx, uint argc, FREObject[] argv) {
             Trace("***********Start Int Uint test***********");
-            var inFre1 = argv[0];
-            var inFre2 = argv[1];
-            if (inFre1 == FREObject.Zero) return FREObject.Zero;
-            if (inFre2 == FREObject.Zero) return FREObject.Zero;
+            if (argc < 2) return FREObject.Zero;
+            if (argv[0] == FREObject.Zero) return FREObject.Zero;
+            if (argv[1] == FREObject.Zero) return FREObject.Zero;
+
+            var newPerson = new FREObject().Init("com.tuarua.Person");
+            Trace("We created a new person. type =", newPerson.Type());
 
             try {
-                var airInt = Convert.ToInt32(new FreObjectSharp(inFre1).Value);
-                var airUint = Convert.ToUInt32(new FreObjectSharp(inFre2).Value);
+                var airInt = argv[0].AsInt();
+                var airUint = argv[1].AsUInt();
 
-                Trace("Int passed from AIR: " + airInt);
-                Trace("Uint passed from AIR: " + airUint);
+                Trace("Int passed from AIR:", airInt);
+                Trace("Uint passed from AIR:", airUint);
             }
             catch (Exception e) {
                 Console.WriteLine($@"caught in C#: type: {e.GetType()} message: {e.Message}");
             }
             const int sharpInt = -666;
-            const uint sharpUInt = 888;
-
-            var intFreType = new FreObjectSharp(sharpUInt).GetType();
-
-            Trace("uintFreType: " + intFreType);
-            return new FreObjectSharp(sharpInt).RawValue;
+            return sharpInt.ToFREObject();
         }
-
 
         private FREObject RunNumberTests(FREContext ctx, uint argc, FREObject[] argv) {
             Trace("***********Start Number test***********");
-            var inFre = argv[0];
-            if (inFre == FREObject.Zero) return FREObject.Zero;
-            var airNumber = (double) new FreObjectSharp(inFre).Value;
-            Trace("Number passed from AIR: " + airNumber);
+            if (argv[0] == FREObject.Zero) return FREObject.Zero;
+            var airNumber = argv[0].AsDouble();
+            Trace("Number passed from AIR:", airNumber);
             const double sharpDouble = 34343.31;
-            return new FreObjectSharp(sharpDouble).RawValue;
+            return sharpDouble.ToFREObject();
         }
-
 
         private FREObject RunStringTests(FREContext ctx, uint argc, FREObject[] argv) {
             Trace(@"***********Start String test***********");
-            var inFre = argv[0];
-            if (inFre == FREObject.Zero) return FREObject.Zero;
+            if (argv[0] == FREObject.Zero) return FREObject.Zero;
             try {
-                var airString = Convert.ToString(new FreObjectSharp(inFre).Value);
-                Trace("String passed from AIR:" + airString);
+                var airString = argv[0].AsString();
+                Trace("String passed from AIR:", airString);
+
+                SendEvent("MY_EVENT", "this is a test");
             }
             catch (Exception e) {
                 Console.WriteLine($@"caught in C#: type: {e.GetType()} message: {e.Message}");
             }
+
 
             //nativeRoot is actually created as a pointer when we call NativeStage.add() from AIRNativeANE
             var nativeRoot = FreStageSharp.GetRootView() as FreNativeRoot;
@@ -294,7 +278,7 @@ namespace FreExampleSharpLib {
             nativeRoot?.AddChild(myEllipse);
 
             const string sharpString = "I am a string from C#";
-            return new FreObjectSharp(sharpString).RawValue;
+            return sharpString.ToFREObject();
         }
     }
 }

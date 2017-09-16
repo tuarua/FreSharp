@@ -20,6 +20,14 @@ namespace TuaRua.FreSharp.Geom {
         }
 
         /// <summary>
+        /// Creates a C# FREObject from a C FREObject
+        /// </summary>
+        /// <param name="freObject"></param>
+        public FreRectangleSharp(FreObjectSharp freObject) {
+            RawValue = freObject.RawValue;
+        }
+
+        /// <summary>
         /// Creates a C# FREObject from a Rectangle
         /// </summary>
         /// <param name="value"></param>
@@ -39,16 +47,16 @@ namespace TuaRua.FreSharp.Geom {
             if (status == FreResultSharp.Ok) {
                 return;
             }
-            FreSharpHelper.ThrowFreException(status, "cannot create rectangle ", this);
+            FreSharpHelper.ThrowFreException(status, "cannot create rectangle ", RawValue);
         }
 
         /// <summary>
         /// Returns the C# FREObject as a Rect.
         /// </summary>
         public new Rect Value => new Rect(
-            Convert.ToDouble(GetProperty("x").Value),
-            Convert.ToDouble(GetProperty("y").Value),
-            Convert.ToDouble(GetProperty("width").Value),
-            Convert.ToDouble(GetProperty("height").Value));
+            RawValue.GetProp("x").AsDouble(), 
+            RawValue.GetProp("y").AsDouble(), 
+            RawValue.GetProp("width").AsDouble(), 
+            RawValue.GetProp("height").AsDouble());
     }
 }

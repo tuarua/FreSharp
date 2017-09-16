@@ -1,16 +1,30 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Windows;
 using TuaRua.FreSharp;
+using FREObject = System.IntPtr;
 
 namespace FreSharp.Geom {
+    /// <summary>
+    /// 
+    /// </summary>
     public class FrePointSharp : FreObjectSharp {
+        /// <summary>
+        /// 
+        /// </summary>
         public FrePointSharp() { }
 
-        public FrePointSharp(IntPtr freObject) {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="freObject"></param>
+        public FrePointSharp(FREObject freObject) {
             RawValue = freObject;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
         public FrePointSharp(Point value) {
             uint resultPtr = 0;
             var args = new ArrayList {
@@ -25,9 +39,13 @@ namespace FreSharp.Geom {
             if (status == FreResultSharp.Ok) {
                 return;
             }
-            FreSharpHelper.ThrowFreException(status, "cannot create point ", this);
+            FreSharpHelper.ThrowFreException(status, "cannot create point ", RawValue);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sourcePoint"></param>
         public void CopyFrom(FrePointSharp sourcePoint) {
             uint resultPtr = 0;
             var args = new ArrayList {
@@ -41,11 +59,14 @@ namespace FreSharp.Geom {
             if (status == FreResultSharp.Ok) {
                 return;
             }
-            FreSharpHelper.ThrowFreException(status, "cannot copyFrom ", this);
+            FreSharpHelper.ThrowFreException(status, "cannot copyFrom ", FREObject.Zero);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public new Point Value => new Point(
-            Convert.ToDouble(GetProperty("x").Value),
-            Convert.ToDouble(GetProperty("y").Value));
+            RawValue.GetProp("x").AsDouble(), 
+            RawValue.GetProp("y").AsDouble());
     }
 }
