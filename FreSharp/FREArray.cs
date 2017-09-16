@@ -2,23 +2,24 @@
 using System.Collections;
 using TuaRua.FreSharp.Display;
 using TuaRua.FreSharp.Geom;
-
+using FREObject = System.IntPtr;
 namespace TuaRua.FreSharp {
     /// <summary>
-    ///  FreArraySharp wraps a C FREObject (Array or Vector) with helper methods.
+    ///  FREArray wraps a C FREObject (Array or Vector) with helper methods.
     /// </summary>
-    public class FreArraySharp : FreObjectSharp {
+    // ReSharper disable once InconsistentNaming
+    public class FREArray : FreObjectSharp {
         /// <summary>
         /// Creates an Empty C# FreArray.
         /// </summary>
-        public FreArraySharp() { }
+        public FREArray() { }
 
         /// <summary>
         /// Creates a C# FreArray from a C FREObject.
         /// </summary>
-        /// <param name="freArray"></param>
-        public FreArraySharp(IntPtr freArray) {
-            RawValue = freArray;
+        /// <param name="freObject"></param>
+        public FREArray(FREObject freObject) {
+            RawValue = freObject;
         }
 
         /// <summary>
@@ -32,7 +33,7 @@ namespace TuaRua.FreSharp {
                 if (status == FreResultSharp.Ok) {
                     return ret;
                 }
-                FreSharpHelper.ThrowFreException(status, "cannot get length of array", null);
+                FreSharpHelper.ThrowFreException(status, "cannot get length of array", FREObject.Zero);
                 return 0;
             }
         }
@@ -42,17 +43,19 @@ namespace TuaRua.FreSharp {
         /// </summary>
         /// <param name="i"></param>
         /// <returns></returns>
-        public FreObjectSharp GetObjectAt(uint i) {
+        public FREObject At(uint i) {
             uint resultPtr = 0;
-            return new FreObjectSharp(FreSharpHelper.Core.getObjectAt(RawValue, i, ref resultPtr));
+            return new FreObjectSharp(FreSharpHelper.Core.getObjectAt(RawValue, i, ref resultPtr)).RawValue;
         }
 
         /// <summary>
         /// Sets the C# FreObject in the C# FreArray at i.
         /// </summary>
-        public void SetObjectAt(FreObjectSharp value, uint i) {
+        
+        public void Set(uint index, object value) {
             uint resultPtr = 0;
-            FreSharpHelper.Core.setObjectAt(RawValue, i, value.RawValue, ref resultPtr);
+            var v = new FreObjectSharp(FreSharpHelper.FreObjectSharpFromObject(value).RawValue);
+            FreSharpHelper.Core.setObjectAt(RawValue, index, v.RawValue, ref resultPtr);
         }
 
         /// <summary>
@@ -64,14 +67,14 @@ namespace TuaRua.FreSharp {
             var len = Length;
             if (len <= 0) return al;
             for (uint i = 0; i < len; i++) {
-                var itm = GetObjectAt(i);
-                var type = itm.GetType();
+                var itm = At(i);
+                var type = itm.Type();
                 switch (type) {
                     case FreObjectTypeSharp.String:
-                        al.Add(FreSharpHelper.GetAsString(itm.RawValue));
+                        al.Add(FreSharpHelper.GetAsString(itm));
                         break;
                     case FreObjectTypeSharp.Bytearray:
-                        var ba = new FreByteArraySharp(itm.RawValue);
+                        var ba = new FreByteArraySharp(itm);
                         ba.Acquire();
                         var baTarget = new byte[ba.Length];
                         ba.Bytes.CopyTo(baTarget, 0);
@@ -80,30 +83,30 @@ namespace TuaRua.FreSharp {
                         break;
                     case FreObjectTypeSharp.Array:
                     case FreObjectTypeSharp.Vector:
-                        var arrFre = new FreArraySharp(itm.RawValue);
+                        var arrFre = new FREArray(itm);
                         al.Add(arrFre.GetAsArrayList());
                         break;
                     case FreObjectTypeSharp.Bitmapdata:
-                        var bmdFre = new FreBitmapDataSharp(itm.RawValue);
+                        var bmdFre = new FreBitmapDataSharp(itm);
                         al.Add(bmdFre.GetAsBitmap());
                         break;
                     case FreObjectTypeSharp.Boolean:
-                        al.Add(FreSharpHelper.GetAsBool(itm.RawValue));
+                        al.Add(FreSharpHelper.GetAsBool(itm));
                         break;
                     case FreObjectTypeSharp.Null:
                         break;
                     case FreObjectTypeSharp.Int:
-                        al.Add(FreSharpHelper.GetAsInt(itm.RawValue));
+                        al.Add(FreSharpHelper.GetAsInt(itm));
                         break;
                     case FreObjectTypeSharp.Object:
                     case FreObjectTypeSharp.Class:
-                        al.Add(FreSharpHelper.GetAsDictionary(itm.RawValue));
+                        al.Add(FreSharpHelper.GetAsDictionary(itm));
                         break;
                     case FreObjectTypeSharp.Number:
-                        al.Add(FreSharpHelper.GetAsDouble(itm.RawValue));
+                        al.Add(FreSharpHelper.GetAsDouble(itm));
                         break;
                     case FreObjectTypeSharp.Rectangle:
-                        var rectFre = new FreRectangleSharp(itm.RawValue);
+                        var rectFre = new FreRectangleSharp(itm);
                         al.Add(rectFre.Value);
                         break;
                     default:
