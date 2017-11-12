@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extension xmlns="http://ns.adobe.com/air/extension/19.0">
+    <id>com.mycompany.HelloWorldANE</id>
+    <name>Hello World ANE</name>
+    <copyright></copyright>
+    <versionNumber>0.0.1</versionNumber>
+	<platforms>
+        <platform name="Windows-x86">
+            <applicationDeployment>
+                <nativeLibrary>HelloWorldANE.dll</nativeLibrary>
+                <initializer>XXXXExtInizer</initializer>
+                <finalizer>XXXXExtFinizer</finalizer>
+            </applicationDeployment>
+        </platform>
+	</platforms>
+</extension>

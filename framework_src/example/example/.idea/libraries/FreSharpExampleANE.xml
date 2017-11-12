@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="FreSharpExampleANE" type="flex">
+    <CLASSES>
+      <root url="jar://$DOCUMENTS$/FreSharp/framework_src/example/native_extension/ane/FreSharpExampleANE.ane!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
