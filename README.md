@@ -1,3 +1,5 @@
+
+
 # FreSharp
 
 [![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=5UR2T52J633RC)
@@ -5,72 +7,14 @@
 ### Features
  - Build Adobe Air Native Extensions using C#
 
-A basic starter project is included here https://github.com/tuarua/FreSharp/tree/master/starter_project
-
-A complete feature rich example is in https://github.com/tuarua/FreSharp/tree/master/framework_src/example
-
 The package is hosted on NuGet at https://www.nuget.org/packages/TuaRua.FreSharp/
 
-
 ----------
 
-The ANE is comprised of 3 parts.
+### Getting Started
 
-1. A C++ dll which is packaged as your ANE. It exposes methods to AIR and acts as a thin C++ API layer to the C# code.
-2. A C# dll which contains the main logic of the ANE.
-3. 2 dlls (FreSharp.dll, FreSharpCore.dll) which contain the translation of FlashRuntimeExtensions to C#.
+A basic Hello World [starter project](/starter_project) is included 
 
-
-* For debug builds, the 3 dlls(FreSharp.dll, FreSharpCore.dll, HelloWorldLib.dll) need to be copied to the same folder as adl.exe in your AIRSDK. 
-* For release builds, the 3 dlls(FreSharp.dll, FreSharpCore.dll, HelloWorldLib.dll) need to be packaged in the same folder as your exe.  
-It is highly recommended you package your app for release using an installer.  
-Please see the win_installer/ folder for an example Inno Setup project which handles .NET 4.6 and MSV2015 dependencies.
-
-* This ANE was built with MS Visual Studio 2015. As such your machine (and user's machines) will need to have Microsoft Visual C++ 2015 Redistributable (x86) runtime installed.
-https://www.microsoft.com/en-us/download/details.aspx?id=48145
-
-* This ANE also uses .NET 4.6 Framework. As such your machine (and user's machines) will need to have to have this installed.
-https://www.microsoft.com/en-us/download/details.aspx?id=48130
-
-----------
-
-HelloWorldANE/HelloWorldANE.cpp is the entry point of the ANE. It acts as a thin layered API to your C# controller.  
-Add the number of methods here 
-
-````C++
-static FRENamedFunction extensionFunctions[] = {
-     MAP_FUNCTION(load)
-    ,MAP_FUNCTION(goBack)
-};
-`````
-    
-
-HelloWorldANELib/MainController.cs  
-Add C# method(s) to the functionsToSet Dictionary in getFunctions()
-
-````C#
-FunctionsDict = new Dictionary<string, Func<FREObject, uint, FREObject[], FREObject>> {
-     {"load", Load}
-    ,{"goBack", GoBack}
-};
-`````
-
-
-Add C# method(s)
-
-````C#
-public FREObject Load(FREContext ctx, uint argc, FREObject[] argv) {
-    //your code here
-    return FREObject.Zero;
-}
-
-public FREObject GoBack(FREContext ctx, uint argc, FREObject[] argv) {
-    //your code here
-    return FREObject.Zero;
-}
-`````
-
-----------
 
 ### How to use
 ###### Converting from FREObject args into C# types, returning FREObjects
