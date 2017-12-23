@@ -42,6 +42,7 @@ extern "C" {
 	}
 
 	CONTEXT_FIN(TRFS) {
+		FreSharpBridge::GetController()->OnFinalize();
 	}
 
 	EXTENSION_INIT(TRFS)

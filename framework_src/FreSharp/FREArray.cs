@@ -4,16 +4,19 @@ using TuaRua.FreSharp.Display;
 using TuaRua.FreSharp.Geom;
 using FREObject = System.IntPtr;
 namespace TuaRua.FreSharp {
+    /// <inheritdoc />
     /// <summary>
     ///  FREArray wraps a C FREObject (Array or Vector) with helper methods.
     /// </summary>
     // ReSharper disable once InconsistentNaming
     public class FREArray : FreObjectSharp {
+        /// <inheritdoc />
         /// <summary>
         /// Creates an Empty C# FreArray.
         /// </summary>
         public FREArray() { }
 
+        /// <inheritdoc />
         /// <summary>
         /// Creates a C# FreArray from a C FREObject.
         /// </summary>

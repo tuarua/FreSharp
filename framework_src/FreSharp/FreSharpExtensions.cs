@@ -28,6 +28,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
+using Color = System.Windows.Media.Color;
 using FreSharp.Geom;
 using TuaRua.FreSharp.Geom;
 using FREObject = System.IntPtr;
@@ -92,7 +93,6 @@ namespace TuaRua.FreSharp {
             //throws? //TODO
             return FreSharpHelper.GetProperty(inFre, name);
         }
-
 
         /// <summary>
         /// 
@@ -200,6 +200,28 @@ namespace TuaRua.FreSharp {
         /// <param name="inFre"></param>
         /// <returns></returns>
         public static int AsInt(this FREObject inFre) => FreSharpHelper.GetAsInt(inFre);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="inFre"></param>
+        /// <param name="hasAlpha"></param>
+        /// <returns></returns>
+        public static Color AsColor(this FREObject inFre, bool hasAlpha = false) {
+            var rgb = FreSharpHelper.GetAsUInt(new FreObjectSharp(inFre).RawValue);
+            if (hasAlpha) {
+                return Color.FromArgb(
+                    Convert.ToByte((rgb >> 24) & 0xff),
+                    Convert.ToByte((rgb >> 16) & 0xff),
+                    Convert.ToByte((rgb >> 8) & 0xff),
+                    Convert.ToByte((rgb >> 0) & 0xff));
+                
+            }
+            return Color.FromRgb(
+                Convert.ToByte((rgb >> 16) & 0xff),
+                Convert.ToByte((rgb >> 8) & 0xff),
+                Convert.ToByte((rgb >> 0) & 0xff));
+        }
 
         /// <summary>
         /// 

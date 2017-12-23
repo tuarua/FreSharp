@@ -13,7 +13,7 @@ using static System.Windows.Media.Brushes;
 using static System.Windows.Media.Color;
 using FREObject = System.IntPtr;
 using FREContext = System.IntPtr;
-using System.Windows;
+using Point = System.Windows.Point;
 
 namespace FreExampleSharpLib {
     public class MainController : FreSharpMainController {
@@ -166,7 +166,7 @@ namespace FreExampleSharpLib {
             try {
                 var dictionary = person.AsDictionary();
                 if (dictionary == null) return person;
-                var city = dictionary["city"] as Dictionary<string, object>;
+                var city = (Dictionary<string, object>) dictionary["city"];
                 if (city == null) return person;
                 var name = city["name"];
                 Trace("what is the city name: ", name);
@@ -225,8 +225,7 @@ namespace FreExampleSharpLib {
             try {
                 var airInt = argv[0].AsInt();
                 var airUint = argv[1].AsUInt();
-           
-                
+
 
                 Trace("Int passed from AIR:", airInt);
                 Trace("Uint passed from AIR:", airUint);
@@ -281,6 +280,12 @@ namespace FreExampleSharpLib {
 
             const string sharpString = "I am a string from C#";
             return sharpString.ToFREObject();
+        }
+
+        public override void OnFinalize() {
+            // https://docs.microsoft.com/en-us/dotnet/standard/garbage-collection/unmanaged
+            // https://docs.microsoft.com/en-us/dotnet/api/system.idisposable.dispose?view=netframework-4.7.1
+            // clear up and variables here
         }
     }
 }
