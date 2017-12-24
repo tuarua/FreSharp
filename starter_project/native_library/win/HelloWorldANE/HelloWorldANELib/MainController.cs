@@ -59,7 +59,11 @@ namespace HelloWorldLib {
             _airWindow = Process.GetCurrentProcess().MainWindowHandle;
             return FREObject.Zero;
         }
-    }
+
+       public override void OnFinalize() {
+           
+       }
+   }
 
 
 }

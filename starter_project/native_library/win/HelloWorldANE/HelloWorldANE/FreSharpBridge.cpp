@@ -24,7 +24,6 @@ namespace FreSharpBridge {
 		for (i = 0; i < mArray->Length; ++i) {
 			std::string itemStr = "";
 			MarshalString(mArray[i], itemStr);
-
 			ret.push_back(itemStr);
 		}
 		return ret;

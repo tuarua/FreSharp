@@ -169,6 +169,9 @@
     <ClCompile Include="HelloWorldANE.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="FreSharp">
+      <HintPath>..\packages\TuaRua.FreSharp.1.2.1\FreSharp\$(PlatformTarget)\FreSharp.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
