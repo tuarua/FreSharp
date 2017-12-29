@@ -79,26 +79,6 @@ namespace TuaRua.FreSharp.Display {
             RawValue = freBitmapData;
         }
 
-        /*
-        private static byte[] BitmapToByteArray(Bitmap bitmap) {
-            BitmapData bmpdata = null;
-            try {
-                bmpdata = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadOnly, bitmap.PixelFormat);
-                var numbytes = bmpdata.Stride * bitmap.Height;
-                var bytedata = new byte[numbytes];
-                var ptr = bmpdata.Scan0;
-
-                Marshal.Copy(ptr, bytedata, 0, numbytes);
-
-                return bytedata;
-            }
-            finally {
-                if (bmpdata != null)
-                    bitmap.UnlockBits(bmpdata);
-            }
-        }
-        */
-
         /// <summary>
         /// Creates a C# FREBitmapData from a C# Bitmap
         /// </summary>

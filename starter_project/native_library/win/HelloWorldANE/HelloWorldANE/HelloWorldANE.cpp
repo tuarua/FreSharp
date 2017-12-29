@@ -1,7 +1,5 @@
 #include "FreSharpMacros.h"
 #include "HelloWorldANE.h"
-#include "FlashRuntimeExtensions.h"
-#include "stdafx.h"
 #include "FreSharpBridge.h"
 
 // XXXX is a placeholder for a unique identifier. Replace with, for example, your company initials and ANE ID eg MCHW
@@ -25,6 +23,7 @@ extern "C" {
 	}
 
 	CONTEXT_FIN(XXXX) {
+		FreSharpBridge::GetController()->OnFinalize();
 	}
 	EXTENSION_INIT(XXXX)
 	EXTENSION_FIN(XXXX)

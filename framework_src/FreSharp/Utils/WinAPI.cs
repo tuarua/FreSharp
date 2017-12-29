@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Drawing;
 using System.Management;
 using System.Runtime.InteropServices;
 using Hwnd = System.IntPtr;
+
 #pragma warning disable 1591
 
 namespace TuaRua.FreSharp.Utils {
@@ -10,7 +12,9 @@ namespace TuaRua.FreSharp.Utils {
     /// </summary>
     public static class WinApi {
         private const string User32 = "user32";
-        private const string Kernel32 = "kernel32";
+        //private const string Kernel32 = "kernel32";
+        private const string Gdi32 = "gdi32";
+
         /// <summary>
         /// 
         /// </summary>
@@ -20,12 +24,29 @@ namespace TuaRua.FreSharp.Utils {
             var searcher = new ManagementObjectSearcher("SELECT Version FROM Win32_OperatingSystem");
             const char delimiter = '.';
             foreach (var o in searcher.Get()) {
-                var os = (ManagementObject)o;
+                var os = (ManagementObject) o;
                 var version = os["Version"].ToString();
                 var substrings = version.Split(delimiter);
                 return new Tuple<int, int>(Convert.ToInt32(substrings[0]), Convert.ToInt32(substrings[1]));
             }
             return result;
+        }
+
+        public static double GetScaleFactor() {
+            var g = Graphics.FromHwnd(Hwnd.Zero);
+            var desktop = g.GetHdc();
+            var logicalScreenHeight = GetDeviceCaps(desktop, (int) DeviceCap.VERTRES);
+            var physicalScreenHeight = GetDeviceCaps(desktop, (int) DeviceCap.DESKTOPVERTRES);
+            var ydpi = GetDeviceCaps(desktop, (int) DeviceCap.LOGPIXELSY);
+            var dpiScale = ydpi / 96.0;
+            g.ReleaseHdc();
+            if (dpiScale > 1.0) {
+                return dpiScale;
+            }
+            if (physicalScreenHeight / (double) logicalScreenHeight > 1.0) {
+                return physicalScreenHeight / (double) logicalScreenHeight;
+            }
+            return 1.0;
         }
 
         /// <summary>
@@ -36,6 +57,7 @@ namespace TuaRua.FreSharp.Utils {
         /// <returns></returns>
         [DllImport(User32, ExactSpelling = true)]
         public static extern bool ShowWindow(Hwnd hwnd, ShowWindowCommands nCmdShow);
+
         /// <summary>
         /// 
         /// </summary>
@@ -43,6 +65,7 @@ namespace TuaRua.FreSharp.Utils {
         /// <returns></returns>
         [DllImport(User32, ExactSpelling = true)]
         public static extern bool UpdateWindow(Hwnd hwnd);
+
         /// <summary>
         /// 
         /// </summary>
@@ -57,6 +80,7 @@ namespace TuaRua.FreSharp.Utils {
         [DllImport(User32, ExactSpelling = true)]
         public static extern bool SetWindowPos(Hwnd hwnd, Hwnd hWndInsertAfter, int x, int y, int cx, int cy,
             WindowPositionFlags flags);
+
         /// <summary>
         /// 
         /// </summary>
@@ -71,7 +95,6 @@ namespace TuaRua.FreSharp.Utils {
         /// 
         /// </summary>
         [StructLayout(LayoutKind.Sequential)]
-
         public struct Rect {
             public int left;
             public int top;
@@ -88,6 +111,9 @@ namespace TuaRua.FreSharp.Utils {
 
         [DllImport(User32)]
         public static extern int GetWindowLong(Hwnd hwnd, int nIndex);
+
+        [DllImport(Gdi32, ExactSpelling = true)]
+        public static extern int GetDeviceCaps(Hwnd hdc, int nIndex);
     }
 
     [Flags]
@@ -152,5 +178,12 @@ namespace TuaRua.FreSharp.Utils {
     public enum TouchWindowFlags {
         TWF_FINETOUCH = 0x00000001,
         TWF_WANTPALM = 0x00000002
+    }
+
+    [Flags]
+    public enum DeviceCap {
+        VERTRES = 10,
+        DESKTOPVERTRES = 117,
+        LOGPIXELSY = 90
     }
 }

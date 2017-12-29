@@ -30,6 +30,9 @@
     <ClInclude Include="FreSharpMacros.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\sdks\AIR\AIRSDK_28\include\FlashRuntimeExtensions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="HelloWorldANE.cpp">

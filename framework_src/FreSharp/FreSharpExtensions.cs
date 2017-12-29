@@ -26,12 +26,15 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Windows;
 using Color = System.Windows.Media.Color;
 using FreSharp.Geom;
+using TuaRua.FreSharp.Display;
 using TuaRua.FreSharp.Geom;
 using FREObject = System.IntPtr;
+using Point = System.Windows.Point;
 
 namespace TuaRua.FreSharp {
     /// <summary>
@@ -305,6 +308,21 @@ namespace TuaRua.FreSharp {
         /// <param name="inFre"></param>
         /// <returns></returns>
         public static Rect AsRect(this FreObjectSharp inFre) => new FreRectangleSharp(inFre).Value;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="inFre"></param>
+        /// <returns></returns>
+        public static Bitmap AsBitmap(this FREObject inFre) => new FreBitmapDataSharp(inFre).GetAsBitmap();
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="bitmap"></param>
+        /// <returns></returns>
+        // ReSharper disable once InconsistentNaming
+        public static FREObject ToFREObject(this Bitmap bitmap) => new FreBitmapDataSharp(bitmap).RawValue;
 
         // ReSharper disable once InconsistentNaming
         /// <summary>

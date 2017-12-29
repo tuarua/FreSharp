@@ -48,7 +48,7 @@ namespace TuaRua.FreSharp {
         /// <param name="values"></param>
         public void Trace(params object[] values) {
             var traceStr = values.Aggregate("", (current, value) => current + value + " ");
-            Context.SendEvent("TRACE", traceStr);
+            Context?.SendEvent("TRACE", traceStr);
         }
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace TuaRua.FreSharp {
         /// <param name="name"></param>
         /// <param name="value"></param>
         public void SendEvent(string name, string value) {
-            Context.SendEvent(name, value);
+            Context?.SendEvent(name, value);
         }
 
     }
