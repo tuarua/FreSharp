@@ -23,6 +23,7 @@ namespace FreSharpBridge {
 	FREObject CallSharpFunction(String^ name, FREContext context, array<FREObject>^ argv, uint32_t argc);
 	void SetFREContext(FREContext freContext);
 	void InitController();
+	FreNamespace::MainController^ GetController();
 }
 extern "C" {
 #define FRE_FUNCTION(fn) FREObject (fn)(FREContext context, void* functionData, uint32_t argc, FREObject argv[])

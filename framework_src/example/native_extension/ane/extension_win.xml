@@ -3,7 +3,7 @@
     <id>com.tuarua.FreSharpExampleANE</id>
     <name>FreSharp Example ANE</name>
     <copyright>his work is licensed under MIT License, Copyright (c) 2017 Tua Rua Ltd.</copyright>
-    <versionNumber>1.2.0</versionNumber>
+    <versionNumber>1.3.0</versionNumber>
 	<platforms>
         <platform name="Windows-x86">
             <applicationDeployment>

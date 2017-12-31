@@ -232,7 +232,6 @@ namespace FRESharpCore {
 
 	FREObjectCLR FRESharpCLR::getFREObject(Bitmap^ value, FREBitmapDataCLR^ descriptorToSet, UInt32% freresult) {
 		FREObject freBitmap;
-
 		FREObjectCLR width = getFREObject(UInt32(value->Width), freresult);
 		if (FRE_OK != freresult) return FREObjectCLR(nullptr);
 		FREObjectCLR height = getFREObject(UInt32(value->Height), freresult);
@@ -241,27 +240,25 @@ namespace FRESharpCore {
 		if (FRE_OK != freresult) return FREObjectCLR(nullptr);
 		FREObjectCLR fillColor = getFREObject(UInt32(0xFFFFFF), freresult);
 		if (FRE_OK != freresult) return FREObjectCLR(nullptr);
-
 		FREObject obs[4] = { width.ToPointer(), height.ToPointer(), transparent.ToPointer(), fillColor.ToPointer() };
 		FRENewObject((uint8_t *)"flash.display.BitmapData", 4, obs, &freBitmap, NULL);
-
 		FREBitmapData2 bitmapData;
 		FREResult acquireResult = FREAcquireBitmapData2(freBitmap, &bitmapData);
-
 		if (FRE_OK != acquireResult) {
 			FREReleaseBitmapData(freBitmap);
 			return FREObjectCLR(freBitmap);
 		}
-
 		if (&bitmapData.isInvertedY != (uint32_t*)(0)) value->RotateFlip(RotateFlipType::RotateNoneFlipY);
-
 		const int pixelSize = 4;
-
 		Rectangle rect(0, 0, value->Width, value->Height);
 		BitmapData^ windowsBitmapData = value->LockBits(rect, ImageLockMode::ReadOnly, PixelFormat::Format32bppArgb);
-
-		for (int y = 0; y < value->Height; y++) {
-			Byte* oRow = (Byte*)windowsBitmapData->Scan0.ToInt32() + (y * windowsBitmapData->Stride);
+		 for (int y = 0; y < value->Height; y++) {
+			 Byte* oRow;
+			 if (Environment::Is64BitProcess) {
+				 oRow = (Byte*)windowsBitmapData->Scan0.ToInt64() + (y * windowsBitmapData->Stride);
+			 } else {
+				 oRow = (Byte*)windowsBitmapData->Scan0.ToInt32() + (y * windowsBitmapData->Stride);
+			 }
 			Byte* nRow = (Byte*)bitmapData.bits32 + (y * bitmapData.lineStride32 * 4);
 			for (int x = 0; x < value->Width; x++) {
 				nRow[x * pixelSize] = oRow[x * pixelSize]; //B
@@ -269,7 +266,6 @@ namespace FRESharpCore {
 				nRow[x * pixelSize + 2] = oRow[x * pixelSize + 2]; //R
 			}
 		}
-
 		descriptorToSet->width = bitmapData.width;
 		descriptorToSet->height = bitmapData.height;
 		uint32_t* input = bitmapData.bits32;
@@ -277,15 +273,12 @@ namespace FRESharpCore {
 		descriptorToSet->isInvertedY = bitmapData.isInvertedY;
 		descriptorToSet->isPremultiplied = bitmapData.isPremultiplied;
 		descriptorToSet->lineStride32 = bitmapData.lineStride32;
-
 		// Free resources
 		releaseBitmapData(FREObjectCLR(freBitmap));
 		invalidateBitmapDataRect(FREObjectCLR(freBitmap), 0, 0, value->Width, value->Height);
-		
 
 		value->UnlockBits(windowsBitmapData);
 		delete windowsBitmapData;
-
 		return FREObjectCLR(freBitmap);
 	}
 

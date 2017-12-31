@@ -29,6 +29,7 @@ The following table shows the primitive as3 types which can easily be converted 
 | Number | double | `var dbl = argv[0].AsDouble()` | `return dbl.ToFREObject()`|
 | Rectangle | Rect | `var rect = argv[0].AsRect()` | `return rect.ToFREObject()` |
 | Point | Point | `var pnt = argv[0].AsPoint()` | `return pnt.ToFREObject()` |
+| BitmapData | Bitmap | `var bmp = argv[0].AsBitmap()` | `return bmp.ToFREObject()` |
 | Object | Dictionary | `var dct = argv[0].AsDictionary()` | N/A |
 
 

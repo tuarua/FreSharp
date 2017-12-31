@@ -26,11 +26,15 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Windows;
+using Color = System.Windows.Media.Color;
 using FreSharp.Geom;
+using TuaRua.FreSharp.Display;
 using TuaRua.FreSharp.Geom;
 using FREObject = System.IntPtr;
+using Point = System.Windows.Point;
 
 namespace TuaRua.FreSharp {
     /// <summary>
@@ -92,7 +96,6 @@ namespace TuaRua.FreSharp {
             //throws? //TODO
             return FreSharpHelper.GetProperty(inFre, name);
         }
-
 
         /// <summary>
         /// 
@@ -205,6 +208,28 @@ namespace TuaRua.FreSharp {
         /// 
         /// </summary>
         /// <param name="inFre"></param>
+        /// <param name="hasAlpha"></param>
+        /// <returns></returns>
+        public static Color AsColor(this FREObject inFre, bool hasAlpha = false) {
+            var rgb = FreSharpHelper.GetAsUInt(new FreObjectSharp(inFre).RawValue);
+            if (hasAlpha) {
+                return Color.FromArgb(
+                    Convert.ToByte((rgb >> 24) & 0xff),
+                    Convert.ToByte((rgb >> 16) & 0xff),
+                    Convert.ToByte((rgb >> 8) & 0xff),
+                    Convert.ToByte((rgb >> 0) & 0xff));
+                
+            }
+            return Color.FromRgb(
+                Convert.ToByte((rgb >> 16) & 0xff),
+                Convert.ToByte((rgb >> 8) & 0xff),
+                Convert.ToByte((rgb >> 0) & 0xff));
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="inFre"></param>
         /// <returns></returns>
         public static Dictionary<string, object> AsDictionary(this FREObject inFre) =>
             FreSharpHelper.GetAsDictionary(inFre);
@@ -283,6 +308,21 @@ namespace TuaRua.FreSharp {
         /// <param name="inFre"></param>
         /// <returns></returns>
         public static Rect AsRect(this FreObjectSharp inFre) => new FreRectangleSharp(inFre).Value;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="inFre"></param>
+        /// <returns></returns>
+        public static Bitmap AsBitmap(this FREObject inFre) => new FreBitmapDataSharp(inFre).GetAsBitmap();
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="bitmap"></param>
+        /// <returns></returns>
+        // ReSharper disable once InconsistentNaming
+        public static FREObject ToFREObject(this Bitmap bitmap) => new FreBitmapDataSharp(bitmap).RawValue;
 
         // ReSharper disable once InconsistentNaming
         /// <summary>

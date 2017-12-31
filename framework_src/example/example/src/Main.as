@@ -171,7 +171,6 @@ public class Main extends Sprite {
                 ane.runBitmapTests(sprBmp.bitmapData);
             }
 
-
             var myByteArray:ByteArray = new ByteArray();
             myByteArray.writeUTFBytes("C# in an ANE. Say whaaaat!");
             ane.runByteArrayTests(myByteArray);
