@@ -1,17 +1,8 @@
 package {
-
-import com.greensock.TweenLite;
-import com.tuarua.AIRNativeANE;
 import com.tuarua.Person;
 import com.tuarua.FreSharpExampleANE;
 import com.tuarua.fre.ANEError;
-import com.tuarua.fre.ANStage;
-import com.tuarua.fre.display.ANButton;
-import com.tuarua.fre.display.ANImage;
-import com.tuarua.fre.display.ANSprite;
-
 import flash.desktop.NativeApplication;
-
 import flash.display.Bitmap;
 import flash.display.BitmapData;
 
@@ -19,10 +10,8 @@ import flash.display.Loader;
 
 import flash.display.Sprite;
 import flash.display.StageAlign;
-import flash.display.StageDisplayState;
 import flash.display.StageScaleMode;
 import flash.events.Event;
-import flash.events.MouseEvent;
 import flash.geom.Rectangle;
 import flash.net.URLRequest;
 import flash.text.TextField;
@@ -35,17 +24,9 @@ public class Main extends Sprite {
     [Embed(source="adobeair.png")]
     public static const TestImage:Class;
 
-    [Embed(source="play.png")]
-    public static const TestButton:Class;
-
-    [Embed(source="play-hover.png")]
-    public static const TestButtonHover:Class;
 
     private var ane:FreSharpExampleANE = new FreSharpExampleANE();
-    private var airNativeANE:AIRNativeANE = new AIRNativeANE();
     private var hasActivated:Boolean = false;
-    private var nativeButton:ANButton;
-    private var nativeImage:ANImage;
     private var textField:TextField = new TextField();
 
     public function Main() {
@@ -62,37 +43,6 @@ public class Main extends Sprite {
 
     private function onActivated(event:Event):void {
         if (!hasActivated) {
-            // adds a native window over our AIR window
-            // Supports transparency on Windows 8.1+ requires .NET4.6+
-
-            ANStage.init(stage, new Rectangle(100, 0, 400, 600), true, true);
-            ANStage.add();
-
-            //NativeStage.viewPort = new Rectangle(0,0,400,200);
-            //NativeStage.visible = false;
-
-            var nativeSprite:ANSprite = new ANSprite();
-            nativeSprite.x = 150;
-
-            nativeImage = new ANImage(new TestImage());
-            var nativeImage2:ANImage = new ANImage(new TestImage());
-            nativeImage2.y = 180;
-            nativeImage2.alpha = 0.5;
-            nativeButton = new ANButton(new TestButton(), new TestButtonHover());
-            nativeButton.addEventListener(MouseEvent.CLICK, onNativeClick);
-            nativeButton.addEventListener(MouseEvent.MOUSE_OVER, onNativeOver);
-            nativeButton.addEventListener(MouseEvent.MOUSE_OUT, onNativeOut);
-            nativeButton.y = 200;
-
-
-            ANStage.addChild(nativeSprite);
-            nativeSprite.addChild(nativeImage2);
-            nativeSprite.addChild(nativeImage); //have to add after the sprite is on stage, can i improve this
-
-
-            ANStage.addChild(nativeButton);
-
-
             var tf:TextFormat = new TextFormat();
             tf.size = 24;
             tf.color = 0x333333;
@@ -200,24 +150,6 @@ public class Main extends Sprite {
 
         }
         hasActivated = true;
-    }
-
-    private function onNativeOut(event:MouseEvent):void {
-    }
-
-    private function onNativeOver(event:MouseEvent):void {
-    }
-
-    private function onNativeClick(event:MouseEvent):void {
-        //goFullscreen();
-        //nativeButton.alpha = 0.5;
-
-        TweenLite.to(nativeImage, 0.35, {y: 100});
-
-    }
-
-    private function goFullscreen():void {
-        stage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE;
     }
 
     private function onExiting(event:Event):void {

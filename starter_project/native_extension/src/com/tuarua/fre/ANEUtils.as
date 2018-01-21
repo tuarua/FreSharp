@@ -7,7 +7,9 @@ import flash.utils.describeType;
 import flash.utils.getDefinitionByName;
 import flash.utils.getQualifiedClassName;
 
+//noinspection JSUnusedGlobalSymbols
 public class ANEUtils {
+    //noinspection JSUnusedGlobalSymbols
     public function ANEUtils() {
     }
 
@@ -57,6 +59,7 @@ public class ANEUtils {
         return ret;
     }
 
+    //noinspection JSUnusedGlobalSymbols
     public function getClassProps(clz:*):Vector.<Object> {
         var ret:Vector.<Object> = new <Object>[];
         var xml:XML = describeType(clz);
@@ -105,6 +108,7 @@ public class ANEUtils {
         return null;
     }
 
+    //noinspection JSUnusedGlobalSymbols
     public static function map(from:Object, to:Class):Object {
         var classInstance:Object;
         classInstance = new to();
@@ -138,14 +142,14 @@ public class ANEUtils {
     }
 
     public static function getClassType(clz:*):String {
-        var xml:XML = describeType(clz);
-        return xml.@name;
+        return getQualifiedClassName(clz);
     }
 
+    //noinspection JSMethodCanBeStatic
     public function getClassType(clz:*):String {
-        var xml:XML = describeType(clz);
-        return xml.@name;
+        return getQualifiedClassName(clz);
     }
+
 
 }
 }

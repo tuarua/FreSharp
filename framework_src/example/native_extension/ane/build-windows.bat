@@ -67,15 +67,11 @@ copy %pathtome%..\..\native_library\win\%projectName%\x86\Release\FreSharp.pdb %
 copy %pathtome%..\..\native_library\win\%projectName%\x64\Release\FreSharp.dll %AIR_PATH_64%FreSharp.dll
 copy %pathtome%..\..\native_library\win\%projectName%\x64\Release\FreSharp.pdb %AIR_PATH_64%FreSharp.pdb
 
-copy %pathtome%..\..\native_library\win\%projectName%\AIRNative\native_extension\ane\AIRNativeANE.ane %pathtome%AIRNativeANE.ane
-
 copy %pathtome%..\..\native_library\win\%projectName%\x86\Release\FreSharpCore.dll %pathtome%..\..\c_sharp_libs_x86\FreSharpCore.dll
 copy %pathtome%..\..\native_library\win\%projectName%\x86\Release\FreSharp.dll %pathtome%..\..\c_sharp_libs_x86\FreSharp.dll
-copy %pathtome%..\..\c_sharp_libs_x86\AIRNative.dll %AIR_PATH%AIRNative.dll
 
 copy %pathtome%..\..\native_library\win\%projectName%\x64\Release\FreSharpCore.dll %pathtome%..\..\c_sharp_libs_x64\FreSharpCore.dll
 copy %pathtome%..\..\native_library\win\%projectName%\x64\Release\FreSharp.dll %pathtome%..\..\c_sharp_libs_x64\FreSharp.dll
-copy %pathtome%..\..\c_sharp_libs_x64\AIRNative.dll %AIR_PATH_64%AIRNative.dll
 
 REM Run the build command.
 echo Building Release.
