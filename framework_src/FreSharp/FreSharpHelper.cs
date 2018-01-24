@@ -112,12 +112,7 @@ namespace TuaRua.FreSharp {
             uint resultPtr = 0;
             var ret = Core.getString(rawValue, ref resultPtr);
             var status = (FreResultSharp) resultPtr;
-
-            if (status == FreResultSharp.Ok) {
-                return ret;
-            }
-            ThrowFreException(status, "cannot get FREObject as String", FREObject.Zero);
-            return "";
+            return status == FreResultSharp.Ok ? ret : null;
         }
 
         /// <summary>

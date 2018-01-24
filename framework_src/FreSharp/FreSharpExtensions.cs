@@ -61,7 +61,7 @@ namespace TuaRua.FreSharp {
         /// </summary>
         /// <param name="inFre"></param>
         /// <returns></returns>
-        public static string AsString(this FreObjectSharp inFre) => Convert.ToString(inFre.Value);
+        public static string AsString(this FreObjectSharp inFre) => FreSharpHelper.GetAsString(inFre.RawValue);
 
 
         /// <summary>
@@ -76,7 +76,7 @@ namespace TuaRua.FreSharp {
         /// </summary>
         /// <param name="inFre"></param>
         /// <returns></returns>
-        public static bool AsBool(this FreObjectSharp inFre) => (bool) inFre.Value;
+        public static bool AsBool(this FreObjectSharp inFre) => FreSharpHelper.GetAsBool(inFre.RawValue);
 
         // ReSharper disable once InconsistentNaming
         /// <summary>
@@ -261,7 +261,7 @@ namespace TuaRua.FreSharp {
         /// </summary>
         /// <param name="inFre"></param>
         /// <returns></returns>
-        public static uint AsUInt(this FreObjectSharp inFre) => Convert.ToUInt32(inFre.Value);
+        public static uint AsUInt(this FreObjectSharp inFre) => FreSharpHelper.GetAsUInt(inFre.RawValue);
 
 
         // ReSharper disable once InconsistentNaming
@@ -284,7 +284,7 @@ namespace TuaRua.FreSharp {
         /// </summary>
         /// <param name="inFre"></param>
         /// <returns></returns>
-        public static double AsDouble(this FreObjectSharp inFre) => Convert.ToDouble(inFre.Value);
+        public static double AsDouble(this FreObjectSharp inFre) => FreSharpHelper.GetAsDouble(inFre.RawValue);
 
         // ReSharper disable once InconsistentNaming
         /// <summary>
