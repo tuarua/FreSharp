@@ -1,3 +1,7 @@
+### 1.4.0
+Allow GetAsString to return null strings
+Updated ANEUtils
+
 ### 1.3.0
 - Fix for Bitmap conversion on 64bit
 - Added AsColor() method

@@ -81,10 +81,6 @@
       <Project>{02df5a34-4bd0-42d1-a150-64a886a335c0}</Project>
       <Name>FreSharp</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AIRNative\native_library\win\AIRNativeANE\AIRNativeANELib\AIRNativeANELib.csproj">
-      <Project>{7e6f0fb4-4743-42c4-9451-f95dfc402f89}</Project>
-      <Name>AIRNativeANELib</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

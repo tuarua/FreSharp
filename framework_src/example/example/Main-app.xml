@@ -43,7 +43,6 @@
     <!-- Identifies the ActionScript extensions used by an application. -->
     <extensions>
         <extensionID>com.tuarua.FreSharpExampleANE</extensionID>
-        <extensionID>com.tuarua.AIRNativeANE</extensionID>
     </extensions>
 
     <!-- Settings for the application's initial window. Required. -->
