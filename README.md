@@ -83,25 +83,6 @@ catch (Exception e) {
 }
 `````
 
-Advanced: AIR Native Stage. Adding native elements over the AIR window  
-The example includes AIRNativeANE for creating a child Window which can be used to contain WPF controls and graphics.
-In Windows 8.1+ the Window can be transparent. 
-Buttons and images can be added easily from actionscript.
-
-````actionscript
-ANStage.init(stage, new Rectangle(100, 0, 400, 600), true, true);
-ANStage.add();
-
-var nativeButton = new ANButton(new TestButton(), new TestButtonHover());
-nativeButton.addEventListener(MouseEvent.CLICK, onNativeClick);
-var nativeSprite:ANSprite = new ANSprite();
-nativeSprite.x = 150;
-
-var nativeImage:ANImage = new ANImage(new TestImage());
-ANStage.addChild(nativeSprite);
-ANStage.addChild(nativeImage);
-ANStage.addChild(nativeButton);
-`````
 Advanced: Extending FreObjectSharp. Creating a C# version of flash.geom.point
 
 ````C#
