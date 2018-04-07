@@ -1,47 +1,34 @@
 ﻿namespace TuaRua.FreSharp {
-    /// <summary>
-    /// 
-    /// </summary>
+    /// <summary>C# implementation of FREResult</summary>
     public enum FreResultSharp {
-        /// <summary>
-        /// 
-        /// </summary>
+        /// <summary></summary>
         Ok = 0,
-        /// <summary>
-        /// 
-        /// </summary>
+
+        /// <summary></summary>
         NoSuchName = 1,
-        /// <summary>
-        /// 
-        /// </summary>
+
+        /// <summary></summary>
         FreInvalidObject = 2,
-        /// <summary>
-        /// 
-        /// </summary>
+
+        /// <summary></summary>
         FreTypeMismatch = 3,
-        /// <summary>
-        /// 
-        /// </summary>
+
+        /// <summary></summary>
         FreActionscriptError = 4,
-        /// <summary>
-        /// 
-        /// </summary>
+
+        /// <summary></summary>
         FreInvalidArgument = 5,
-        /// <summary>
-        /// 
-        /// </summary>
+
+        /// <summary></summary>
         FreReadOnly = 6,
-        /// <summary>
-        /// 
-        /// </summary>
+
+        /// <summary></summary>
         FreWrongThread = 7,
-        /// <summary>
-        /// 
-        /// </summary>
+
+        /// <summary></summary>
         FreIllegalState = 8,
-        /// <summary>
-        /// 
-        /// </summary>
+
+        /// <summary></summary>
         FreInsufficientMemory = 9,
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
 using FreSharp.Geom;
@@ -26,6 +27,8 @@ namespace FreExampleSharpLib {
                     {"runErrorTests", RunErrorTests},
                     {"runDataTests", RunDataTests},
                     {"runErrorTests2", RunErrorTests2},
+                    {"runDateTests", RunDateTests},
+                    {"runColorTests", RunColorTests},
                 };
 
 
@@ -78,6 +81,7 @@ namespace FreExampleSharpLib {
         private FREObject RunErrorTests2(FREContext ctx, uint argc, FREObject[] argv) {
             Trace("***********Start Error Handling test 2***********");
             var testString = argv[0];
+
             try {
                 testString.Call("noStringFunc"); //call method on a string
             }
@@ -132,7 +136,7 @@ namespace FreExampleSharpLib {
             try {
                 var bmd = new FreBitmapDataSharp(inFre);
                 SepiaTone(bmd);
-                //var bmp = bmd.GetAsBitmap(); //makes a bitmap copy
+                // var bmp = bmd.AsBitmap(); //makes a bitmap copy
             }
             catch (Exception e) {
                 Trace(e.GetType());
@@ -140,6 +144,7 @@ namespace FreExampleSharpLib {
                 Trace(e.Source);
                 Trace(e.StackTrace);
             }
+
             return FREObject.Zero;
         }
 
@@ -172,6 +177,7 @@ namespace FreExampleSharpLib {
                 Trace(e.Source);
                 Trace(e.StackTrace);
             }
+
             return person;
         }
 
@@ -182,30 +188,45 @@ namespace FreExampleSharpLib {
             rectangle.Height = 111;
 
             var point = new Point(10, 88);
-            var frePoint = new FrePointSharp(point);
-            var targetPoint = new FrePointSharp(new Point(100, 444));
-            frePoint.CopyFrom(targetPoint);
+            var unused = new FrePointSharp(point);
+            var unused1 = unused.AsPoint();
             return rectangle.ToFREObject();
         }
 
         private FREObject RunArrayTests(FREContext ctx, uint argc, FREObject[] argv) {
             Trace("***********Start Array test***********");
-            var inFre = new FREArray(argv[0]);
+            if (argc < 4) {
+                return new FreException("Not enough args").RawValue;
+            }
 
-            var airArray = argv[0].ToArrayList();
-            var airArrayLen = inFre.Length;
+            var inFre0 = new FREArray(argv[0]);
+            var inFre1 = new FREArray(argv[1]);
+            var inFre2 = new FREArray(argv[2]);
+            var inFre3 = new FREArray(argv[3]);
 
-            Trace("Array passed from AIR:", airArray);
+            var airArray = inFre0.ToArrayList();
+            var airArrayLen = inFre0.Length;
+
+            var airVectorString = inFre1.AsStringArray();
+            var airVectorNumber = inFre2.AsDoubleArray();
+            var airVectorBoolean = inFre3.AsBoolArray();
+
+            Trace("Array passed from AIR:", string.Join(",", airArray.ToArray()));
             Trace("AIR Array length:", airArrayLen);
 
-            var itemZero = inFre.At(0);
+            Trace("Vector.<String> passed from AIR:", string.Join(",", airVectorString.ToArray()));
+            Trace("Vector.<Number> passed from AIR:", string.Join(",", airVectorNumber.ToArray()));
+            Trace("Vector.<Boolean> passed from AIR:", string.Join(",", airVectorBoolean.ToArray()));
+
+            var itemZero = inFre0.At(0);
             var itemZeroVal = itemZero.AsInt();
 
             Trace("AIR Array item 0 before change:", itemZeroVal);
 
-            inFre.Set(0, 56);
+            inFre0.Set(0, 56);
 
-            return inFre.RawValue;
+            var marks = new[] {99, 98, 92, 97, 95};
+            return marks.ToFREObject();
         }
 
         private FREObject RunIntTests(FREContext ctx, uint argc, FREObject[] argv) {
@@ -220,14 +241,13 @@ namespace FreExampleSharpLib {
             try {
                 var airInt = argv[0].AsInt();
                 var airUint = argv[1].AsUInt();
-
-
                 Trace("Int passed from AIR:", airInt);
                 Trace("Uint passed from AIR:", airUint);
             }
             catch (Exception e) {
                 Console.WriteLine($@"caught in C#: type: {e.GetType()} message: {e.Message}");
             }
+
             const int sharpInt = -666;
             return sharpInt.ToFREObject();
         }
@@ -239,6 +259,32 @@ namespace FreExampleSharpLib {
             Trace("Number passed from AIR:", airNumber);
             const double sharpDouble = 34343.31;
             return sharpDouble.ToFREObject();
+        }
+
+        private FREObject RunDateTests(FREContext ctx, uint argc, FREObject[] argv) {
+            try {
+                var airDate = argv[0].AsDateTime();
+                Trace(airDate.Day, airDate.Month, airDate.Year, airDate.Hour, airDate.Minute);
+                return new DateTime(1990, 11, 25, 23, 19, 15, 0).ToFREObject();
+            }
+            catch (Exception e) {
+                Trace(e.Message);
+            }
+
+            return FREObject.Zero;
+        }
+
+        private FREObject RunColorTests(FREContext ctx, uint argc, FREObject[] argv) {
+            try {
+                var airColor = argv[0].AsColor(true);
+                Trace("A", airColor.A, "R", airColor.R, "G", airColor.G, "B", airColor.B);
+                return Color.FromArgb(airColor.A, airColor.R, airColor.G, airColor.B).ToFREObject();
+            }
+            catch (Exception e) {
+                Trace(e.Message);
+            }
+
+            return FREObject.Zero;
         }
 
         private FREObject RunStringTests(FREContext ctx, uint argc, FREObject[] argv) {

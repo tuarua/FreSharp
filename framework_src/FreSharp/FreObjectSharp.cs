@@ -12,7 +12,9 @@
    See the License for the specific language governing permissions and
    limitations under the License.*/
 
+using System;
 using FREObject = System.IntPtr;
+
 namespace TuaRua.FreSharp {
     /// <summary>
     /// FreObjectSharp wraps a C FREObject with helper methods.
@@ -41,6 +43,7 @@ namespace TuaRua.FreSharp {
         public FreObjectSharp(FREObject freObject) {
             RawValue = freObject;
         }
+
         /// <summary>
         /// Creates a C# FREObject from a string
         /// </summary>
@@ -49,6 +52,7 @@ namespace TuaRua.FreSharp {
             uint resultPtr = 0;
             RawValue = FreSharpHelper.Core.getFREObject(value, ref resultPtr);
         }
+
         /// <summary>
         /// Creates a C# FREObject from a bool
         /// </summary>
@@ -57,6 +61,7 @@ namespace TuaRua.FreSharp {
             uint resultPtr = 0;
             RawValue = FreSharpHelper.Core.getFREObject(value, ref resultPtr);
         }
+
         /// <summary>
         /// Creates a C# FREObject from a double
         /// </summary>
@@ -65,6 +70,7 @@ namespace TuaRua.FreSharp {
             uint resultPtr = 0;
             RawValue = FreSharpHelper.Core.getFREObject(value, ref resultPtr);
         }
+
         /// <summary>
         /// Creates a C# FREObject from an int
         /// </summary>
@@ -73,6 +79,7 @@ namespace TuaRua.FreSharp {
             uint resultPtr = 0;
             RawValue = FreSharpHelper.Core.getFREObject(value, ref resultPtr);
         }
+
         /// <summary>
         /// Creates a C# FREObject from a uint
         /// </summary>
@@ -80,6 +87,14 @@ namespace TuaRua.FreSharp {
         public FreObjectSharp(uint value) {
             uint resultPtr = 0;
             RawValue = FreSharpHelper.Core.getFREObject(value, ref resultPtr);
+        }
+
+        /// <summary>
+        /// Creates a C# FREObject from a DateTime
+        /// </summary>
+        /// <param name="value"></param>
+        public FreObjectSharp(DateTime value) {
+            RawValue = new FREObject().Init("Date", Convert.ToDouble(new DateTimeOffset(value).ToUnixTimeMilliseconds()));
         }
     }
 }

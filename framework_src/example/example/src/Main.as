@@ -2,6 +2,7 @@ package {
 import com.tuarua.Person;
 import com.tuarua.FreSharpExampleANE;
 import com.tuarua.fre.ANEError;
+
 import flash.desktop.NativeApplication;
 import flash.display.Bitmap;
 import flash.display.BitmapData;
@@ -24,6 +25,8 @@ public class Main extends Sprite {
     [Embed(source="adobeair.png")]
     public static const TestImage:Class;
 
+    public static const GREEN:uint = 0xFF00FF00;
+    public static const HALF_GREEN:uint = 0x8000FF00;
 
     private var ane:FreSharpExampleANE = new FreSharpExampleANE();
     private var hasActivated:Boolean = false;
@@ -67,19 +70,29 @@ public class Main extends Sprite {
             var resultInt:int = ane.runIntTests(-54, 66);
             textField.text += "Int: " + resultInt + "\n";
 
-            var myArray:Array = [];
-            myArray.push(3, 1, 4, 2, 6, 5);
-            var resultArray:Array = ane.runArrayTests(myArray);
-            if (resultArray)
-                textField.text += "Array: " + resultArray.toString() + "\n";
+            var intArray:Array = [];
+            intArray.push(3, 1, 4, 2, 6, 5);
 
+            var stringVec:Vector.<String> = new Vector.<String>();
+            stringVec.push("a", "b", "c", "d");
+
+            var numberVec:Vector.<Number> = new Vector.<Number>();
+            numberVec.push(1, 0.5, 2.0, 3.3);
+
+            var booleanVec:Vector.<Boolean> = new Vector.<Boolean>();
+            booleanVec.push(true, true, false, true);
+
+            var resultArray:Array = ane.runArrayTests(intArray, stringVec, numberVec, booleanVec);
+            if (resultArray) {
+                textField.text += "Array: " + resultArray.toString() + "\n";
+            }
 
             var resultObject:Person = ane.runObjectTests(person) as Person;
             if (resultObject) {
                 textField.text += "Person.age: " + resultObject.age.toString() + "\n";
             }
 
-           try {
+            try {
                 var inRect:Rectangle = new Rectangle(50, 60, 70, 80);
                 var resultRectangle:Rectangle = ane.runExtensibleTests(inRect) as Rectangle;
                 trace("resultRectangle", resultRectangle);
@@ -90,18 +103,14 @@ public class Main extends Sprite {
                 trace(e.getStackTrace());
             }
 
-
-            const IMAGE_URL:String = "https://scontent.cdninstagram.com/t/s320x320/17126819_1827746530776184_5999931637335326720_n.jpg";
+            const IMAGE_URL:String = "http://www.ibasoglu.com/wp-content/uploads/2015/07/visual_csharp_logo1.png";
 
             var ldr:Loader = new Loader();
             ldr.contentLoaderInfo.addEventListener(Event.COMPLETE, ldr_complete);
             ldr.load(new URLRequest(IMAGE_URL));
 
             function ldr_complete(evt:Event):void {
-
                 var spr:Sprite = new Sprite();
-
-
                 var bmp:Bitmap = ldr.content as Bitmap;
                 spr.addChild(bmp);
                 var overlay:Sprite = new Sprite();
@@ -113,7 +122,6 @@ public class Main extends Sprite {
                 var bmd:BitmapData = new BitmapData(320, 320, true, 0xFFFFFF);
                 bmd.draw(spr);
                 var sprBmp:Bitmap = new Bitmap(bmd, "auto", true);
-
 
                 sprBmp.y = 150;
                 addChild(sprBmp);
@@ -144,6 +152,12 @@ public class Main extends Sprite {
             /*var inData:String = "Saved and returned"; //TODO
              var outData:String = ane.runDataTests(inData) as String;
              textField.text += outData + "\n";*/
+
+            var returnedDate:Date = ane.runDateTests(new Date());
+            trace("returnedDate:", returnedDate);
+
+            trace("GREEN", GREEN, GREEN == ane.runColorTests(GREEN));
+            trace("HALF_GREEN", HALF_GREEN, HALF_GREEN == ane.runColorTests(HALF_GREEN));
 
             addChild(textField);
 

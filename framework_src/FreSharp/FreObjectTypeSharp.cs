@@ -50,6 +50,14 @@
         /// <summary>
         /// flash.geom.Rectangle
         /// </summary>
-        Rectangle
+        Rectangle,
+        /// <summary>
+        /// flash.geom.Point
+        /// </summary>
+        Point,
+        /// <summary>
+        /// Date
+        /// </summary>
+        Date
     }
 }

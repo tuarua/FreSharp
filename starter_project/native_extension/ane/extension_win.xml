@@ -12,5 +12,12 @@
                 <finalizer>XXXXExtFinizer</finalizer>
             </applicationDeployment>
         </platform>
+        <platform name="Windows-x86-64">
+            <applicationDeployment>
+                <nativeLibrary>HelloWorldANE.dll</nativeLibrary>
+                <initializer>XXXXExtInizer</initializer>
+                <finalizer>XXXXExtFinizer</finalizer>
+            </applicationDeployment>
+        </platform>
 	</platforms>
 </extension>

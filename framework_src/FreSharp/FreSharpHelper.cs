@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using FreSharp.Exceptions;
+using FreSharp.Geom;
 using FRESharpCore;
 using TuaRua.FreSharp.Display;
 using TuaRua.FreSharp.Geom;
@@ -36,6 +37,9 @@ namespace TuaRua.FreSharp {
         /// <returns></returns>
         public static FreObjectSharp FreObjectSharpFromObject(object value) {
             var t = value.GetType();
+            if (t == typeof(FREObject)) {
+                return new FreObjectSharp((FREObject) value);
+            }
 
             if (t == typeof(FreObjectSharp)) {
                 return value as FreObjectSharp;
@@ -82,10 +86,12 @@ namespace TuaRua.FreSharp {
                     arr.SetValue(argArr[i], i);
                     continue;
                 }
+
                 var fre = FreObjectSharpFromObject(argArr.ElementAt((int) i));
                 if (fre == null) break;
                 arr.SetValue(fre.RawValue, i);
             }
+
             return arr;
         }
 
@@ -100,6 +106,7 @@ namespace TuaRua.FreSharp {
             if (args != null) {
                 cnt = (uint) args.Count;
             }
+
             return cnt;
         }
 
@@ -126,6 +133,7 @@ namespace TuaRua.FreSharp {
             if (status == FreResultSharp.Ok) {
                 return ret;
             }
+
             ThrowFreException(status, "cannot get FREObject as Double", FREObject.Zero);
             return 0.0;
         }
@@ -141,6 +149,7 @@ namespace TuaRua.FreSharp {
             if (status == FreResultSharp.Ok) {
                 return ret;
             }
+
             ThrowFreException(status, "cannot get FREObject as Bool", FREObject.Zero);
             return false;
         }
@@ -175,9 +184,18 @@ namespace TuaRua.FreSharp {
             if (status == FreResultSharp.Ok) {
                 return ret;
             }
+
             ThrowFreException(status, "cannot get FREObject as Uint", FREObject.Zero);
             return 0;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="rawValue"></param>
+        /// <returns></returns>
+        public static DateTime GetAsDateTime(FREObject rawValue) => 
+            new DateTime(1970, 1, 1, 0, 0, 0, 0).AddSeconds(rawValue.GetProp("time").AsDouble() / 1000);
 
 
         /// <summary>
@@ -186,7 +204,7 @@ namespace TuaRua.FreSharp {
         /// <param name="rawValue"></param>
         /// <returns></returns>
         public static FreObjectTypeSharp GetActionscriptType(FREObject rawValue) {
-            var aneUtils = new FREObject().Init(className: "com.tuarua.fre.ANEUtils", args: null);
+            var aneUtils = new FREObject().Init("com.tuarua.fre.ANEUtils", null);
             var classType = aneUtils.Call("getClassType", rawValue);
             var type = GetAsString(classType).ToLower();
 
@@ -201,6 +219,10 @@ namespace TuaRua.FreSharp {
                     return FreObjectTypeSharp.Boolean;
                 case "flash.geom::rectangle":
                     return FreObjectTypeSharp.Rectangle;
+                case "flash.geom::point":
+                    return FreObjectTypeSharp.Point;
+                case "date":
+                    return FreObjectTypeSharp.Date;
                 default:
                     return FreObjectTypeSharp.Class;
             }
@@ -214,16 +236,18 @@ namespace TuaRua.FreSharp {
             if (status == FreResultSharp.Ok) {
                 return;
             }
+
             ThrowFreException(status, "cannot set property " + name, ret);
         }
 
         internal static void SetProperty(FREObject rawValue, string name, FREObject value) {
             uint resultPtr = 0;
             var ret = Core.setProperty(rawValue, name, value, ref resultPtr);
-            var status = (FreResultSharp)resultPtr;
+            var status = (FreResultSharp) resultPtr;
             if (status == FreResultSharp.Ok) {
                 return;
             }
+
             ThrowFreException(status, "cannot set property " + name, ret);
         }
 
@@ -263,6 +287,7 @@ namespace TuaRua.FreSharp {
                 var propVal = GetProperty(rawValue, propName);
                 ret.Add(propName, GetAsObject(propVal));
             }
+
             return ret;
         }
 
@@ -302,10 +327,10 @@ namespace TuaRua.FreSharp {
                 case FreObjectTypeSharp.Array:
                 case FreObjectTypeSharp.Vector:
                     var arrFre = new FREArray(rawValue);
-                    return arrFre.GetAsArrayList();
+                    return arrFre.AsArrayList();
                 case FreObjectTypeSharp.Bitmapdata:
                     var bmdFre = new FreBitmapDataSharp(rawValue);
-                    return bmdFre.GetAsBitmap();
+                    return bmdFre.AsBitmap();
                 case FreObjectTypeSharp.Boolean:
                     return GetAsBool(rawValue);
                 case FreObjectTypeSharp.Null:
@@ -314,6 +339,10 @@ namespace TuaRua.FreSharp {
                     return GetAsInt(rawValue);
                 case FreObjectTypeSharp.Rectangle:
                     return new FreRectangleSharp(rawValue).Value;
+                case FreObjectTypeSharp.Point:
+                    return new FrePointSharp(rawValue).Value;
+                case FreObjectTypeSharp.Date:
+                    return GetAsDateTime(rawValue);
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -351,6 +380,7 @@ namespace TuaRua.FreSharp {
                     //ignored
                 }
             }
+
             switch (status) {
                 case FreResultSharp.FreActionscriptError:
                     throw new FreActionscriptErrorException(message);

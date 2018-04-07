@@ -6,25 +6,24 @@ namespace TuaRua.FreSharp.Geom {
     /// <summary>
     /// FreRectangleSharp wraps a flash.geom.Rectangle with helper methods.
     /// </summary>
-    public class FreRectangleSharp : FreObjectSharp {
+    public class FreRectangleSharp {
         /// <summary>
         /// Creates an empty FreRectangleSharp
         /// </summary>
         public FreRectangleSharp() { }
+
+        /// <summary>
+        /// Returns the associated C FREObject of the C# FREObject.
+        /// </summary>
+        /// <returns></returns>
+        public IntPtr RawValue { get; set; } = IntPtr.Zero;
+
         /// <summary>
         /// Creates a C# FREObject from a C FREObject
         /// </summary>
         /// <param name="freObject"></param>
         public FreRectangleSharp(IntPtr freObject) {
             RawValue = freObject;
-        }
-
-        /// <summary>
-        /// Creates a C# FREObject from a C FREObject
-        /// </summary>
-        /// <param name="freObject"></param>
-        public FreRectangleSharp(FreObjectSharp freObject) {
-            RawValue = freObject.RawValue;
         }
 
         /// <summary>
@@ -53,7 +52,7 @@ namespace TuaRua.FreSharp.Geom {
         /// <summary>
         /// Returns the C# FREObject as a Rect.
         /// </summary>
-        public new Rect Value => new Rect(
+        public Rect Value => new Rect(
             RawValue.GetProp("x").AsDouble(), 
             RawValue.GetProp("y").AsDouble(), 
             RawValue.GetProp("width").AsDouble(), 
