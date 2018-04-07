@@ -35,6 +35,8 @@ extern "C" {
 			,MAP_FUNCTION(runErrorTests)
 			,MAP_FUNCTION(runDataTests)
 			,MAP_FUNCTION(runErrorTests2)
+			,MAP_FUNCTION(runDateTests)
+			,MAP_FUNCTION(runColorTests)
 		};
 
 		SET_FUNCTIONS

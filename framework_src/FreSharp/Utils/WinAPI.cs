@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Drawing;
-using System.Management;
 using System.Runtime.InteropServices;
 using Hwnd = System.IntPtr;
 
@@ -14,23 +13,6 @@ namespace TuaRua.FreSharp.Utils {
         private const string User32 = "user32";
         //private const string Kernel32 = "kernel32";
         private const string Gdi32 = "gdi32";
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public static Tuple<int, int> GetOsVersion() {
-            var result = new Tuple<int, int>(0, 0);
-            var searcher = new ManagementObjectSearcher("SELECT Version FROM Win32_OperatingSystem");
-            const char delimiter = '.';
-            foreach (var o in searcher.Get()) {
-                var os = (ManagementObject) o;
-                var version = os["Version"].ToString();
-                var substrings = version.Split(delimiter);
-                return new Tuple<int, int>(Convert.ToInt32(substrings[0]), Convert.ToInt32(substrings[1]));
-            }
-            return result;
-        }
 
         public static double GetScaleFactor() {
             var g = Graphics.FromHwnd(Hwnd.Zero);

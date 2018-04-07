@@ -27,10 +27,17 @@ The following table shows the primitive as3 types which can easily be converted 
 | int | int | `var i = argv[0].AsInt()` | `return i.ToFREObject()`|
 | Boolean | bool | `var b = argv[0].AsBool()` | `return b.ToFREObject()`|
 | Number | double | `var dbl = argv[0].AsDouble()` | `return dbl.ToFREObject()`|
+| uint ARGB | Color | `var clr = argv[0].AsColor()` | `return clr.ToFREObject()`|
+| Date | DateTime | `var dt = argv[0].AsDateTime()` | `return dt.ToFREObject()`|
 | Rectangle | Rect | `var rect = argv[0].AsRect()` | `return rect.ToFREObject()` |
 | Point | Point | `var pnt = argv[0].AsPoint()` | `return pnt.ToFREObject()` |
 | BitmapData | Bitmap | `var bmp = argv[0].AsBitmap()` | `return bmp.ToFREObject()` |
+| Array | string[] | `var arr = argv[0].AsStringArray()` | `return arr.ToFREObject()`|
+| Array | int[] | `var arr = argv[0].AsIntArray()` | `return arr.ToFREObject()`|
+| Array | double[] | `var arr = argv[0].AsDoubleArray()` | `return arr.ToFREObject()`|
+| Array | bool[] | `var arr = argv[0].AsBoolArray()` | `return arr.ToFREObject()`|
 | Object | Dictionary | `var dct = argv[0].AsDictionary()` | N/A |
+
 
 
 Example - Convert a FREObject into a String, and String into FREObject
@@ -92,11 +99,15 @@ using TuaRua.FreSharp;
 using FREObject = System.IntPtr;
 
 namespace FreSharp.Geom {
-    public class FrePointSharp : FreObjectSharp {
+    public class FrePointSharp {
         public FrePointSharp() { }
+
+        public FREObject RawValue { get; set; } = FREObject.Zero;
+
         public FrePointSharp(FREObject freObject) {
             RawValue = freObject;
         }
+
         public FrePointSharp(Point value) {
             uint resultPtr = 0;
             var args = new ArrayList {
@@ -113,20 +124,9 @@ namespace FreSharp.Geom {
             }
             FreSharpHelper.ThrowFreException(status, "cannot create point ", RawValue);
         }
-        public void CopyFrom(FrePointSharp sourcePoint) {
-            uint resultPtr = 0;
-            var args = new ArrayList {
-                sourcePoint.RawValue,
-            };
-            FreSharpHelper.Core.callMethod(RawValue, "copyFrom", FreSharpHelper.ArgsToArgv(args),
-                FreSharpHelper.GetArgsC(args), ref resultPtr);
-            var status = (FreResultSharp) resultPtr;
-            if (status == FreResultSharp.Ok) {
-                return;
-            }
-            FreSharpHelper.ThrowFreException(status, "cannot copyFrom ", FREObject.Zero);
-        }
-        public new Point Value => new Point(
+
+        
+        public Point Value => new Point(
             RawValue.GetProp("x").AsDouble(), 
             RawValue.GetProp("y").AsDouble());
     }

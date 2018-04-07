@@ -1,4 +1,3 @@
-#include "FreSharpMacros.h"
 #include "HelloWorldANE.h"
 #include "FreSharpBridge.h"
 

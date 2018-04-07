@@ -18,5 +18,13 @@ namespace TuaRua.FreSharp.Exceptions {
             RawValue = new FREObject().Init("com.tuarua.fre.ANEError", e.Message, 0, e.GetType().ToString(), e.Source, e.StackTrace);
         }
 
+        /// <summary>
+        /// Creates a FreException from a C# message string
+        /// </summary>
+        /// <param name="message"></param>
+        public FreException(string message) {
+            RawValue = new FREObject().Init("com.tuarua.fre.ANEError", message, 0, "FreSharp.Exceptions.Generic", "", "");
+        }
+
     }
 }

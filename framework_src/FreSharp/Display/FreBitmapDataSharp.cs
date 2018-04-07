@@ -119,7 +119,36 @@ namespace TuaRua.FreSharp.Display {
         /// <summary>
         /// Converts the FREBitmapData into a C# Bitmap
         /// </summary>
+        [Obsolete("GetAsBitmap is deprecated, please use AsBitmap instead.")]
         public Bitmap GetAsBitmap() {
+            var bitmap = new Bitmap(1, 1);
+            Acquire();
+            /*
+            ///https://msdn.microsoft.com/en-us/library/zy1a2d14(v=vs.110).aspx
+            */
+
+            try {
+                bitmap = new Bitmap(Width, Height, LineStride32 * 4,
+                    PixelFormat.Format32bppArgb, Bits32);
+                if (IsInvertedY) {
+                    bitmap.RotateFlip(RotateFlipType.RotateNoneFlipY);
+                }
+            }
+            catch (Exception e) {
+                Console.WriteLine(e.Message);
+                Console.WriteLine(e.StackTrace);
+                Console.WriteLine(e.InnerException);
+            }
+
+            Release();
+
+            return bitmap;
+        }
+
+        /// <summary>
+        /// Converts the FREBitmapData into a C# Bitmap
+        /// </summary>
+        public Bitmap AsBitmap() {
             var bitmap = new Bitmap(1, 1);
             Acquire();
             /*
