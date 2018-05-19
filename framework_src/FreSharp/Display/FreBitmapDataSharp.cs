@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Runtime.InteropServices;
 using FRESharpCore;
 
 namespace TuaRua.FreSharp.Display {
@@ -146,7 +147,7 @@ namespace TuaRua.FreSharp.Display {
         }
 
         /// <summary>
-        /// Converts the FREBitmapData into a C# Bitmap
+        /// Copies the FREBitmapData into a C# Bitmap
         /// </summary>
         public Bitmap AsBitmap() {
             var bitmap = new Bitmap(1, 1);
@@ -171,6 +172,18 @@ namespace TuaRua.FreSharp.Display {
             Release();
 
             return bitmap;
+        }
+
+        /// <summary>
+        /// Copies the FREBitmapData into a C# ByteArray
+        /// </summary>
+        public byte[] AsByteArray() {
+            Acquire();
+            var ptr = Bits32;
+            var byteBuffer = new byte[LineStride32 * Height * 4];
+            Marshal.Copy(ptr, byteBuffer, 0, byteBuffer.Length);
+            Release();
+            return byteBuffer;
         }
     }
 }

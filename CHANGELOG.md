@@ -1,3 +1,7 @@
+### 1.5.1
+- Added FreBitmapDataSharp.AsByteArray()
+- Fixed possible null pointer exception in FreObjectSharp
+
 ### 1.5.0
 - Added FREObject.AsDateTime()
 - Added DateTime.ToFREObject()

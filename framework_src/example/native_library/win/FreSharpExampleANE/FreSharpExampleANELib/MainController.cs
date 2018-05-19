@@ -305,9 +305,6 @@ namespace FreExampleSharpLib {
         }
 
         public override void OnFinalize() {
-            // https://docs.microsoft.com/en-us/dotnet/standard/garbage-collection/unmanaged
-            // https://docs.microsoft.com/en-us/dotnet/api/system.idisposable.dispose?view=netframework-4.7.1
-            // clear up and variables here
         }
     }
 }
