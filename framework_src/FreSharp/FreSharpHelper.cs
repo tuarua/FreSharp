@@ -7,6 +7,7 @@ using FreSharp.Geom;
 using FRESharpCore;
 using TuaRua.FreSharp.Display;
 using TuaRua.FreSharp.Geom;
+using TuaRua.FreSharp.Utils;
 using FREContext = System.IntPtr;
 using FREObject = System.IntPtr;
 
@@ -120,7 +121,7 @@ namespace TuaRua.FreSharp {
             uint resultPtr = 0;
             var ret = Core.getString(rawValue, ref resultPtr);
             var status = (FreResultSharp) resultPtr;
-            return status == FreResultSharp.Ok ? ret : null;
+            return status == FreResultSharp.Ok ? StringUtils.ToUtf8(ret) : null;
         }
 
         /// <summary>

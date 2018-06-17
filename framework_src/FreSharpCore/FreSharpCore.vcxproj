@@ -153,9 +153,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FRESharpCLR.h" />
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Drawing" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="FreSharpCore.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -293,18 +293,17 @@ namespace FreExampleSharpLib {
             try {
                 var airString = argv[0].AsString();
                 Trace("String passed from AIR:", airString);
-
                 SendEvent("MY_EVENT", "this is a test");
             }
             catch (Exception e) {
                 Console.WriteLine($@"caught in C#: type: {e.GetType()} message: {e.Message}");
             }
-
-            const string sharpString = "I am a string from C#";
+            const string sharpString = "I am a string from C# with UTF-8: Björk Guðmundsdóttir " +
+                                       "Sinéad O’Connor 久保田  利伸 Михаил Горбачёв Садриддин Айнӣ " +
+                                       "Tor Åge Bringsværd 章子怡 €";
             return sharpString.ToFREObject();
         }
 
-        public override void OnFinalize() {
-        }
+        public override void OnFinalize() { }
     }
 }
