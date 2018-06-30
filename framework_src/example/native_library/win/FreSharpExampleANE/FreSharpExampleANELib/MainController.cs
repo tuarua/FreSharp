@@ -207,6 +207,11 @@ namespace FreExampleSharpLib {
             var airArray = inFre0.ToArrayList();
             var airArrayLen = inFre0.Length;
 
+            inFre0[1] = 123.ToFREObject();
+            foreach (var fre in inFre0) {
+                Trace("iterate over FREArray", fre.AsInt());
+            }
+
             var airVectorString = inFre1.AsStringArray();
             var airVectorNumber = inFre2.AsDoubleArray();
             var airVectorBoolean = inFre3.AsBoolArray();
@@ -218,7 +223,7 @@ namespace FreExampleSharpLib {
             Trace("Vector.<Number> passed from AIR:", string.Join(",", airVectorNumber.ToArray()));
             Trace("Vector.<Boolean> passed from AIR:", string.Join(",", airVectorBoolean.ToArray()));
 
-            var itemZero = inFre0.At(0);
+            var itemZero = inFre0[0];
             var itemZeroVal = itemZero.AsInt();
 
             Trace("AIR Array item 0 before change:", itemZeroVal);
