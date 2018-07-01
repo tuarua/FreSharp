@@ -42,7 +42,7 @@ The following table shows the primitive as3 types which can easily be converted 
 
 Example - Convert a FREObject into a String, and String into FREObject
 
-````C#
+```C#
 try {
    var airString = argv[0].AsString();
    Trace("String passed from AIR:" + airString);
@@ -52,35 +52,35 @@ catch (Exception e) {
 }
 const string sharpString = "I am a string from C#";
 return sharpString.ToFREObject();
-`````
+```
 
 Example - Call a method on an FREObject
-````C#
+```C#
 var person = argv[0];
 var addition = person.Call("add", 100, 33);
 Trace("result is: ", addition.AsInt());
-`````
+```
 
 Example - Get a property of a FREObject
-````C#
+```C#
 var oldAge = person.GetProp("age").AsInt();
 Trace("result is: ", oldAge);
-`````
+```
 
 Example - Convert a FREObject Object into a Dictionary
-````C#
+```C#
 var dictionary = person.AsDictionary();
 var name = dictionary["name"];
-`````
+```
 
 Example - Create a new FREObject
-````C#
+```C#
 var newPerson = new FREObject().Init("com.tuarua.Person");
 Trace("We created a new person. type =", newPerson.Type());
-`````
+```
 
 Example - Error handling
-````C#
+```C#
 var testString = argv[0];
 try {
     testString.Call("noStringFunc"); //call method on a string
@@ -88,11 +88,25 @@ try {
 catch (Exception e) {
     return new FreException(e).RawValue; //return as3 error and throw in swc
 }
-`````
+```
+
+Example - Sending events back to AIR (replaces dispatchStatusEventAsync)
+```C#
+SendEvent("MY_EVENT", "this is a test");
+```
+
+Example - Reading items in array
+```C#
+foreach (var fre in inFre0) {
+    Trace("iterate over FREArray", fre.AsInt());
+}
+var itemZero = inFre0[0];
+inFre0[1] = 123.ToFREObject();
+```
 
 Advanced: Extending FreObjectSharp. Creating a C# version of flash.geom.point
 
-````C#
+```C#
 using System.Collections;
 using System.Windows;
 using TuaRua.FreSharp;
@@ -131,7 +145,9 @@ namespace FreSharp.Geom {
             RawValue.GetProp("y").AsDouble());
     }
 }
-`````
+public static Point AsPoint(this FREObject inFre) => new FrePointSharp(inFre).Value;
+public static FREObject ToFREObject(this Point point) => new FrePointSharp(point).RawValue;
+```
 
 ### Tech
 
