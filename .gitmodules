@@ -1,3 +1,0 @@
-[submodule "framework_src/example/native_library/win/FreSharpExampleANE/AIRNative"]
-	path = framework_src/example/native_library/win/FreSharpExampleANE/AIRNative
-	url = https://github.com/tuarua/AIRNativeANE

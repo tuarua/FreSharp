@@ -7,6 +7,7 @@ using FreSharp.Geom;
 using FRESharpCore;
 using TuaRua.FreSharp.Display;
 using TuaRua.FreSharp.Geom;
+using TuaRua.FreSharp.Utils;
 using FREContext = System.IntPtr;
 using FREObject = System.IntPtr;
 
@@ -36,6 +37,7 @@ namespace TuaRua.FreSharp {
         /// <param name="value"></param>
         /// <returns></returns>
         public static FreObjectSharp FreObjectSharpFromObject(object value) {
+            if (value == null) return null;
             var t = value.GetType();
             if (t == typeof(FREObject)) {
                 return new FreObjectSharp((FREObject) value);
@@ -119,7 +121,7 @@ namespace TuaRua.FreSharp {
             uint resultPtr = 0;
             var ret = Core.getString(rawValue, ref resultPtr);
             var status = (FreResultSharp) resultPtr;
-            return status == FreResultSharp.Ok ? ret : null;
+            return status == FreResultSharp.Ok ? StringUtils.ToUtf8(ret) : null;
         }
 
         /// <summary>
@@ -194,7 +196,7 @@ namespace TuaRua.FreSharp {
         /// </summary>
         /// <param name="rawValue"></param>
         /// <returns></returns>
-        public static DateTime GetAsDateTime(FREObject rawValue) => 
+        public static DateTime GetAsDateTime(FREObject rawValue) =>
             new DateTime(1970, 1, 1, 0, 0, 0, 0).AddSeconds(rawValue.GetProp("time").AsDouble() / 1000);
 
 

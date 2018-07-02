@@ -10,12 +10,12 @@ namespace TuaRua.FreSharp {
     /// <summary></summary>
     // ReSharper disable once InconsistentNaming
     // : FreObjectSharp
-    public class FREArray  {
+    public class FREArray : IEnumerable<FREObject> { 
         /// <inheritdoc />
         /// <summary>
         /// Creates an Empty C# FreArray.
         /// </summary>
-        public FREArray() { }
+    public FREArray() { }
 
         /// <summary>
         /// Returns the associated C FREObject of the C# FREObject.
@@ -301,6 +301,31 @@ namespace TuaRua.FreSharp {
             }
 
             return al;
+        }
+
+        /// <summary>
+        /// Provides bracket access to <see cref="FREArray"/>
+        /// </summary>
+        /// <param name="i"></param>
+        public FREObject this[uint i] {
+            get => At(i);
+            set {
+                uint resultPtr = 0;
+                FreSharpHelper.Core.setObjectAt(RawValue, i, value, ref resultPtr);
+            }
+        }
+
+        /// <inheritdoc />
+        public IEnumerator<FREObject> GetEnumerator() {
+            var list = new List<FREObject>((int) Length);
+            for (uint i = 0; i < Length; i++) {
+                list.Add(At(i));
+            }
+            return list.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator() {
+            return GetEnumerator();
         }
     }
 }

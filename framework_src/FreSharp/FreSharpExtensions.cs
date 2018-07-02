@@ -92,7 +92,6 @@ namespace TuaRua.FreSharp {
         /// <param name="name">Name of the property</param>
         /// <returns></returns>
         public static FREObject GetProp(this FREObject inFre, string name) {
-            //throws? //TODO
             return FreSharpHelper.GetProperty(inFre, name);
         }
 

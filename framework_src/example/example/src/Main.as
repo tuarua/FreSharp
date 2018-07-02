@@ -51,8 +51,8 @@ public class Main extends Sprite {
             tf.color = 0x333333;
             tf.align = TextFormatAlign.LEFT;
             textField.defaultTextFormat = tf;
-            textField.width = 400;
-            textField.height = 150;
+            textField.width = 640;
+            textField.height = 250;
             textField.multiline = true;
             textField.wordWrap = true;
 
@@ -61,7 +61,9 @@ public class Main extends Sprite {
             person.name = "Tom";
             person.city.name = "Dunleer";
 
-            var resultString:String = ane.runStringTests("I am a string from AIR with new interface");
+            var resultString:String = ane.runStringTests("Björk Guðmundsdóttir Sinéad O’Connor 久保田  " +
+                    "利伸 Михаил Горбачёв Садриддин Айнӣ Tor Åge Bringsværd 章子怡 €");
+
             textField.text += resultString + "\n";
 
             var resultNumber:Number = ane.runNumberTests(31.99);
@@ -114,7 +116,7 @@ public class Main extends Sprite {
                 var bmp:Bitmap = ldr.content as Bitmap;
                 spr.addChild(bmp);
                 var overlay:Sprite = new Sprite();
-                overlay.graphics.beginFill(0x33FFCC);
+                overlay.graphics.beginFill(0x33FF00);
                 overlay.graphics.drawCircle(120, 100, 50);
                 overlay.graphics.endFill();
                 spr.addChild(overlay);
@@ -123,7 +125,7 @@ public class Main extends Sprite {
                 bmd.draw(spr);
                 var sprBmp:Bitmap = new Bitmap(bmd, "auto", true);
 
-                sprBmp.y = 150;
+                sprBmp.y = 250;
                 addChild(sprBmp);
 
                 ane.runBitmapTests(sprBmp.bitmapData);

@@ -207,6 +207,11 @@ namespace FreExampleSharpLib {
             var airArray = inFre0.ToArrayList();
             var airArrayLen = inFre0.Length;
 
+            inFre0[1] = 123.ToFREObject();
+            foreach (var fre in inFre0) {
+                Trace("iterate over FREArray", fre.AsInt());
+            }
+
             var airVectorString = inFre1.AsStringArray();
             var airVectorNumber = inFre2.AsDoubleArray();
             var airVectorBoolean = inFre3.AsBoolArray();
@@ -218,7 +223,7 @@ namespace FreExampleSharpLib {
             Trace("Vector.<Number> passed from AIR:", string.Join(",", airVectorNumber.ToArray()));
             Trace("Vector.<Boolean> passed from AIR:", string.Join(",", airVectorBoolean.ToArray()));
 
-            var itemZero = inFre0.At(0);
+            var itemZero = inFre0[0];
             var itemZeroVal = itemZero.AsInt();
 
             Trace("AIR Array item 0 before change:", itemZeroVal);
@@ -293,21 +298,17 @@ namespace FreExampleSharpLib {
             try {
                 var airString = argv[0].AsString();
                 Trace("String passed from AIR:", airString);
-
                 SendEvent("MY_EVENT", "this is a test");
             }
             catch (Exception e) {
                 Console.WriteLine($@"caught in C#: type: {e.GetType()} message: {e.Message}");
             }
-
-            const string sharpString = "I am a string from C#";
+            const string sharpString = "I am a string from C# with UTF-8: Björk Guðmundsdóttir " +
+                                       "Sinéad O’Connor 久保田  利伸 Михаил Горбачёв Садриддин Айнӣ " +
+                                       "Tor Åge Bringsværd 章子怡 €";
             return sharpString.ToFREObject();
         }
 
-        public override void OnFinalize() {
-            // https://docs.microsoft.com/en-us/dotnet/standard/garbage-collection/unmanaged
-            // https://docs.microsoft.com/en-us/dotnet/api/system.idisposable.dispose?view=netframework-4.7.1
-            // clear up and variables here
-        }
+        public override void OnFinalize() { }
     }
 }

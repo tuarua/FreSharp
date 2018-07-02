@@ -16,10 +16,21 @@
 using namespace System;
 using FREObjectCLR = IntPtr;
 
-#include <iostream>
-#include <stdlib.h>
+#include <codecvt>
 namespace FRESharpCore {
 	FRESharpCLR::FRESharpCLR() {
+	}
+
+	std::string wstring_to_utf8(const std::wstring& str) {
+		std::wstring_convert<std::codecvt_utf8<wchar_t>> myconv;
+		return myconv.to_bytes(str);
+	}
+
+	void MarshalString(String ^ s, std::wstring& os) {
+		using namespace Runtime::InteropServices;
+		const wchar_t* chars = (const wchar_t*)(Marshal::StringToHGlobalUni(s)).ToPointer();
+		os = chars;
+		Marshal::FreeHGlobal(IntPtr((void*)chars));
 	}
 
 	void MarshalString(String^ s, std::string& os) {
@@ -30,8 +41,9 @@ namespace FRESharpCore {
 	}
 
 	FREObjectCLR FRESharpCLR::getFREObject(String^ value, UInt32% freresult) {
-		std::string valueStr = "";
-		MarshalString(value, valueStr);
+		std::wstring valueWstr = L"";
+		MarshalString(value, valueWstr);
+		std::string valueStr = wstring_to_utf8(valueWstr);
 		FREObject result;
 		freresult = FRENewObjectFromUTF8(uint32_t(valueStr.length()), reinterpret_cast<const uint8_t *>(valueStr.data()), &result);
 		return FREObjectCLR(result);
@@ -142,7 +154,6 @@ namespace FRESharpCore {
 	}
 
 	String ^ FRESharpCLR::getString(FREObjectCLR freObject, UInt32% freresult) {
-
 		uint32_t string1Length;
 		const uint8_t *val;
 		freresult = FREGetObjectAsUTF8(freObject.ToPointer(), &string1Length, &val);
@@ -199,14 +210,12 @@ namespace FRESharpCore {
 	void FRESharpCLR::dispatchEvent(FREContextCLR freContext, String^ name, String^ value) {
 		std::string nameStr = "";
 		MarshalString(name, nameStr);
-
-		std::string valueStr = "";
-		MarshalString(value, valueStr);
-
+		std::wstring valueWstr = L"";
+		MarshalString(value, valueWstr);
+		std::string valueStr = wstring_to_utf8(valueWstr);
 		FREDispatchStatusEventAsync(freContext.ToPointer(), reinterpret_cast<const uint8_t *>(valueStr.data()),
 			reinterpret_cast<const uint8_t *>(nameStr.data()));
 	}
-
 
 	int FRESharpCLR::getType(FREObjectCLR freObject, UInt32% freresult) {
 		auto val = FRE_TYPE_NULL;
