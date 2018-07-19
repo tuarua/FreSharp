@@ -158,7 +158,7 @@ namespace FreExampleSharpLib {
             person.SetProp("age", newAge);
 
             var personType = person.Type();
-            Trace("person type is:", personType);
+            Trace($"person type is:{personType}");
             Trace("current person age is: ", oldAge);
             var addition = person.Call("add", 100, 33);
             Trace("result is: ", addition.AsInt());
@@ -222,6 +222,9 @@ namespace FreExampleSharpLib {
             Trace("Vector.<String> passed from AIR:", string.Join(",", airVectorString.ToArray()));
             Trace("Vector.<Number> passed from AIR:", string.Join(",", airVectorNumber.ToArray()));
             Trace("Vector.<Boolean> passed from AIR:", string.Join(",", airVectorBoolean.ToArray()));
+
+            var newFreArray = new FREArray("Object", 5, true);
+            Trace("New Array of Objects should be 5?",newFreArray.Length);
 
             var itemZero = inFre0[0];
             var itemZeroVal = itemZero.AsInt();
@@ -298,7 +301,7 @@ namespace FreExampleSharpLib {
             try {
                 var airString = argv[0].AsString();
                 Trace("String passed from AIR:", airString);
-                SendEvent("MY_EVENT", "this is a test");
+                DispatchEvent("MY_EVENT", "this is a test");
             }
             catch (Exception e) {
                 Console.WriteLine($@"caught in C#: type: {e.GetType()} message: {e.Message}");

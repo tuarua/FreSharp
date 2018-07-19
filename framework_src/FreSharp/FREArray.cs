@@ -37,8 +37,20 @@ namespace TuaRua.FreSharp {
         /// Creates a C# FreArray with a given class name.
         /// </summary>
         /// <param name="className"></param>
+        [Obsolete("FREArray is deprecated, please use FREArray(className, length, fixedSize) instead.", true)]
         public FREArray(string className) {
             RawValue = new FREObject().Init(className);
+        }
+
+        /// <inheritdoc />
+        /// <summary>
+        /// Creates a C# FREArray with a given class name. Do not specify the &lt;Vector. prefix.
+        /// </summary>
+        /// <param name="className"></param>
+        /// <param name="length"></param>
+        /// <param name="fixedSize"></param>
+        public FREArray(string className, int length = 0, bool fixedSize = false) {
+            RawValue = new FREObject().Init("Vector.<" + className + ">", length, fixedSize);
         }
 
         /// <inheritdoc />

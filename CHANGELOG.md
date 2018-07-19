@@ -1,3 +1,8 @@
+### 1.7.0
+- deprecate SendEvent, use DispatchEvent instead
+- deprecate FREArray(className), use FREArray(className, length, fixedSize) instead (className only no <Vector. prefix)
+- **C++ project now needs reference to ..\packages\TuaRua.FreSharp.1.7.0\FreSharp\$(PlatformTarget)\FreSharp.dll**
+
 ### 1.6.0
 - Added FreBitmapDataSharp.AsByteArray()
 - Fixed possible null pointer exception in FreObjectSharp

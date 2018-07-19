@@ -48,7 +48,7 @@ namespace TuaRua.FreSharp {
         /// <param name="values"></param>
         public void Trace(params object[] values) {
             var traceStr = values.Aggregate("", (current, value) => current + value + " ");
-            Context?.SendEvent("TRACE", traceStr);
+            Context?.DispatchEvent("TRACE", traceStr);
         }
 
         /// <summary>
@@ -56,9 +56,18 @@ namespace TuaRua.FreSharp {
         /// </summary>
         /// <param name="name"></param>
         /// <param name="value"></param>
+        [Obsolete("SendEvent is deprecated, please use DispatchEvent instead.", true)]
         public void SendEvent(string name, string value) {
-            Context?.SendEvent(name, value);
+            Context?.DispatchEvent(name, value);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        public void DispatchEvent(string name, string value) {
+            Context?.DispatchEvent(name, value);
+        }
     }
 }
