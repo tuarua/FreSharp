@@ -37,71 +37,107 @@ The following table shows the primitive as3 types which can easily be converted 
 | Array | double[] | `var arr = argv[0].AsDoubleArray()` | `return arr.ToFREObject()`|
 | Array | bool[] | `var arr = argv[0].AsBoolArray()` | `return arr.ToFREObject()`|
 | Object | Dictionary | `var dct = argv[0].AsDictionary()` | N/A |
+| null | FREObject.Zero |  |  |
 
-
-
-Example - Convert a FREObject into a String, and String into FREObject
-
+#### Basic Types
 ```C#
-try {
-   var airString = argv[0].AsString();
-   Trace("String passed from AIR:" + airString);
-}
-catch (Exception e) {
-    Console.WriteLine(@"caught in C#: type: {0} message: {1}", e.GetType(), e.Message);
-}
+string myString = argv[0].AsString();
+int myInt = argv[1].AsInt();
+bool myBool = argv[2].AsBool();
+
 const string sharpString = "I am a string from C#";
 return sharpString.ToFREObject();
 ```
 
-Example - Call a method on an FREObject
+#### Creating new FREObjects
 ```C#
-var person = argv[0];
-var addition = person.Call("add", 100, 33);
-Trace("result is: ", addition.AsInt());
+var frePerson = new FREObject().Init("com.tuarua.Person");
+
+// create a FREObject passing args
+// 
+// The following param types are allowed: 
+// int, uint, short, long, bool, string, double, FREObject
+var frePerson = new FREObject().Init("com.tuarua.Person", "Bob", "Doe", 28, myFREObject);
 ```
 
-Example - Get a property of a FREObject
+#### Calling Methods
+```C#
+// call a FREObject method passing args
+// 
+// The following param types are allowed: 
+// int, uint, short, long, bool, string, double, FREObject
+var addition = freCalculator.Call("add", 100, 33);
+```
+
+#### Getting / Setting Properties
 ```C#
 var oldAge = person.GetProp("age").AsInt();
-Trace("result is: ", oldAge);
+var newAge = oldAge + 10;
+
+// The following param types are allowed: 
+// int, uint, short, long, bool, string, double, FREObject
+person.SetProp("age", newAge);
 ```
 
-Example - Convert a FREObject Object into a Dictionary
+#### Arrays
 ```C#
-var dictionary = person.AsDictionary();
-var name = dictionary["name"];
+var inFre0 = new FREArray(argv[0]);
+// convert to a C# [string]
+var airStringVector = inFre0.AsStringArray();
+
+// create a Vector.<com.tuarua.Person> with fixed length of 5
+var newFreArray = new FREArray("com.tuarua.Person", 5, true);
+var len = newFreArray.Length;
+
+// loop over FREArray
+foreach (var fre in freIntArray) {
+    Trace(fre.AsInt());
+}
+
+// set element 1 to 123
+freIntArray[1] = 123.ToFREObject();
+
+// return C# [int] to AIR
+var marks = new[] {99, 98, 92, 97, 95};
+return marks.ToFREObject();
 ```
 
-Example - Create a new FREObject
+#### Sending Events back to AIR
+
 ```C#
-var newPerson = new FREObject().Init("com.tuarua.Person");
-Trace("We created a new person. type =", newPerson.Type());
+Trace("Hi", "There");
+
+// with interpolation
+Trace($"My name is: {name}");
+
+DispatchEvent(name: "MY_EVENT", value: "this is a test"); 
 ```
 
-Example - Error handling
+#### Bitmapdata
 ```C#
-var testString = argv[0];
+// read AS3 bitmapData into a Bitmap
+var bitmap = new FreBitmapDataSharp(argv[0]).AsBitmap();
+
+return bitmap.ToFREObject();
+```
+
+#### ByteArrays
+```C#
+var ba = new FreByteArraySharp(inFre);
+ba.Acquire();
+var byteData = ba.Bytes;
+var base64Encoded = Convert.ToBase64String(byteData);
+ba.Release();
+```
+
+#### Error Handling
+```C#
 try {
     testString.Call("noStringFunc"); //call method on a string
 }
 catch (Exception e) {
     return new FreException(e).RawValue; //return as3 error and throw in swc
 }
-```
-
-Example - Sending events back to AIR (replaces dispatchStatusEventAsync)
-```C#
-SendEvent("MY_EVENT", "this is a test");
-```
-
-Example - Reading items in array
-```C#
-foreach (var fre in inFre0) {
-    Trace("iterate over FREArray", fre.AsInt());
-}
-var itemZero = inFre0[0];
-inFre0[1] = 123.ToFREObject();
 ```
 
 Advanced: Extending FreObjectSharp. Creating a C# version of flash.geom.point

@@ -1,4 +1,5 @@
-﻿using FREContext = System.IntPtr;
+﻿using System;
+using FREContext = System.IntPtr;
 
 namespace TuaRua.FreSharp {
     /// <summary>
@@ -21,13 +22,21 @@ namespace TuaRua.FreSharp {
             _rawValue = freContext;
         }
 
+        [Obsolete("SendEvent is deprecated, please use DispatchEvent instead.", true)]
+        public void SendEvent(string name, string value) {
+            FreSharpHelper.DispatchEvent(ref _rawValue, name, value);
+        }
+
         /// <summary>
         /// Dispatches an event. Mimics FREDispatchStatusEventAsync
         /// </summary>
         /// <param name="name"></param>
         /// <param name="value"></param>
-        public void SendEvent(string name, string value) {
+        public void DispatchEvent(string name, string value)
+        {
             FreSharpHelper.DispatchEvent(ref _rawValue, name, value);
         }
+        
+
     }
 }

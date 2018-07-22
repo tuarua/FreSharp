@@ -34,7 +34,7 @@ namespace HelloWorldLib {
                 var uppercase = argv[1].AsBool();
                 var numRepeats = argv[2].AsInt();
 
-                for (int i = 0; i < numRepeats; i++) {
+                for (var i = 0; i < numRepeats; i++) {
                     Trace(i);
                 }
 
@@ -43,7 +43,7 @@ namespace HelloWorldLib {
                     ret = ret.ToUpper();
                 }
 
-                SendEvent("MY_EVENT", "ok");
+                DispatchEvent("MY_EVENT", "ok");
 
 
                 return ret.ToFREObject();

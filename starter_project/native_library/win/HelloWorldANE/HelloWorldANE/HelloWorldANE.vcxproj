@@ -194,7 +194,7 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="FreSharp">
-      <HintPath>..\packages\TuaRua.FreSharp.1.6.0\FreSharp\$(PlatformTarget)\FreSharp.dll</HintPath>
+      <HintPath>..\packages\TuaRua.FreSharp.1.7.0\FreSharp\$(PlatformTarget)\FreSharp.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />

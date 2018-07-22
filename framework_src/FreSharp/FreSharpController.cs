@@ -23,6 +23,7 @@
 
 #endregion
 
+using System;
 using System.Linq;
 using FREContext = System.IntPtr;
 
@@ -50,7 +51,12 @@ namespace TuaRua.FreSharp {
         /// <param name="values"></param>
         public void Trace(params object[] values) {
             var traceStr = values.Aggregate("", (current, value) => current + value + " ");
-            Context?.SendEvent("TRACE", traceStr);
+            Context?.DispatchEvent("TRACE", traceStr);
+        }
+
+        [Obsolete("SendEvent is deprecated, please use DispatchEvent instead.", true)]
+        public void SendEvent(string name, string value) {
+            Context?.DispatchEvent(name, value);
         }
 
         /// <summary>
@@ -58,8 +64,9 @@ namespace TuaRua.FreSharp {
         /// </summary>
         /// <param name="name"></param>
         /// <param name="value"></param>
-        public void SendEvent(string name, string value) {
-            Context?.SendEvent(name, value);
+        public void DispatchEvent(string name, string value)
+        {
+            Context?.DispatchEvent(name, value);
         }
     }
 }
