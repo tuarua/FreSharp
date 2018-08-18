@@ -40,7 +40,6 @@ public class Main extends Sprite {
         NativeApplication.nativeApplication.addEventListener(Event.EXITING, onExiting);
         this.addEventListener(Event.ACTIVATE, onActivated);
 
-
     }
 
 
@@ -61,16 +60,20 @@ public class Main extends Sprite {
             person.name = "Tom";
             person.city.name = "Dunleer";
 
+
             var resultString:String = ane.runStringTests("Björk Guðmundsdóttir Sinéad O’Connor 久保田  " +
                     "利伸 Михаил Горбачёв Садриддин Айнӣ Tor Åge Bringsværd 章子怡 €");
 
+
             textField.text += resultString + "\n";
+
 
             var resultNumber:Number = ane.runNumberTests(31.99);
             textField.text += "Number: " + resultNumber + "\n";
 
             var resultInt:int = ane.runIntTests(-54, 66);
             textField.text += "Int: " + resultInt + "\n";
+
 
             var intArray:Array = [];
             intArray.push(3, 1, 4, 2, 6, 5);
@@ -94,16 +97,10 @@ public class Main extends Sprite {
                 textField.text += "Person.age: " + resultObject.age.toString() + "\n";
             }
 
-            try {
-                var inRect:Rectangle = new Rectangle(50, 60, 70, 80);
-                var resultRectangle:Rectangle = ane.runExtensibleTests(inRect) as Rectangle;
-                trace("resultRectangle", resultRectangle);
-            } catch (e:ANEError) {
-                trace(e.message);
-                trace(e.type);
-                trace(e.errorID);
-                trace(e.getStackTrace());
-            }
+
+            var inRect:Rectangle = new Rectangle(50.9, 60, 70, 80);
+            var resultRectangle:Rectangle = ane.runExtensibleTests(inRect) as Rectangle;
+            trace("resultRectangle", resultRectangle);
 
             const IMAGE_URL:String = "http://www.ibasoglu.com/wp-content/uploads/2015/07/visual_csharp_logo1.png";
 
@@ -134,26 +131,10 @@ public class Main extends Sprite {
             var myByteArray:ByteArray = new ByteArray();
             myByteArray.writeUTFBytes("C# in an ANE. Say whaaaat!");
             ane.runByteArrayTests(myByteArray);
-
-            //catch the error in C# only
             ane.runErrorTests(person, "test string", 78);
-
-            //catch the error in as
-
-            try {
-                ane.runErrorTests2("abc");
-            } catch (e:ANEError) {
-                //trace("e is",e)
-                trace("e.message: ", e.message);
-                trace("e.type: ", e.type);
-                trace("e.errorID", e.errorID);
-                trace("e.getStackTrace", e.getStackTrace());
-            }
-
-
-            /*var inData:String = "Saved and returned"; //TODO
-             var outData:String = ane.runDataTests(inData) as String;
-             textField.text += outData + "\n";*/
+            var inData:String = "Saved and returned"; //TODO
+            var outData:String = ane.runDataTests(inData) as String;
+            textField.text += outData + "\n";
 
             var returnedDate:Date = ane.runDateTests(new Date());
             trace("returnedDate:", returnedDate);

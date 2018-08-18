@@ -77,29 +77,21 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Exceptions\FreActionscriptErrorException.cs" />
     <Compile Include="FREArray.cs" />
-    <Compile Include="Exceptions\FreInvalidArgumentException.cs" />
-    <Compile Include="Exceptions\FreInvalidObjectException.cs" />
-    <Compile Include="Exceptions\FreIllegalStateException.cs" />
-    <Compile Include="Exceptions\FreInsufficientMemoryException.cs" />
     <Compile Include="Display\FreBitmapDataSharp.cs" />
     <Compile Include="FreByteArraySharp.cs" />
     <Compile Include="Exceptions\FreException.cs" />
     <Compile Include="FreContextSharp.cs" />
     <Compile Include="FreObjectSharp.cs" />
     <Compile Include="FreObjectTypeSharp.cs" />
-    <Compile Include="Exceptions\FreReadOnlyException.cs" />
     <Compile Include="FreResultSharp.cs" />
     <Compile Include="FreSharpController.cs" />
     <Compile Include="FreSharpExtensions.cs" />
     <Compile Include="FreSharpHelper.cs" />
-    <Compile Include="Exceptions\FreTypeMismatchException.cs" />
-    <Compile Include="Exceptions\NoSuchNameException.cs" />
-    <Compile Include="Exceptions\FreWrongThreadException.cs" />
+    <Compile Include="FreSharpLogger.cs" />
     <Compile Include="FreSharpMainController.cs" />
-    <Compile Include="Geom\FrePointSharp.cs" />
-    <Compile Include="Geom\FreRectangleSharp.cs" />
+    <Compile Include="Geom\FrePoint.cs" />
+    <Compile Include="Geom\FreRectangle.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\BitmapUtils.cs" />
     <Compile Include="Utils\StringUtils.cs" />

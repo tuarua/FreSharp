@@ -22,6 +22,11 @@ namespace TuaRua.FreSharp {
             _rawValue = freContext;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
         [Obsolete("SendEvent is deprecated, please use DispatchEvent instead.", true)]
         public void SendEvent(string name, string value) {
             FreSharpHelper.DispatchEvent(ref _rawValue, name, value);

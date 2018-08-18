@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using FreSharp.Geom;
 using TuaRua.FreSharp.Display;
 using TuaRua.FreSharp.Geom;
 using FREObject = System.IntPtr;
@@ -10,12 +9,14 @@ namespace TuaRua.FreSharp {
     /// <summary></summary>
     // ReSharper disable once InconsistentNaming
     // : FreObjectSharp
-    public class FREArray : IEnumerable<FREObject> { 
+    public class FREArray : IEnumerable<FREObject> {
+        private static FreSharpLogger Logger => FreSharpLogger.GetInstance();
+
         /// <inheritdoc />
         /// <summary>
         /// Creates an Empty C# FreArray.
         /// </summary>
-    public FREArray() { }
+        public FREArray() { }
 
         /// <summary>
         /// Returns the associated C FREObject of the C# FREObject.
@@ -113,11 +114,8 @@ namespace TuaRua.FreSharp {
                 uint resultPtr = 0;
                 var ret = FreSharpHelper.Core.getArrayLength(RawValue, ref resultPtr);
                 var status = (FreResultSharp) resultPtr;
-                if (status == FreResultSharp.Ok) {
-                    return ret;
-                }
-
-                FreSharpHelper.ThrowFreException(status, "cannot get length of array", FREObject.Zero);
+                if (status == FreResultSharp.Ok) return ret;
+                Logger.Log("cannot get length of array", status);
                 return 0;
             }
         }
@@ -297,12 +295,10 @@ namespace TuaRua.FreSharp {
                         al.Add(FreSharpHelper.GetAsDouble(itm));
                         break;
                     case FreObjectTypeSharp.Rectangle:
-                        var rectFre = new FreRectangleSharp(itm);
-                        al.Add(rectFre.Value);
+                        al.Add(itm.AsRect());
                         break;
                     case FreObjectTypeSharp.Point:
-                        var pointFre = new FrePointSharp(itm);
-                        al.Add(pointFre.Value);
+                        al.Add(itm.AsPoint());
                         break;
                     case FreObjectTypeSharp.Date:
                         al.Add(FreSharpHelper.GetAsDateTime(itm));
@@ -333,6 +329,7 @@ namespace TuaRua.FreSharp {
             for (uint i = 0; i < Length; i++) {
                 list.Add(At(i));
             }
+
             return list.GetEnumerator();
         }
 

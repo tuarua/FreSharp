@@ -161,7 +161,7 @@ namespace FRESharpCore {
 		if (FRE_OK == freresult) {
 			ret = std::string(val, val + string1Length);
 			return gcnew String(ret.c_str());
-		}else{
+		} else {
 			return gcnew String("");
 		}
 	}

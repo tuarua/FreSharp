@@ -28,19 +28,17 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Windows;
-using FreSharp.Geom;
 using TuaRua.FreSharp.Display;
-using TuaRua.FreSharp.Geom;
 using FREObject = System.IntPtr;
-using Point = System.Windows.Point;
+// ReSharper disable InconsistentNaming
 
 namespace TuaRua.FreSharp {
     /// <summary>
     /// 
     /// </summary>
     public static class FreSharpExtensions {
-        // ReSharper disable once InconsistentNaming
+        private static FreSharpLogger Logger => FreSharpLogger.GetInstance();
+
         /// <summary>
         /// Converts a C# string to a FREObject
         /// </summary>
@@ -56,13 +54,36 @@ namespace TuaRua.FreSharp {
         public static string AsString(this FREObject inFre) => FreSharpHelper.GetAsString(inFre);
 
         /// <summary>
+        /// Calls toString() on a FREObject
+        /// </summary>
+        /// <param name="inFre"></param>
+        /// <returns></returns>
+#pragma warning disable IDE1006 // Naming Styles
+        public static string toString(this FREObject inFre) {
+            if (inFre.Type() == FreObjectTypeSharp.String 
+                || inFre.Type() == FreObjectTypeSharp.Null) return "";
+            return inFre.Call("toString").AsString();
+        }
+#pragma warning restore IDE1006 // Naming Styles
+
+        /// <summary>
+        /// Calls hasOwnProperty() on a FREObject
+        /// </summary>
+        /// <param name="inFre"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+#pragma warning disable IDE1006 // Naming Styles
+        public static bool hasOwnProperty(this FREObject inFre, string name) =>
+            inFre.Call("hasOwnProperty", name).AsBool();
+#pragma warning restore IDE1006 // Naming Styles
+
+        /// <summary>
         /// Converts a FREObject to a DateTime
         /// </summary>
         /// <param name="inFre"></param>
         /// <returns></returns>
         public static DateTime AsDateTime(this FREObject inFre) => FreSharpHelper.GetAsDateTime(inFre);
 
-        // ReSharper disable once InconsistentNaming
         /// <summary>
         /// Converts a C# DateTime to a FREObject
         /// </summary>
@@ -77,7 +98,6 @@ namespace TuaRua.FreSharp {
         /// <returns></returns>
         public static bool AsBool(this FREObject inFre) => FreSharpHelper.GetAsBool(inFre);
 
-        // ReSharper disable once InconsistentNaming
         /// <summary>
         /// Converts a C# bool to a FREObject
         /// </summary>
@@ -142,12 +162,8 @@ namespace TuaRua.FreSharp {
                 FreSharpHelper.GetArgsC(argsArr), ref resultPtr);
 
             var status = (FreResultSharp) resultPtr;
-
-            if (status == FreResultSharp.Ok) {
-                return ret;
-            }
-
-            FreSharpHelper.ThrowFreException(status, "cannot call method " + method, ret);
+            if (status == FreResultSharp.Ok) return ret;
+            Logger.Log($"cannot call method {method} of {inFre.toString()}", status, ret);
             return FREObject.Zero;
         }
 
@@ -160,18 +176,15 @@ namespace TuaRua.FreSharp {
         /// <returns></returns>
         public static FREArray Call(this FREObject inFre, string methodName, ArrayList args) {
             uint resultPtr = 0;
-            var ret = new FREArray(FreSharpHelper.Core.callMethod(inFre, methodName,
-                FreSharpHelper.ArgsToArgv(args), FreSharpHelper.GetArgsC(args), ref resultPtr));
+            var fre = FreSharpHelper.Core.callMethod(inFre, methodName,
+                FreSharpHelper.ArgsToArgv(args), FreSharpHelper.GetArgsC(args), ref resultPtr);
+            var ret = new FREArray(fre);
             var status = (FreResultSharp) resultPtr;
-            if (status == FreResultSharp.Ok) {
-                return ret;
-            }
-
-            FreSharpHelper.ThrowFreException(status, "cannot call method " + methodName, ret.RawValue);
+            if (status == FreResultSharp.Ok) return ret;
+            Logger.Log($"cannot call method {methodName} of {inFre.toString()}", status, fre);
             return null;
         }
 
-        // ReSharper disable once InconsistentNaming
         /// <summary>
         /// Converts a C# int[] to a FREObject
         /// </summary>
@@ -179,7 +192,6 @@ namespace TuaRua.FreSharp {
         /// <returns></returns>
         public static FREObject ToFREObject(this int[] arr) => new FREArray(arr).RawValue;
 
-        // ReSharper disable once InconsistentNaming
         /// <summary>
         /// Converts a C# bool[] to a FREObject
         /// </summary>
@@ -187,7 +199,6 @@ namespace TuaRua.FreSharp {
         /// <returns></returns>
         public static FREObject ToFREObject(this bool[] arr) => new FREArray(arr).RawValue;
 
-        // ReSharper disable once InconsistentNaming
         /// <summary>
         /// Converts a C# double[] to a FREObject
         /// </summary>
@@ -195,7 +206,6 @@ namespace TuaRua.FreSharp {
         /// <returns></returns>
         public static FREObject ToFREObject(this double[] arr) => new FREArray(arr).RawValue;
 
-        // ReSharper disable once InconsistentNaming
         /// <summary>
         /// Converts a C# string[] to a FREObject
         /// </summary>
@@ -239,6 +249,7 @@ namespace TuaRua.FreSharp {
                     Convert.ToByte((rgb >> 8) & 0xff),
                     Convert.ToByte((rgb >> 0) & 0xff));
             }
+
             return Color.FromArgb(
                 Convert.ToByte((rgb >> 16) & 0xff),
                 Convert.ToByte((rgb >> 8) & 0xff),
@@ -251,7 +262,6 @@ namespace TuaRua.FreSharp {
         /// </summary>
         /// <param name="c"></param>
         /// <returns></returns>
-        // ReSharper disable once InconsistentNaming
         public static FREObject ToFREObject(this Color c) => new FreObjectSharp((uint) ((c.A << 24)
                                                                                         | (c.R << 16)
                                                                                         | (c.G << 8)
@@ -265,7 +275,6 @@ namespace TuaRua.FreSharp {
         public static Dictionary<string, object> AsDictionary(this FREObject inFre) =>
             FreSharpHelper.GetAsDictionary(inFre);
 
-        // ReSharper disable once InconsistentNaming
         /// <summary>
         /// Converts a C# int to a FREObject
         /// </summary>
@@ -280,7 +289,6 @@ namespace TuaRua.FreSharp {
         /// <returns></returns>
         public static uint AsUInt(this FREObject inFre) => FreSharpHelper.GetAsUInt(inFre);
 
-        // ReSharper disable once InconsistentNaming
         /// <summary>
         /// Converts a C# uint to a FREObject
         /// </summary>
@@ -295,7 +303,6 @@ namespace TuaRua.FreSharp {
         /// <returns></returns>
         public static double AsDouble(this FREObject inFre) => FreSharpHelper.GetAsDouble(inFre);
 
-        // ReSharper disable once InconsistentNaming
         /// <summary>
         /// Converts a C# double to a FREObject
         /// </summary>
@@ -304,11 +311,25 @@ namespace TuaRua.FreSharp {
         public static FREObject ToFREObject(this double i) => new FreObjectSharp(i).RawValue;
 
         /// <summary>
-        /// Converts a FREObject to a C# Rect
+        /// 
         /// </summary>
-        /// <param name="inFre"></param>
+        /// <param name="i"></param>
         /// <returns></returns>
-        public static Rect AsRect(this FREObject inFre) => new FreRectangleSharp(inFre).Value;
+        public static FREObject ToFREObject(this float i) => new FreObjectSharp((double) i).RawValue;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="i"></param>
+        /// <returns></returns>
+        public static FREObject ToFREObject(this short i) => new FreObjectSharp(i).RawValue;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="i"></param>
+        /// <returns></returns>
+        public static FREObject ToFREObject(this long i) => new FreObjectSharp((int)i).RawValue;
 
         /// <summary>
         /// Converts a FREObject to a C# Bitmap
@@ -322,39 +343,7 @@ namespace TuaRua.FreSharp {
         /// </summary>
         /// <param name="bitmap"></param>
         /// <returns></returns>
-        // ReSharper disable once InconsistentNaming
         public static FREObject ToFREObject(this Bitmap bitmap) => new FreBitmapDataSharp(bitmap).RawValue;
-
-        // ReSharper disable once InconsistentNaming
-        /// <summary>
-        /// Converts a C# Rect to a FREObject
-        /// </summary>
-        /// <param name="rect"></param>
-        /// <returns></returns>
-        public static FREObject ToFREObject(this Rect rect) => new FreRectangleSharp(rect).RawValue;
-
-
-        /// <summary>
-        /// Converts a FREObject to a C# Point
-        /// </summary>
-        /// <param name="inFre"></param>
-        /// <returns></returns>
-        public static Point AsPoint(this FREObject inFre) => new FrePointSharp(inFre).Value;
-
-        /// <summary>
-        /// Converts a FrePointSharp to a C# Point
-        /// </summary>
-        /// <param name="inFre"></param>
-        /// <returns></returns>
-        public static Point AsPoint(this FrePointSharp inFre) => inFre.Value;
-
-        // ReSharper disable once InconsistentNaming
-        /// <summary>
-        /// Converts a C# Point to a FREObject
-        /// </summary>
-        /// <param name="point"></param>
-        /// <returns></returns>
-        public static FREObject ToFREObject(this Point point) => new FrePointSharp(point).RawValue;
 
         /// <summary>
         /// Creates a FREObject
@@ -372,14 +361,11 @@ namespace TuaRua.FreSharp {
                 }
             }
 
-            var rawValue = FreSharpHelper.Core.getFREObject(className, FreSharpHelper.ArgsToArgv(argsArr),
+            var ret = FreSharpHelper.Core.getFREObject(className, FreSharpHelper.ArgsToArgv(argsArr),
                 FreSharpHelper.GetArgsC(argsArr), ref resultPtr);
             var status = (FreResultSharp) resultPtr;
-            if (status == FreResultSharp.Ok) {
-                return rawValue;
-            }
-
-            FreSharpHelper.ThrowFreException(status, "cannot create class " + className, rawValue);
+            if (status == FreResultSharp.Ok) return ret;
+            Logger.Log($"cannot create class {className}", status, ret);
             return FREObject.Zero;
         }
 
@@ -393,14 +379,11 @@ namespace TuaRua.FreSharp {
         public static FREObject Init(this FREObject value, string name) {
             uint resultPtr = 0;
             var argsArr = new ArrayList();
-            var rawValue = FreSharpHelper.Core.getFREObject(name, FreSharpHelper.ArgsToArgv(argsArr),
+            var ret = FreSharpHelper.Core.getFREObject(name, FreSharpHelper.ArgsToArgv(argsArr),
                 FreSharpHelper.GetArgsC(argsArr), ref resultPtr);
             var status = (FreResultSharp) resultPtr;
-            if (status == FreResultSharp.Ok) {
-                return rawValue;
-            }
-
-            FreSharpHelper.ThrowFreException(status, "cannot create class " + name, rawValue);
+            if (status == FreResultSharp.Ok) return ret;
+            Logger.Log($"cannot create class {name}", status, ret);
             return FREObject.Zero;
         }
     }

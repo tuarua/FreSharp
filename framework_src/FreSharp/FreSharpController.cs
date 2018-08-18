@@ -54,6 +54,11 @@ namespace TuaRua.FreSharp {
             Context?.DispatchEvent("TRACE", traceStr);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
         [Obsolete("SendEvent is deprecated, please use DispatchEvent instead.", true)]
         public void SendEvent(string name, string value) {
             Context?.DispatchEvent(name, value);

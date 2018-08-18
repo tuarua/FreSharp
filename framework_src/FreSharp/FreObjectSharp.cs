@@ -72,6 +72,16 @@ namespace TuaRua.FreSharp {
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
+        public FreObjectSharp(float value)
+        {
+            uint resultPtr = 0;
+            RawValue = FreSharpHelper.Core.getFREObject(value, ref resultPtr);
+        }
+
+        /// <summary>
         /// Creates a C# FREObject from an int
         /// </summary>
         /// <param name="value"></param>

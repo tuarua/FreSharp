@@ -74,15 +74,8 @@ public class FreSharpExampleANE extends EventDispatcher {
         return ctx.call("runDataTests", value) as String;
     }
 
-    public function runErrorTests(value:Person, string:String, int:int):void {
-        ctx.call("runErrorTests", value, string, int);
-    }
-
-    public function runErrorTests2(string:String):void {
-        var theRet:* = ctx.call("runErrorTests2", string);
-        if (theRet is ANEError) {
-            throw theRet as ANEError;
-        }
+    public function runErrorTests(value:Person, string:String, i:int):void {
+        ctx.call("runErrorTests", value, string, i);
     }
 
     public function runDateTests(value:Date):Date {
