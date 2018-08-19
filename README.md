@@ -80,8 +80,8 @@ person.SetProp("age", newAge);
 
 // create a FreSharpObject DynamicObject 
 dynamic person = new FreObjectSharp("com.tuarua.Person", "Ben McBobster", 80);
-int oldAge = person.age;
-var name = (string) person.name;
+int oldAge = person.age; // implicit conversion
+var name = (string) person.name; // explicit conversion
 
 // The following prop types are allowed: 
 // int, uint, short, long, bool, string, double, Rect, Point, DateTime, Color, FREObject

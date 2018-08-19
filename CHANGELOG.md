@@ -1,8 +1,8 @@
 ### 2.0.0
 - repurpose FreObjectSharp for use as a dynamic object
 - Added FREObject.toString()
-- Added FREObject.hasOwnProperty()
-- FREObject.AsColor() hasAlpha default value is now TRUE
+- Added FREObject.hasOwnProperty(string name)
+- FREObject.AsColor(bool hasAlpha = true) hasAlpha default value is now TRUE
 - mark FreSharpHelper as internal
 - Refactor
 
