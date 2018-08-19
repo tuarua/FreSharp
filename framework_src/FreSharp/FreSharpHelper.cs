@@ -8,75 +8,67 @@ using TuaRua.FreSharp.Geom;
 using TuaRua.FreSharp.Utils;
 using FREContext = System.IntPtr;
 using FREObject = System.IntPtr;
+using Color = System.Drawing.Color;
+using Point = System.Windows.Point;
+using Rect = System.Windows.Rect;
 
+// ReSharper disable InconsistentNaming
 namespace TuaRua.FreSharp {
-    /// <summary>
-    /// Creates a new FreSharp Helper
-    /// </summary>
-    public static class FreSharpHelper {
+    internal static class FreSharpHelper {
         private static FreSharpLogger Logger => FreSharpLogger.GetInstance();
+        internal static FRESharpCLR Core = new FRESharpCLR();
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public static FRESharpCLR Core = new FRESharpCLR();
-
-        /// <summary>
-        /// Dispatches an event. Mimics FREDispatchStatusEventAsync
-        /// </summary>
-        /// <param name="freContext"></param>
-        /// <param name="name"></param>
-        /// <param name="value"></param>
-        public static void DispatchEvent(ref FREContext freContext, string name, string value) {
+        internal static void DispatchEvent(ref FREContext freContext, string name, string value) {
             Core.dispatchEvent(freContext, name, value);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public static FreObjectSharp FreObjectSharpFromObject(object value) {
-            if (value == null) return null;
-            var t = value.GetType();
-            if (t == typeof(FREObject)) {
-                return new FreObjectSharp((FREObject) value);
+        internal static FREObject FREObjectFromObject(object value) {
+            if (value == null) return FREObject.Zero;
+            var type = value.GetType();
+            if (type == typeof(FREObject)) {
+                return (FREObject) value;
             }
 
-            if (t == typeof(FreObjectSharp)) {
-                return value as FreObjectSharp;
+            if (type == typeof(int) || type == typeof(long) || type == typeof(short)) {
+                return NewObject((int) value);
             }
 
-            if (t == typeof(int) || t == typeof(long) || t == typeof(short)) {
-                return new FreObjectSharp((int) value);
+            if (type == typeof(uint)) {
+                return NewObject((uint) value);
             }
 
-            if (t == typeof(uint)) {
-                return new FreObjectSharp((uint) value);
+            if (type == typeof(bool)) {
+                return NewObject((bool) value);
             }
 
-            if (t == typeof(bool)) {
-                return new FreObjectSharp((bool) value);
+            if (type == typeof(string)) {
+                return NewObject((string) value);
             }
 
-            if (t == typeof(string)) {
-                return new FreObjectSharp((string) value);
+            if (type == typeof(double)) {
+                return NewObject((double) value);
             }
 
-            if (t == typeof(double)) {
-                return new FreObjectSharp((double) value);
+            if (type == typeof(Rect)) {
+                return ((Rect) value).ToFREObject();
             }
 
-            return null;
+            if (type == typeof(Point)) {
+                return ((Point) value).ToFREObject();
+            }
+
+            if (type == typeof(DateTime)) {
+                return NewObject((DateTime) value);
+            }
+
+            if (type == typeof(Color)) {
+                return ((Color) value).ToFREObject();
+            }
+
+            return  FREObject.Zero;
         }
 
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="args"></param>
-        /// <returns></returns>
-        public static FREObject[] ArgsToArgv(ArrayList args) {
+        internal static FREObject[] ArgsToArgv(ArrayList args) {
             var cnt = GetArgsC(args);
             var arr = new FREObject[cnt];
             if (args == null) return arr;
@@ -89,21 +81,15 @@ namespace TuaRua.FreSharp {
                     continue;
                 }
 
-                var fre = FreObjectSharpFromObject(argArr.ElementAt((int) i));
-                if (fre == null) break;
-                arr.SetValue(fre.RawValue, i);
+                var fre = FREObjectFromObject(argArr.ElementAt((int) i));
+                if (fre == FREObject.Zero) break;
+                arr.SetValue(fre, i);
             }
 
             return arr;
         }
 
-
-        /// <summary>
-        /// Gets length of ArrayList as argc which can be passed to library calls
-        /// </summary>
-        /// <param name="args"></param>
-        /// <returns></returns>
-        public static uint GetArgsC(ArrayList args) {
+        internal static uint GetArgsC(ArrayList args) {
             uint cnt = 0;
             if (args != null) {
                 cnt = (uint) args.Count;
@@ -112,12 +98,56 @@ namespace TuaRua.FreSharp {
             return cnt;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="rawValue"></param>
-        /// <returns></returns>
-        public static string GetAsString(FREObject rawValue) {
+        internal static FREObject NewObject(string value) {
+            uint resultPtr = 0;
+            var ret = Core.getFREObject(value, ref resultPtr);
+            var status = (FreResultSharp) resultPtr;
+            if (status == FreResultSharp.Ok) return ret;
+            Logger.Log($"cannot create FREObject from {value}", status);
+            return FREObject.Zero;
+        }
+
+        internal static FREObject NewObject(DateTime value) {
+            return new FREObject().Init("Date", Convert.ToDouble(new DateTimeOffset(value).ToUnixTimeMilliseconds()));
+        }
+
+        internal static FREObject NewObject(bool value) {
+            uint resultPtr = 0;
+            var ret = Core.getFREObject(value, ref resultPtr);
+            var status = (FreResultSharp) resultPtr;
+            if (status == FreResultSharp.Ok) return ret;
+            Logger.Log($"cannot create FREObject from {value}", status);
+            return FREObject.Zero;
+        }
+
+        internal static FREObject NewObject(int value) {
+            uint resultPtr = 0;
+            var ret = Core.getFREObject(value, ref resultPtr);
+            var status = (FreResultSharp) resultPtr;
+            if (status == FreResultSharp.Ok) return ret;
+            Logger.Log($"cannot create FREObject from {value}", status);
+            return FREObject.Zero;
+        }
+
+        internal static FREObject NewObject(uint value) {
+            uint resultPtr = 0;
+            var ret = Core.getFREObject(value, ref resultPtr);
+            var status = (FreResultSharp) resultPtr;
+            if (status == FreResultSharp.Ok) return ret;
+            Logger.Log($"cannot create FREObject from {value}", status);
+            return FREObject.Zero;
+        }
+
+        internal static FREObject NewObject(double value) {
+            uint resultPtr = 0;
+            var ret = Core.getFREObject(value, ref resultPtr);
+            var status = (FreResultSharp) resultPtr;
+            if (status == FreResultSharp.Ok) return ret;
+            Logger.Log($"cannot create FREObject from {value}", status);
+            return FREObject.Zero;
+        }
+
+        internal static string GetAsString(FREObject rawValue) {
             uint resultPtr = 0;
             var ret = Core.getString(rawValue, ref resultPtr);
             var status = (FreResultSharp) resultPtr;
@@ -126,11 +156,7 @@ namespace TuaRua.FreSharp {
             return null;
         }
 
-        /// <summary>
-        /// Returns the C# FREObject as a double.
-        /// </summary>
-        /// <returns></returns>
-        public static double GetAsDouble(FREObject rawValue) {
+        internal static double GetAsDouble(FREObject rawValue) {
             uint resultPtr = 0;
             var ret = Core.getDouble(rawValue, ref resultPtr);
             var status = (FreResultSharp) resultPtr;
@@ -139,11 +165,7 @@ namespace TuaRua.FreSharp {
             return 0.0;
         }
 
-        /// <summary>
-        /// Returns the C# FREObject as a bool.
-        /// </summary>
-        /// <returns></returns>
-        public static bool GetAsBool(FREObject rawValue) {
+        internal static bool GetAsBool(FREObject rawValue) {
             uint resultPtr = 0;
             var ret = Core.getBool(rawValue, ref resultPtr);
             var status = (FreResultSharp) resultPtr;
@@ -152,11 +174,7 @@ namespace TuaRua.FreSharp {
             return false;
         }
 
-        /// <summary>
-        /// Returns the C# FREObject as an int.
-        /// </summary>
-        /// <returns></returns>
-        public static int GetAsInt(FREObject rawValue) {
+        internal static int GetAsInt(FREObject rawValue) {
             uint resultPtr = 0;
             var ret = Core.getInt32(rawValue, ref resultPtr);
             var status = (FreResultSharp) resultPtr;
@@ -165,11 +183,7 @@ namespace TuaRua.FreSharp {
             return 0;
         }
 
-        /// <summary>
-        /// Returns the C# FREObject as a uint.
-        /// </summary>
-        /// <returns></returns>
-        public static uint GetAsUInt(FREObject rawValue) {
+        internal static uint GetAsUInt(FREObject rawValue) {
             uint resultPtr = 0;
             var ret = Core.getUInt32(rawValue, ref resultPtr);
             var status = (FreResultSharp) resultPtr;
@@ -178,22 +192,11 @@ namespace TuaRua.FreSharp {
             return 0;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="rawValue"></param>
-        /// <returns></returns>
-        public static DateTime GetAsDateTime(FREObject rawValue) =>
+        internal static DateTime GetAsDateTime(FREObject rawValue) =>
             new DateTime(1970, 1, 1, 0, 0, 0, 0).AddSeconds(rawValue.GetProp("time").AsDouble() / 1000);
 
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="rawValue"></param>
-        /// <returns></returns>
-        public static FreObjectTypeSharp GetActionscriptType(FREObject rawValue) {
-            var aneUtils = new FREObject().Init("com.tuarua.fre.ANEUtils", null);
+        internal static FreObjectTypeSharp GetActionscriptType(FREObject rawValue) {
+            var aneUtils = new FREObject().Init("com.tuarua.fre.ANEUtils");
             var classType = aneUtils.Call("getClassType", rawValue);
             var type = GetAsString(classType).ToLower();
 
@@ -219,7 +222,7 @@ namespace TuaRua.FreSharp {
 
         internal static void SetProperty(FREObject rawValue, string name, object value) {
             uint resultPtr = 0;
-            var ret = Core.setProperty(rawValue, name, FreObjectSharpFromObject(value).RawValue,
+            var ret = Core.setProperty(rawValue, name, FREObjectFromObject(value),
                 ref resultPtr);
             var status = (FreResultSharp) resultPtr;
             if (status == FreResultSharp.Ok) return;
@@ -243,12 +246,7 @@ namespace TuaRua.FreSharp {
             return FREObject.Zero;
         }
 
-
-        /// <summary>
-        /// Returns the Actionscript type of the C# FREObject. !Important - your ane must include ANEUtils.as in com.tuarua.fre
-        /// </summary>
-        /// <returns></returns>
-        public static FreObjectTypeSharp GetType(FREObject rawValue) {
+        internal static FreObjectTypeSharp GetType(FREObject rawValue) {
             uint resultPtr = 0;
             var type = (FreObjectTypeSharp) Core.getType(rawValue, ref resultPtr);
             return FreObjectTypeSharp.Number == type || FreObjectTypeSharp.Object == type
@@ -256,16 +254,11 @@ namespace TuaRua.FreSharp {
                 : type;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="rawValue"></param>
-        /// <returns></returns>
-        public static Dictionary<string, object> GetAsDictionary(FREObject rawValue) {
+        internal static Dictionary<string, object> GetAsDictionary(FREObject rawValue) {
             var ret = new Dictionary<string, object>();
-            var aneUtils = new FREObject().Init("com.tuarua.fre.ANEUtils", null);
+            var aneUtils = new FREObject().Init("com.tuarua.fre.ANEUtils");
             var paramsArray = new ArrayList {
-                new FreObjectSharp(rawValue)
+                rawValue
             };
             var classProps = aneUtils.Call("getClassProps", paramsArray);
             if (classProps == null) return ret;
@@ -283,13 +276,38 @@ namespace TuaRua.FreSharp {
             return ret;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="rawValue"></param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentOutOfRangeException"></exception>
-        public static object GetAsObject(FREObject rawValue) {
+        internal static object GetAsPrimitiveObject(FREObject rawValue) {
+            Console.WriteLine("GetAsPrimitiveObject: " + GetType(rawValue));
+            switch (GetType(rawValue)) {
+                case FreObjectTypeSharp.Class:
+                case FreObjectTypeSharp.Object:
+                case FreObjectTypeSharp.Vector:
+                case FreObjectTypeSharp.Array:
+                case FreObjectTypeSharp.Bytearray:
+                case FreObjectTypeSharp.Bitmapdata:
+                    return rawValue;
+                case FreObjectTypeSharp.Number:
+                    return GetAsDouble(rawValue);
+                case FreObjectTypeSharp.String:
+                    return GetAsString(rawValue);
+                case FreObjectTypeSharp.Boolean:
+                    return GetAsBool(rawValue);
+                case FreObjectTypeSharp.Null:
+                    return null;
+                case FreObjectTypeSharp.Int:
+                    return GetAsInt(rawValue);
+                case FreObjectTypeSharp.Rectangle:
+                    return rawValue.AsRect();
+                case FreObjectTypeSharp.Point:
+                    return rawValue.AsPoint();
+                case FreObjectTypeSharp.Date:
+                    return GetAsDateTime(rawValue);
+                default:
+                    return null;
+            }
+        }
+
+        internal static object GetAsObject(FREObject rawValue) {
             switch (GetType(rawValue)) {
                 case FreObjectTypeSharp.Object:
                 case FreObjectTypeSharp.Class:
@@ -324,9 +342,8 @@ namespace TuaRua.FreSharp {
                 case FreObjectTypeSharp.Date:
                     return GetAsDateTime(rawValue);
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    return null;
             }
         }
-
     }
 }

@@ -132,9 +132,10 @@ public class Main extends Sprite {
             myByteArray.writeUTFBytes("C# in an ANE. Say whaaaat!");
             ane.runByteArrayTests(myByteArray);
             ane.runErrorTests(person, "test string", 78);
-            var inData:String = "Saved and returned"; //TODO
+
+            /*var inData:String = "Saved and returned"; //TODO
             var outData:String = ane.runDataTests(inData) as String;
-            textField.text += outData + "\n";
+            textField.text += outData + "\n";*/
 
             var returnedDate:Date = ane.runDateTests(new Date());
             trace("returnedDate:", returnedDate);

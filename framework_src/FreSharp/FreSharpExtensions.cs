@@ -30,6 +30,7 @@ using System.Drawing;
 using System.Linq;
 using TuaRua.FreSharp.Display;
 using FREObject = System.IntPtr;
+
 // ReSharper disable InconsistentNaming
 
 namespace TuaRua.FreSharp {
@@ -42,9 +43,9 @@ namespace TuaRua.FreSharp {
         /// <summary>
         /// Converts a C# string to a FREObject
         /// </summary>
-        /// <param name="str"></param>
+        /// <param name="value"></param>
         /// <returns></returns>
-        public static FREObject ToFREObject(this string str) => new FreObjectSharp(str).RawValue;
+        public static FREObject ToFREObject(this string value) => FreSharpHelper.NewObject(value);
 
         /// <summary>
         /// Converts a FREObject to a C# string
@@ -58,19 +59,17 @@ namespace TuaRua.FreSharp {
         /// </summary>
         /// <param name="inFre"></param>
         /// <returns></returns>
-#pragma warning disable IDE1006 // Naming Styles
         public static string toString(this FREObject inFre) {
-            if (inFre.Type() == FreObjectTypeSharp.String 
+            if (inFre.Type() == FreObjectTypeSharp.String
                 || inFre.Type() == FreObjectTypeSharp.Null) return "";
             return inFre.Call("toString").AsString();
         }
-#pragma warning restore IDE1006 // Naming Styles
 
         /// <summary>
-        /// Calls hasOwnProperty() on a FREObject
+        /// Indicates whether an object has a specified property defined.
         /// </summary>
         /// <param name="inFre"></param>
-        /// <param name="name"></param>
+        /// <param name="name">The property of the FREObject. </param>
         /// <returns></returns>
 #pragma warning disable IDE1006 // Naming Styles
         public static bool hasOwnProperty(this FREObject inFre, string name) =>
@@ -89,7 +88,7 @@ namespace TuaRua.FreSharp {
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static FREObject ToFREObject(this DateTime value) => new FreObjectSharp(value).RawValue;
+        public static FREObject ToFREObject(this DateTime value) => FreSharpHelper.NewObject(value);
 
         /// <summary>
         /// Converts a FREObject to a C# bool
@@ -101,9 +100,9 @@ namespace TuaRua.FreSharp {
         /// <summary>
         /// Converts a C# bool to a FREObject
         /// </summary>
-        /// <param name="b"></param>
+        /// <param name="value"></param>
         /// <returns></returns>
-        public static FREObject ToFREObject(this bool b) => new FreObjectSharp(b).RawValue;
+        public static FREObject ToFREObject(this bool value) => FreSharpHelper.NewObject(value);
 
         /// <summary>
         /// Gets the property of a FREObject
@@ -240,8 +239,8 @@ namespace TuaRua.FreSharp {
         /// <param name="inFre"></param>
         /// <param name="hasAlpha">Set to true when the AS3 uint is in ARGB format</param>
         /// <returns></returns>
-        public static Color AsColor(this FREObject inFre, bool hasAlpha = false) {
-            var rgb = FreSharpHelper.GetAsUInt(new FreObjectSharp(inFre).RawValue);
+        public static Color AsColor(this FREObject inFre, bool hasAlpha = true) {
+            var rgb = inFre.AsUInt();
             if (hasAlpha) {
                 return Color.FromArgb(
                     Convert.ToByte((rgb >> 24) & 0xff),
@@ -262,10 +261,10 @@ namespace TuaRua.FreSharp {
         /// </summary>
         /// <param name="c"></param>
         /// <returns></returns>
-        public static FREObject ToFREObject(this Color c) => new FreObjectSharp((uint) ((c.A << 24)
-                                                                                        | (c.R << 16)
-                                                                                        | (c.G << 8)
-                                                                                        | (c.B << 0))).RawValue;
+        public static FREObject ToFREObject(this Color c) => FreSharpHelper.NewObject((uint) ((c.A << 24)
+                                                                                              | (c.R << 16)
+                                                                                              | (c.G << 8)
+                                                                                              | (c.B << 0)));
 
         /// <summary>
         /// Converts a FREObject to a C# Dictionary&lt;string, object&gt;
@@ -278,9 +277,9 @@ namespace TuaRua.FreSharp {
         /// <summary>
         /// Converts a C# int to a FREObject
         /// </summary>
-        /// <param name="i"></param>
+        /// <param name="value"></param>
         /// <returns></returns>
-        public static FREObject ToFREObject(this int i) => new FreObjectSharp(i).RawValue;
+        public static FREObject ToFREObject(this int value) => FreSharpHelper.NewObject(value);
 
         /// <summary>
         /// Converts a FREObject to a C# uint
@@ -292,9 +291,9 @@ namespace TuaRua.FreSharp {
         /// <summary>
         /// Converts a C# uint to a FREObject
         /// </summary>
-        /// <param name="i"></param>
+        /// <param name="value"></param>
         /// <returns></returns>
-        public static FREObject ToFREObject(this uint i) => new FreObjectSharp(i).RawValue;
+        public static FREObject ToFREObject(this uint value) => FreSharpHelper.NewObject(value);
 
         /// <summary>
         /// Converts a FREObject to a C# double
@@ -306,30 +305,30 @@ namespace TuaRua.FreSharp {
         /// <summary>
         /// Converts a C# double to a FREObject
         /// </summary>
-        /// <param name="i"></param>
+        /// <param name="value"></param>
         /// <returns></returns>
-        public static FREObject ToFREObject(this double i) => new FreObjectSharp(i).RawValue;
+        public static FREObject ToFREObject(this double value) => FreSharpHelper.NewObject(value);
 
         /// <summary>
-        /// 
+        /// Converts a C# float to a FREObject
         /// </summary>
-        /// <param name="i"></param>
+        /// <param name="value"></param>
         /// <returns></returns>
-        public static FREObject ToFREObject(this float i) => new FreObjectSharp((double) i).RawValue;
+        public static FREObject ToFREObject(this float value) => FreSharpHelper.NewObject(value);
 
         /// <summary>
-        /// 
+        /// Converts a C# short to a FREObject
         /// </summary>
-        /// <param name="i"></param>
+        /// <param name="value"></param>
         /// <returns></returns>
-        public static FREObject ToFREObject(this short i) => new FreObjectSharp(i).RawValue;
+        public static FREObject ToFREObject(this short value) => FreSharpHelper.NewObject(value);
 
         /// <summary>
-        /// 
+        /// Converts a C# long to a FREObject
         /// </summary>
-        /// <param name="i"></param>
+        /// <param name="value"></param>
         /// <returns></returns>
-        public static FREObject ToFREObject(this long i) => new FreObjectSharp((int)i).RawValue;
+        public static FREObject ToFREObject(this long value) => FreSharpHelper.NewObject((int) value);
 
         /// <summary>
         /// Converts a FREObject to a C# Bitmap

@@ -1,3 +1,11 @@
+### 2.0.0
+- repurpose FreObjectSharp for use as a dynamic object
+- Added FREObject.toString()
+- Added FREObject.hasOwnProperty()
+- FREObject.AsColor() hasAlpha default value is now TRUE
+- mark FreSharpHelper as internal
+- Refactor
+
 ### 1.7.0
 - deprecate SendEvent, use DispatchEvent instead
 - deprecate FREArray(className), use FREArray(className, length, fixedSize) instead (className only no <Vector. prefix)

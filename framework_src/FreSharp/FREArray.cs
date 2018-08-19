@@ -4,11 +4,11 @@ using System.Collections.Generic;
 using TuaRua.FreSharp.Display;
 using TuaRua.FreSharp.Geom;
 using FREObject = System.IntPtr;
+// ReSharper disable InheritdocConsiderUsage
+// ReSharper disable InconsistentNaming
 
 namespace TuaRua.FreSharp {
     /// <summary></summary>
-    // ReSharper disable once InconsistentNaming
-    // : FreObjectSharp
     public class FREArray : IEnumerable<FREObject> {
         private static FreSharpLogger Logger => FreSharpLogger.GetInstance();
 
@@ -136,7 +136,7 @@ namespace TuaRua.FreSharp {
         public void Set(uint index, object value) {
             uint resultPtr = 0;
             FreSharpHelper.Core.setObjectAt(RawValue, index,
-                FreSharpHelper.FreObjectSharpFromObject(value).RawValue, ref resultPtr);
+                FreSharpHelper.FREObjectFromObject(value), ref resultPtr);
         }
 
         /// <summary>

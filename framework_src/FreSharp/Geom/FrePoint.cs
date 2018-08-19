@@ -1,12 +1,13 @@
 ﻿using FREObject = System.IntPtr;
 using Point = System.Windows.Point;
 
+// ReSharper disable InconsistentNaming
+
 namespace TuaRua.FreSharp.Geom {
     /// <summary>
     /// 
     /// </summary>
     public static class FrePoint {
-        // ReSharper disable once InconsistentNaming
         /// <summary>
         /// Converts a C# Point to a FREObject
         /// </summary>
@@ -17,12 +18,13 @@ namespace TuaRua.FreSharp.Geom {
         }
 
         /// <summary>
-        /// 
+        /// Converts a FREObject to a C# Point
         /// </summary>
         /// <param name="inFre"></param>
         /// <returns></returns>
-        public static Point AsPoint(this FREObject inFre) => new Point(
-            inFre.GetProp("x").AsDouble(),
-            inFre.GetProp("y").AsDouble());
+        public static Point AsPoint(this FREObject inFre) {
+            dynamic fre = new FreObjectSharp(inFre);
+            return new Point(fre.x, fre.y);
+        }
     }
 }

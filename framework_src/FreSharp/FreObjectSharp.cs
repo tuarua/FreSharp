@@ -1,110 +1,150 @@
-/* Copyright 2017 Tua Rua Ltd.
+﻿#region License
 
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
+// Copyright 2017 Tua Rua Ltd.
+// 
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
+// 
+//  http://www.apache.org/licenses/LICENSE-2.0
+// 
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
+// 
+//  Additional Terms
+//  No part, or derivative of this Air Native Extensions's code is permitted 
+//  to be sold as the basis of a commercially packaged Air Native Extension which 
+//  undertakes the same purpose as this software. That is, a WebView for Windows, 
+//  OSX and/or iOS and/or Android.
+//  All Rights Reserved. Tua Rua Ltd.
 
-       http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.*/
+#endregion
 
 using System;
+using System.Drawing;
+using System.Dynamic;
+using System.Windows;
+using TuaRua.FreSharp.Geom;
 using FREObject = System.IntPtr;
+using Point = System.Windows.Point;
+// ReSharper disable InconsistentNaming
 
 namespace TuaRua.FreSharp {
+    /// <inheritdoc />
     /// <summary>
-    /// FreObjectSharp wraps a C FREObject with helper methods.
+    /// Wraps a FREObject in a dynamic object which allows us to perform easy gets and sets of it's properties
     /// </summary>
-    public class FreObjectSharp {
-        /// <summary>
-        /// Returns the associated C FREObject of the C# FREObject.
-        /// </summary>
-        /// <returns></returns>
-        public FREObject RawValue { get; set; } = FREObject.Zero;
+    public class FreObjectSharp : DynamicObject {
+        private static FREObject _rawValue;
 
         /// <summary>
-        /// Returns the C# FREObject as an object.
+        /// Converts the RawValue FREObject to a C# object
         /// </summary>
-        public object Value => FreSharpHelper.GetAsObject(RawValue);
+        public object Value => FreSharpHelper.GetAsObject(_rawValue);
 
         /// <summary>
-        /// Creates an empty C# FREObject
-        /// </summary>
-        public FreObjectSharp() { }
-
-        /// <summary>
-        /// Creates a C# FREObject from a C FREObject
+        /// Create a FreObjectSharp from base class of FREObject
         /// </summary>
         /// <param name="freObject"></param>
-        public FreObjectSharp(FREObject freObject) {
-            RawValue = freObject;
-        }
+        // ReSharper disable once InheritdocConsiderUsage
+        public FreObjectSharp(FREObject freObject) => _rawValue = freObject;
 
         /// <summary>
-        /// Creates a C# FREObject from a string
+        /// Creates a FreObjectSharp
         /// </summary>
-        /// <param name="value"></param>
-        public FreObjectSharp(string value) {
-            uint resultPtr = 0;
-            RawValue = FreSharpHelper.Core.getFREObject(value, ref resultPtr);
-        }
+        /// <param name="className">Name of the Class</param>
+        // ReSharper disable once InheritdocConsiderUsage
+        public FreObjectSharp(string className) => _rawValue = new FREObject().Init(className);
 
         /// <summary>
-        /// Creates a C# FREObject from a bool
+        /// Creates a FreObjectSharp
         /// </summary>
-        /// <param name="value"></param>
-        public FreObjectSharp(bool value) {
-            uint resultPtr = 0;
-            RawValue = FreSharpHelper.Core.getFREObject(value, ref resultPtr);
-        }
-
-        /// <summary>
-        /// Creates a C# FREObject from a double
-        /// </summary>
-        /// <param name="value"></param>
-        public FreObjectSharp(double value) {
-            uint resultPtr = 0;
-            RawValue = FreSharpHelper.Core.getFREObject(value, ref resultPtr);
-        }
+        /// <param name="className">Name of the Class</param>
+        /// <param name="args">Arguments to pass to the Class</param>
+        // ReSharper disable once InheritdocConsiderUsage
+        public FreObjectSharp(string className, params object[] args) => _rawValue = new FREObject().Init(className, args);
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="value"></param>
-        public FreObjectSharp(float value)
-        {
-            uint resultPtr = 0;
-            RawValue = FreSharpHelper.Core.getFREObject(value, ref resultPtr);
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public bool hasOwnProperty(string name) => _rawValue.Call("hasOwnProperty", name).AsBool();
+
+        /// <inheritdoc />
+        public override bool TryGetMember(GetMemberBinder binder, out object result) {
+            if (binder.Name == "RawValue") {
+                result = _rawValue;
+                return true;
+            }
+            result = FreSharpHelper.GetAsPrimitiveObject(_rawValue.GetProp(binder.Name));
+            return true;
         }
 
-        /// <summary>
-        /// Creates a C# FREObject from an int
-        /// </summary>
-        /// <param name="value"></param>
-        public FreObjectSharp(int value) {
-            uint resultPtr = 0;
-            RawValue = FreSharpHelper.Core.getFREObject(value, ref resultPtr);
+        /// <inheritdoc />
+        public override bool TrySetMember(SetMemberBinder binder, object value) {
+            _rawValue.SetProp(binder.Name, value);
+            return true;
         }
 
-        /// <summary>
-        /// Creates a C# FREObject from a uint
-        /// </summary>
-        /// <param name="value"></param>
-        public FreObjectSharp(uint value) {
-            uint resultPtr = 0;
-            RawValue = FreSharpHelper.Core.getFREObject(value, ref resultPtr);
-        }
+        /// <inheritdoc />
+        public override bool TryConvert(ConvertBinder binder, out object result) {
+            var type = binder.Type;
+            if (type == typeof(FREObject)) {
+                result = _rawValue;
+                return true;
+            }
 
-        /// <summary>
-        /// Creates a C# FREObject from a DateTime
-        /// </summary>
-        /// <param name="value"></param>
-        public FreObjectSharp(DateTime value) {
-            RawValue = new FREObject().Init("Date", Convert.ToDouble(new DateTimeOffset(value).ToUnixTimeMilliseconds()));
+            if (type == typeof(string)) {
+                result = _rawValue.AsString();
+                return true;
+            }
+
+            if (type == typeof(double)) {
+                result = _rawValue.AsDouble();
+                return true;
+            }
+
+            if (type == typeof(bool)) {
+                result = _rawValue.AsBool();
+                return true;
+            }
+
+            if (type == typeof(uint)) {
+                result = _rawValue.AsUInt();
+                return true;
+            }
+
+            if (type == typeof(int) || type == typeof(long) || type == typeof(short)) {
+                result = _rawValue.AsInt();
+                return true;
+            }
+
+            if (type == typeof(Rect)) {
+                result = _rawValue.AsRect();
+                return true;
+            }
+
+            if (type == typeof(Point)) {
+                result = _rawValue.AsPoint();
+                return true;
+            }
+
+            if (type == typeof(DateTime)) {
+                result = _rawValue.AsDateTime();
+                return true;
+            }
+
+            if (type == typeof(Color)) {
+                result = _rawValue.AsColor();
+                return true;
+            }
+
+            result = null;
+            return true;
         }
     }
 }

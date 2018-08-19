@@ -54,7 +54,7 @@ namespace FreExampleSharpLib {
             var airDouble = argv[0].AsDouble();
             const double testDouble = 31.99;
             Trace("Number passed from AIR as Double:", testDouble.Equals(airDouble) ? "PASS" : "FAIL", airDouble);
-           
+
             const double sharpDouble = 34343.31;
             return sharpDouble.ToFREObject();
         }
@@ -141,6 +141,7 @@ namespace FreExampleSharpLib {
             var addition = person.Call("add", 100, 33);
             Trace("result is: ", addition.AsInt());
 
+
             try {
                 var dictionary = person.AsDictionary();
                 if (dictionary == null) return person;
@@ -148,6 +149,40 @@ namespace FreExampleSharpLib {
                 if (city == null) return person;
                 var name = city["name"];
                 Trace("what is the city name: ", name);
+
+                dynamic sharpPerson = new FreObjectSharp("com.tuarua.Person", "Ben McBobster", 80);
+                Trace("sharpPerson.RawValue.ToString()",
+                    ((FREObject) sharpPerson.RawValue).toString()); //case sensitive, calls as3 toString NOT c# ToString()
+
+
+                Trace("sharpPerson.hasOwnProperty(\"name\")", sharpPerson.hasOwnProperty("name"));
+
+                int sharpAge = sharpPerson.age;
+                string sharpName = sharpPerson.name;
+                string sharpOptional = sharpPerson.opt;
+                double sharpHeight = sharpPerson.height;
+                bool sharpIsMan = sharpPerson.isMan;
+                Trace("FreObjectSharp age 1", sharpAge);
+                Trace("FreObjectSharp name 1", sharpName);
+                Trace("FreObjectSharp opt 1 is null?:", sharpOptional == null);
+                Trace("FreObjectSharp height 1", sharpHeight);
+                Trace("FreObjectSharp isMan 1", sharpIsMan);
+
+                sharpPerson.age = 999;
+                sharpPerson.height = 1.88;
+                sharpPerson.isMan = true;
+
+                Trace("FreObjectSharp age 2", (int) sharpPerson.age);
+                Trace("FreObjectSharp height 2", (double) sharpPerson.height);
+                Trace("FreObjectSharp isMan 2", (bool) sharpPerson.isMan);
+
+                sharpPerson.age = 111.ToFREObject();
+                sharpPerson.height = 2;
+
+                Trace("FreObjectSharp age 3", (int) sharpPerson.age);
+                Trace("FreObjectSharp height 3", (double) sharpPerson.height);
+                var sharpNameCity = (FREObject) sharpPerson.city;
+                Trace("sharpNameCity", sharpNameCity.toString());
             }
             catch (Exception e) {
                 Trace(e.GetType());
@@ -248,7 +283,7 @@ namespace FreExampleSharpLib {
         }
 
         private FREObject RunColorTests(FREContext ctx, uint argc, FREObject[] argv) {
-            var airColor = argv[0].AsColor(true);
+            var airColor = argv[0].AsColor();
             Trace("A", airColor.A, "R", airColor.R, "G", airColor.G, "B", airColor.B);
             return Color.FromArgb(airColor.A, airColor.R, airColor.G, airColor.B).ToFREObject();
         }
