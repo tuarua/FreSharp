@@ -136,11 +136,10 @@ namespace FreExampleSharpLib {
             person.SetProp("age", newAge);
 
             var personType = person.Type();
-            Trace($"person type is:{personType}");
+            Trace($"person type is: {personType}");
             Trace("current person age is: ", oldAge);
             var addition = person.Call("add", 100, 33);
             Trace("result is: ", addition.AsInt());
-
 
             try {
                 var dictionary = person.AsDictionary();
@@ -154,6 +153,8 @@ namespace FreExampleSharpLib {
                 Trace("sharpPerson.RawValue.ToString()",
                     ((FREObject) sharpPerson.RawValue).toString()); //case sensitive, calls as3 toString NOT c# ToString()
 
+                var sharpPersonType = sharpPerson.Type();
+                Trace($"sharpPerson type is: {sharpPersonType}");
 
                 Trace("sharpPerson.hasOwnProperty(\"name\")", sharpPerson.hasOwnProperty("name"));
 

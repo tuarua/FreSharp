@@ -41,6 +41,11 @@ namespace TuaRua.FreSharp {
         private static FREObject _rawValue;
 
         /// <summary>
+        /// Returns the type of the FreObjectSharp
+        /// </summary>
+        public FreObjectTypeSharp Type() => FreSharpHelper.GetType(_rawValue);
+
+        /// <summary>
         /// Converts the RawValue FREObject to a C# object
         /// </summary>
         public object Value => FreSharpHelper.GetAsObject(_rawValue);
@@ -68,9 +73,9 @@ namespace TuaRua.FreSharp {
         public FreObjectSharp(string className, params object[] args) => _rawValue = new FREObject().Init(className, args);
 
         /// <summary>
-        /// 
+        /// Indicates whether an object has a specified property defined.
         /// </summary>
-        /// <param name="name"></param>
+        /// <param name="name">The property of the FREObject. </param>
         /// <returns></returns>
         public bool hasOwnProperty(string name) => _rawValue.Call("hasOwnProperty", name).AsBool();
 
