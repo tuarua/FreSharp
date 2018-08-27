@@ -6,7 +6,10 @@
 - Added FREArray.Append()
 - FREObject.AsColor(bool hasAlpha = true) hasAlpha default value is now TRUE
 - mark FreSharpHelper as internal
+- Add FreSharpLogger to trace any FREExceptions
+- Remove SendEvent method
 - Refactor
+- **C++ project now needs reference to ..\packages\TuaRua.FreSharp.2.0.0\FreSharp\$(PlatformTarget)\FreSharp.dll**
 
 ### 1.7.0
 - deprecate SendEvent, use DispatchEvent instead
