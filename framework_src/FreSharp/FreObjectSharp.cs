@@ -30,6 +30,7 @@ using System.Windows;
 using TuaRua.FreSharp.Geom;
 using FREObject = System.IntPtr;
 using Point = System.Windows.Point;
+
 // ReSharper disable InconsistentNaming
 
 namespace TuaRua.FreSharp {
@@ -38,17 +39,18 @@ namespace TuaRua.FreSharp {
     /// Wraps a FREObject in a dynamic object which allows us to perform easy gets and sets of it's properties
     /// </summary>
     public class FreObjectSharp : DynamicObject {
-        private static FREObject _rawValue;
+        private FREObject _rawValue;
+
+        /// <summary>
+        /// Returns the FREObject value of the FreObjectSharp
+        /// </summary>
+        /// <returns></returns>
+        public FREObject RawValue() => _rawValue;
 
         /// <summary>
         /// Returns the type of the FreObjectSharp
         /// </summary>
         public FreObjectTypeSharp Type() => FreSharpHelper.GetType(_rawValue);
-
-        /// <summary>
-        /// Converts the RawValue FREObject to a C# object
-        /// </summary>
-        public object Value => FreSharpHelper.GetAsObject(_rawValue);
 
         /// <summary>
         /// Create a FreObjectSharp from base class of FREObject
@@ -70,7 +72,8 @@ namespace TuaRua.FreSharp {
         /// <param name="className">Name of the Class</param>
         /// <param name="args">Arguments to pass to the Class</param>
         // ReSharper disable once InheritdocConsiderUsage
-        public FreObjectSharp(string className, params object[] args) => _rawValue = new FREObject().Init(className, args);
+        public FreObjectSharp(string className, params object[] args) =>
+            _rawValue = new FREObject().Init(className, args);
 
         /// <summary>
         /// Indicates whether an object has a specified property defined.
@@ -81,10 +84,6 @@ namespace TuaRua.FreSharp {
 
         /// <inheritdoc />
         public override bool TryGetMember(GetMemberBinder binder, out object result) {
-            if (binder.Name == "RawValue") {
-                result = _rawValue;
-                return true;
-            }
             result = FreSharpHelper.GetAsPrimitiveObject(_rawValue.GetProp(binder.Name));
             return true;
         }
@@ -100,6 +99,16 @@ namespace TuaRua.FreSharp {
             var type = binder.Type;
             if (type == typeof(FREObject)) {
                 result = _rawValue;
+                return true;
+            }
+
+            if (type == typeof(FreObjectSharp)) {
+                result = this;
+                return true;
+            }
+
+            if (type == typeof(FREArray)) {
+                result = new FREArray(_rawValue);
                 return true;
             }
 
@@ -123,7 +132,7 @@ namespace TuaRua.FreSharp {
                 return true;
             }
 
-            if (type == typeof(int) || type == typeof(long) || type == typeof(short)) {
+            if (type == typeof(int) || type == typeof(long) || type == typeof(short)) { //TODO short is not great
                 result = _rawValue.AsInt();
                 return true;
             }

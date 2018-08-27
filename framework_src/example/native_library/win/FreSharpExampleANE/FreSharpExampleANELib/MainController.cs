@@ -53,7 +53,8 @@ namespace FreExampleSharpLib {
             if (argv[0] == FREObject.Zero) return FREObject.Zero;
             var airDouble = argv[0].AsDouble();
             const double testDouble = 31.99;
-            Trace("Number passed from AIR as Double:", testDouble.Equals(airDouble) ? "PASS" : "FAIL", airDouble);
+
+            Trace("Number passed from AIR as Double:", airDouble, testDouble.Equals(airDouble) ? "✓" : "❌");
 
             const double sharpDouble = 34343.31;
             return sharpDouble.ToFREObject();
@@ -70,8 +71,8 @@ namespace FreExampleSharpLib {
             const int testInt = -54;
             const uint testUInt = 66;
 
-            Trace("Number passed from AIR as Int:", testInt.Equals(airInt) ? "PASS" : "FAIL", testInt);
-            Trace("Number passed from AIR as UInt:", testUInt.Equals(airUint) ? "PASS" : "FAIL", testUInt);
+            Trace("Number passed from AIR as Int:", testInt, testInt.Equals(airInt) ? "✓" : "❌");
+            Trace("Number passed from AIR as UInt:", testUInt, testUInt.Equals(airUint) ? "✓" : "❌");
 
             const int sharpInt = -666;
             return sharpInt.ToFREObject();
@@ -83,16 +84,20 @@ namespace FreExampleSharpLib {
                 return new FreException("Not enough args").RawValue;
             }
 
-            var inFre0 = new FREArray(argv[0]);
+            var airArray = new FREArray(argv[0]);
             var inFre1 = new FREArray(argv[1]);
             var inFre2 = new FREArray(argv[2]);
             var inFre3 = new FREArray(argv[3]);
 
-            var airArray = inFre0.ToArrayList();
-            var airArrayLen = inFre0.Length;
+            var airArrayList = airArray.AsArrayList();
+            Trace("Convert FREArray to ArrayList :", airArrayList.Count, airArray.Length.Equals(6) ? "✓" : "❌");
 
-            inFre0[1] = 123.ToFREObject();
-            foreach (var fre in inFre0) {
+            airArray.Append(77.ToFREObject());
+            airArray.Append(88);
+            Trace("Get FREArray length after 2 appends:", airArray.Length, airArray.Length.Equals(8) ? "✓" : "❌");
+
+            airArray[0] = 123.ToFREObject();
+            foreach (var fre in airArray) {
                 Trace("iterate over FREArray", fre.AsInt());
             }
 
@@ -100,22 +105,24 @@ namespace FreExampleSharpLib {
             var airVectorNumber = inFre2.AsDoubleArray();
             var airVectorBoolean = inFre3.AsBoolArray();
 
-            Trace("Array passed from AIR:", string.Join(",", airArray.ToArray()));
-            Trace("AIR Array length:", airArrayLen);
+            Trace("Vector.<String> passed from AIR :",
+                string.Join(",", airVectorString.ToArray()),
+                string.Join(",", airVectorString.ToArray()).Equals("a,b,c,d") ? "✓" : "❌");
 
-            Trace("Vector.<String> passed from AIR:", string.Join(",", airVectorString.ToArray()));
-            Trace("Vector.<Number> passed from AIR:", string.Join(",", airVectorNumber.ToArray()));
-            Trace("Vector.<Boolean> passed from AIR:", string.Join(",", airVectorBoolean.ToArray()));
+            Trace("Vector.<Number> passed from AIR :",
+                string.Join(",", airVectorNumber.ToArray()),
+                string.Join(",", airVectorNumber.ToArray()).Equals("1,0.5,2,3.3") ? "✓" : "❌");
+
+            Trace("Vector.<Boolean> passed from AIR :",
+                string.Join(",", airVectorBoolean.ToArray()),
+                string.Join(",", airVectorBoolean.ToArray()).Equals("True,True,False,True") ? "✓" : "❌");
 
             var newFreArray = new FREArray("Object", 5, true);
-            Trace("New Array of Objects should be 5?", newFreArray.Length);
+            Trace("New FREArray of fixed length :", newFreArray.Length, newFreArray.Length.Equals(5) ? "✓" : "❌");
 
-            var itemZero = inFre0[0];
-            var itemZeroVal = itemZero.AsInt();
-
-            Trace("AIR Array item 0 before change:", itemZeroVal);
-
-            inFre0.Set(0, 56);
+            airArray.Set(0, 56);
+            var itemZero = airArray[0].AsInt();
+            Trace("Set item 0 of FREArray:", itemZero, itemZero.Equals(56) ? "✓" : "❌");
 
             var marks = new[] {99, 98, 92, 97, 95};
             return marks.ToFREObject();
@@ -127,19 +134,26 @@ namespace FreExampleSharpLib {
             if (person == FREObject.Zero) return FREObject.Zero;
 
             var newPerson = new FREObject().Init("com.tuarua.Person");
-            Trace("newPerson.ToString()", newPerson.toString());
-            Trace("newPerson.hasOwnProperty('name')", newPerson.hasOwnProperty("name"));
-            Trace("We created a new person. type =", newPerson.Type());
+            Trace("New Person.ToString()", newPerson.toString());
+
+            Trace("New Person has property name:",
+                newPerson.hasOwnProperty("name"), newPerson.hasOwnProperty("name") ? "✓" : "❌");
+            Trace("New Person is of type CLASS:",
+                newPerson.Type(), newPerson.Type().Equals(FreObjectTypeSharp.Class) ? "✓" : "❌");
+
+            dynamic sharpPerson = new FreObjectSharp("com.tuarua.Person", "Ben McBobster", 80);
+            Trace("sharpPerson.RawValue.ToString()",
+                ((FREObject) sharpPerson.RawValue()).toString()); //case sensitive, calls as3 toString NOT c# ToString()
 
             var oldAge = person.GetProp("age").AsInt();
+            Trace("Get property as Int :", oldAge, oldAge.Equals(21) ? "✓" : "❌");
             var newAge = oldAge + 10;
             person.SetProp("age", newAge);
+            Trace("Set property to Int :", person.GetProp("age").AsInt(),
+                person.GetProp("age").AsInt().Equals(31) ? "✓" : "❌");
 
-            var personType = person.Type();
-            Trace($"person type is: {personType}");
-            Trace("current person age is: ", oldAge);
             var addition = person.Call("add", 100, 33);
-            Trace("result is: ", addition.AsInt());
+            Trace("Call add :", 131, addition.AsInt().Equals(133) ? "✓" : "❌");
 
             try {
                 var dictionary = person.AsDictionary();
@@ -147,43 +161,53 @@ namespace FreExampleSharpLib {
                 var city = (Dictionary<string, object>) dictionary["city"];
                 if (city == null) return person;
                 var name = city["name"];
-                Trace("what is the city name: ", name);
-
-                dynamic sharpPerson = new FreObjectSharp("com.tuarua.Person", "Ben McBobster", 80);
-                Trace("sharpPerson.RawValue.ToString()",
-                    ((FREObject) sharpPerson.RawValue).toString()); //case sensitive, calls as3 toString NOT c# ToString()
+                Trace("Get property from Dict :", name, name.Equals("Portland") ? "✓" : "❌");
 
                 var sharpPersonType = sharpPerson.Type();
-                Trace($"sharpPerson type is: {sharpPersonType}");
+                Trace("Dynamic Person is of type CLASS:",
+                    sharpPersonType, sharpPersonType.Equals(FreObjectTypeSharp.Class) ? "✓" : "❌");
+                Trace("Dynamic Person has property name:",
+                    sharpPerson.hasOwnProperty("name"), sharpPerson.hasOwnProperty("name") ? "✓" : "❌");
 
-                Trace("sharpPerson.hasOwnProperty(\"name\")", sharpPerson.hasOwnProperty("name"));
+                dynamic sharpCity = new FreObjectSharp("com.tuarua.City");
+                FreObjectTypeSharp sharpCityType = sharpCity.Type();
+
+                Trace("Dynamic City is of type CLASS:",
+                    sharpCityType, sharpCityType.Equals(FreObjectTypeSharp.Class) ? "✓" : "❌");
+
+                sharpCity.name = "San Francisco";
 
                 int sharpAge = sharpPerson.age;
                 string sharpName = sharpPerson.name;
                 string sharpOptional = sharpPerson.opt;
                 double sharpHeight = sharpPerson.height;
                 bool sharpIsMan = sharpPerson.isMan;
-                Trace("FreObjectSharp age 1", sharpAge);
-                Trace("FreObjectSharp name 1", sharpName);
-                Trace("FreObjectSharp opt 1 is null?:", sharpOptional == null);
-                Trace("FreObjectSharp height 1", sharpHeight);
-                Trace("FreObjectSharp isMan 1", sharpIsMan);
+
+                Trace("Dynamic age as int:", sharpAge, sharpAge.Equals(80) ? "✓" : "❌");
+                Trace("Dynamic name as string:", sharpName, sharpName.Equals("Ben McBobster") ? "✓" : "❌");
+                Trace("Dynamic Optional string:", sharpOptional == null,
+                    (sharpOptional == null).Equals(true) ? "✓" : "❌");
+                Trace("Dynamic height as double:", sharpHeight, sharpHeight.Equals(1.8) ? "✓" : "❌");
+                Trace("Dynamic isMan as bool:", sharpIsMan, sharpIsMan.Equals(false) ? "✓" : "❌");
 
                 sharpPerson.age = 999;
                 sharpPerson.height = 1.88;
                 sharpPerson.isMan = true;
+                sharpPerson.city = sharpCity;
 
-                Trace("FreObjectSharp age 2", (int) sharpPerson.age);
-                Trace("FreObjectSharp height 2", (double) sharpPerson.height);
-                Trace("FreObjectSharp isMan 2", (bool) sharpPerson.isMan);
+                Trace("Dynamic age as int:", (int) sharpPerson.age,
+                    ((int) sharpPerson.age).Equals(999) ? "✓" : "❌");
+                Trace("Dynamic height as double:", (double) sharpPerson.height,
+                    ((double) sharpPerson.height).Equals(1.88) ? "✓" : "❌");
+                Trace("Dynamic isMan as bool:",  (bool)sharpPerson.isMan, 
+                    ((bool)sharpPerson.isMan).Equals(true) ? "✓" : "❌");
 
                 sharpPerson.age = 111.ToFREObject();
                 sharpPerson.height = 2;
 
-                Trace("FreObjectSharp age 3", (int) sharpPerson.age);
-                Trace("FreObjectSharp height 3", (double) sharpPerson.height);
-                var sharpNameCity = (FREObject) sharpPerson.city;
-                Trace("sharpNameCity", sharpNameCity.toString());
+                Trace("Dynamic age as int:", (int)sharpPerson.age, ((int)sharpPerson.age).Equals(111) ? "✓" : "❌");
+                Trace("Dynamic height as double:", (double)sharpPerson.height,
+                    ((double)sharpPerson.height).Equals(2) ? "✓" : "❌");
             }
             catch (Exception e) {
                 Trace(e.GetType());
@@ -192,16 +216,18 @@ namespace FreExampleSharpLib {
                 Trace(e.StackTrace);
             }
 
-            return person;
+            return sharpPerson.RawValue();
         }
 
         private FREObject RunExtensibleTests(FREContext ctx, uint argc, FREObject[] argv) {
             Trace("***********Start Extensible test***********");
             var rectangle = argv[0].AsRect();
-            rectangle.Width = 999;
-            rectangle.Height = 111;
-
-            var unused = new Point(10, 88).ToFREObject();
+            Trace("Rect :", rectangle, rectangle.X.Equals(50.9) ? "✓" : "❌");
+            var frePoint = new Point(10, 88).ToFREObject();
+            Trace("Point :", frePoint.toString(),
+                frePoint.GetProp("x").AsInt() == 10 && frePoint.GetProp("y").AsInt() == 88
+                    ? "✓"
+                    : "❌");
             return rectangle.ToFREObject();
         }
 
@@ -256,7 +282,8 @@ namespace FreExampleSharpLib {
             var byteData = ba.Bytes;
             var base64Encoded = Convert.ToBase64String(byteData);
             ba.Release();
-            Trace("Encoded to Base64: ", base64Encoded);
+            Trace("Base64 :", base64Encoded,
+                base64Encoded.Equals("QyMgaW4gYW4gQU5FLiBTYXkgd2hhYWFhdCE=") ? "✓" : "❌");
             return FREObject.Zero;
         }
 
@@ -279,13 +306,11 @@ namespace FreExampleSharpLib {
 
         private FREObject RunDateTests(FREContext ctx, uint argc, FREObject[] argv) {
             var airDate = argv[0].AsDateTime();
-            Trace(airDate.Day, airDate.Month, airDate.Year, airDate.Hour, airDate.Minute);
-            return new DateTime(1990, 11, 25, 23, 19, 15, 0).ToFREObject();
+            return airDate.ToFREObject();
         }
 
         private FREObject RunColorTests(FREContext ctx, uint argc, FREObject[] argv) {
             var airColor = argv[0].AsColor();
-            Trace("A", airColor.A, "R", airColor.R, "G", airColor.G, "B", airColor.B);
             return Color.FromArgb(airColor.A, airColor.R, airColor.G, airColor.B).ToFREObject();
         }
 

@@ -12,17 +12,11 @@ namespace TuaRua.FreSharp {
     public class FREArray : IEnumerable<FREObject> {
         private static FreSharpLogger Logger => FreSharpLogger.GetInstance();
 
-        /// <inheritdoc />
-        /// <summary>
-        /// Creates an Empty C# FreArray.
-        /// </summary>
-        public FREArray() { }
-
         /// <summary>
         /// Returns the associated C FREObject of the C# FREObject.
         /// </summary>
         /// <returns></returns>
-        public FREObject RawValue { get; set; } = FREObject.Zero;
+        public FREObject RawValue { get; }
 
         /// <inheritdoc />
         /// <summary>
@@ -59,11 +53,10 @@ namespace TuaRua.FreSharp {
         /// Creates a FREArray from a C# int[]
         /// </summary>
         /// <param name="intArray"></param>
-        public FREArray(IReadOnlyList<int> intArray) {
+        public FREArray(IEnumerable<int> intArray) {
             RawValue = new FREObject().Init("Array");
-            var count = intArray.Count;
-            for (var i = 0; i < count; i++) {
-                Set((uint) i, intArray[i]);
+            foreach (var v in intArray) {
+                Append(v);
             }
         }
 
@@ -72,11 +65,10 @@ namespace TuaRua.FreSharp {
         /// Creates a FREArray from a C# double[]
         /// </summary>
         /// <param name="doubleArray"></param>
-        public FREArray(IReadOnlyList<double> doubleArray) {
+        public FREArray(IEnumerable<double> doubleArray) {
             RawValue = new FREObject().Init("Array");
-            var count = doubleArray.Count;
-            for (var i = 0; i < count; i++) {
-                Set((uint) i, doubleArray[i]);
+            foreach (var v in doubleArray) {
+                Append(v);
             }
         }
 
@@ -85,11 +77,10 @@ namespace TuaRua.FreSharp {
         /// Creates a FREArray from a C# bool[]
         /// </summary>
         /// <param name="boolArray"></param>
-        public FREArray(IReadOnlyList<bool> boolArray) {
+        public FREArray(IEnumerable<bool> boolArray) {
             RawValue = new FREObject().Init("Array");
-            var count = boolArray.Count;
-            for (var i = 0; i < count; i++) {
-                Set((uint) i, boolArray[i]);
+            foreach (var v in boolArray) {
+                Append(v);
             }
         }
 
@@ -98,11 +89,10 @@ namespace TuaRua.FreSharp {
         /// Creates a FREArray from a C# string[]
         /// </summary>
         /// <param name="stringArray"></param>
-        public FREArray(IReadOnlyList<string> stringArray) {
+        public FREArray(IEnumerable<string> stringArray) {
             RawValue = new FREObject().Init("Array");
-            var count = stringArray.Count;
-            for (var i = 0; i < count; i++) {
-                Set((uint) i, stringArray[i]);
+            foreach (var v in stringArray) {
+                Append(v);
             }
         }
 
@@ -118,6 +108,14 @@ namespace TuaRua.FreSharp {
                 Logger.Log("cannot get length of array", status);
                 return 0;
             }
+        }
+
+        /// <summary>
+        /// Appends the item to the FREArray
+        /// </summary>
+        /// <param name="value"></param>
+        public void Append(object value) {
+            Set(Length, value);
         }
 
         /// <summary>

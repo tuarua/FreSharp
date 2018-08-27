@@ -58,7 +58,7 @@ public class Main extends Sprite {
             var person:Person = new Person();
             person.age = 21;
             person.name = "Tom";
-            person.city.name = "Dunleer";
+            person.city.name = "Portland";
 
 
             var resultString:String = ane.runStringTests("Björk Guðmundsdóttir Sinéad O’Connor 久保田  " +
@@ -137,11 +137,11 @@ public class Main extends Sprite {
             var outData:String = ane.runDataTests(inData) as String;
             textField.text += outData + "\n";*/
 
-            var returnedDate:Date = ane.runDateTests(new Date());
-            trace("returnedDate:", returnedDate);
+            var testDate:Date = new Date(1990, 5, 13, 8, 59, 3);
 
-            trace("GREEN", GREEN, GREEN == ane.runColorTests(GREEN));
-            trace("HALF_GREEN", HALF_GREEN, HALF_GREEN == ane.runColorTests(HALF_GREEN));
+            trace("Date returned is same", testDate.time == ane.runDateTests(testDate).time ? "✓" : "❌");
+            trace("GREEN", GREEN, GREEN == ane.runColorTests(GREEN) ? "✓" : "❌");
+            trace("HALF_GREEN", HALF_GREEN, HALF_GREEN == ane.runColorTests(HALF_GREEN) ? "✓" : "❌");
 
             addChild(textField);
 

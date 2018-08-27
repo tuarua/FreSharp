@@ -224,7 +224,7 @@ namespace TuaRua.FreSharp {
         /// </summary>
         /// <param name="inFre"></param>
         /// <returns></returns>
-        public static ArrayList ToArrayList(this FREArray inFre) => inFre.AsArrayList();
+        public static ArrayList ToArrayList(this FREArray inFre) => inFre.AsArrayList(); //TODO can I delete this
 
         /// <summary>
         /// Converts a FREObject to a C# int
@@ -232,6 +232,13 @@ namespace TuaRua.FreSharp {
         /// <param name="inFre"></param>
         /// <returns></returns>
         public static int AsInt(this FREObject inFre) => FreSharpHelper.GetAsInt(inFre);
+
+        /// <summary>
+        /// Converts a FREObject to a C# short
+        /// </summary>
+        /// <param name="inFre"></param>
+        /// <returns></returns>
+        public static short AsShort(this FREObject inFre) => (short)FreSharpHelper.GetAsInt(inFre);
 
         /// <summary>
         /// Initialise a System.Drawing.Color from a FREObject.

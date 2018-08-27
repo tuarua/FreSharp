@@ -1,7 +1,9 @@
 ### 2.0.0
+- Fix FREObject.AsDateTime() UTC bug
 - repurpose FreObjectSharp for use as a dynamic object
 - Added FREObject.toString()
 - Added FREObject.hasOwnProperty(string name)
+- Added FREArray.Append()
 - FREObject.AsColor(bool hasAlpha = true) hasAlpha default value is now TRUE
 - mark FreSharpHelper as internal
 - Refactor

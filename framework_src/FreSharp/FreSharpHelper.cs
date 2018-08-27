@@ -29,6 +29,14 @@ namespace TuaRua.FreSharp {
                 return (FREObject) value;
             }
 
+            if (type == typeof(FREArray)) {
+                return ((FREArray) value).RawValue;
+            }
+
+            if (type == typeof(FreObjectSharp)) {
+                return ((FreObjectSharp) value).RawValue();
+            }
+
             if (type == typeof(int) || type == typeof(long) || type == typeof(short)) {
                 return NewObject((int) value);
             }
@@ -65,7 +73,7 @@ namespace TuaRua.FreSharp {
                 return ((Color) value).ToFREObject();
             }
 
-            return  FREObject.Zero;
+            return FREObject.Zero;
         }
 
         internal static FREObject[] ArgsToArgv(ArrayList args) {
@@ -193,7 +201,7 @@ namespace TuaRua.FreSharp {
         }
 
         internal static DateTime GetAsDateTime(FREObject rawValue) =>
-            new DateTime(1970, 1, 1, 0, 0, 0, 0).AddSeconds(rawValue.GetProp("time").AsDouble() / 1000);
+            new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc).AddSeconds(rawValue.GetProp("time").AsDouble() / 1000);
 
         internal static FreObjectTypeSharp GetActionscriptType(FREObject rawValue) {
             var aneUtils = new FREObject().Init("com.tuarua.fre.ANEUtils");
@@ -277,15 +285,16 @@ namespace TuaRua.FreSharp {
         }
 
         internal static object GetAsPrimitiveObject(FREObject rawValue) {
-            Console.WriteLine("GetAsPrimitiveObject: " + GetType(rawValue));
+            // Console.WriteLine("GetAsPrimitiveObject: " + GetType(rawValue));
             switch (GetType(rawValue)) {
                 case FreObjectTypeSharp.Class:
                 case FreObjectTypeSharp.Object:
-                case FreObjectTypeSharp.Vector:
-                case FreObjectTypeSharp.Array:
                 case FreObjectTypeSharp.Bytearray:
                 case FreObjectTypeSharp.Bitmapdata:
                     return rawValue;
+                case FreObjectTypeSharp.Vector:
+                case FreObjectTypeSharp.Array:
+                    return new FREArray(rawValue);
                 case FreObjectTypeSharp.Number:
                     return GetAsDouble(rawValue);
                 case FreObjectTypeSharp.String:
