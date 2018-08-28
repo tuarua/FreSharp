@@ -119,6 +119,14 @@ namespace TuaRua.FreSharp {
         }
 
         /// <summary>
+        /// Appends the item to the FREArray
+        /// </summary>
+        /// <param name="value"></param>
+        public void Append(FREObject value) {
+            Set(Length, value);
+        }
+
+        /// <summary>
         /// Returns the C# FreObject from the C# FreArray at i.
         /// </summary>
         /// <param name="i"></param>
