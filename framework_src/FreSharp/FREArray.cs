@@ -1,6 +1,27 @@
-﻿using System;
+﻿#region License
+
+// Copyright 2017 Tua Rua Ltd.
+// 
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
+// 
+//  http://www.apache.org/licenses/LICENSE-2.0
+// 
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
+// 
+//  All Rights Reserved. Tua Rua Ltd.
+
+#endregion
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using TuaRua.FreSharp.Display;
 using TuaRua.FreSharp.Geom;
 using FREObject = System.IntPtr;
@@ -8,7 +29,10 @@ using FREObject = System.IntPtr;
 // ReSharper disable InconsistentNaming
 
 namespace TuaRua.FreSharp {
-    /// <summary></summary>
+    /// <summary>
+    /// 
+    /// </summary>
+    [SuppressMessage("ReSharper", "UnusedMember.Global")]
     public class FREArray : IEnumerable<FREObject> {
         private static FreSharpLogger Logger => FreSharpLogger.GetInstance();
 
@@ -41,58 +65,58 @@ namespace TuaRua.FreSharp {
         /// <summary>
         /// Creates a C# FREArray with a given class name. Do not specify the &lt;Vector. prefix.
         /// </summary>
-        /// <param name="className"></param>
-        /// <param name="length"></param>
-        /// <param name="fixedSize"></param>
+        /// <param name="className">name of AS3 class to create.</param>
+        /// <param name="length">number of elements in the array.</param>
+        /// <param name="fixedSize">whether the array is fixed.</param>
         public FREArray(string className, int length = 0, bool fixedSize = false) {
             RawValue = new FREObject().Init("Vector.<" + className + ">", length, fixedSize);
         }
 
         /// <inheritdoc />
         /// <summary>
-        /// Creates a FREArray from a C# int[]
+        /// Creates a FREArray from a C# int[].
         /// </summary>
         /// <param name="intArray"></param>
         public FREArray(IEnumerable<int> intArray) {
             RawValue = new FREObject().Init("Array");
             foreach (var v in intArray) {
-                Append(v);
+                Push(v);
             }
         }
 
         /// <inheritdoc />
         /// <summary>
-        /// Creates a FREArray from a C# double[]
+        /// Creates a FREArray from a C# double[].
         /// </summary>
         /// <param name="doubleArray"></param>
         public FREArray(IEnumerable<double> doubleArray) {
             RawValue = new FREObject().Init("Array");
             foreach (var v in doubleArray) {
-                Append(v);
+                Push(v);
             }
         }
 
         /// <inheritdoc />
         /// <summary>
-        /// Creates a FREArray from a C# bool[]
+        /// Creates a FREArray from a C# bool[].
         /// </summary>
         /// <param name="boolArray"></param>
         public FREArray(IEnumerable<bool> boolArray) {
             RawValue = new FREObject().Init("Array");
             foreach (var v in boolArray) {
-                Append(v);
+                Push(v);
             }
         }
 
         /// <inheritdoc />
         /// <summary>
-        /// Creates a FREArray from a C# string[]
+        /// Creates a FREArray from a C# string[].
         /// </summary>
         /// <param name="stringArray"></param>
         public FREArray(IEnumerable<string> stringArray) {
             RawValue = new FREObject().Init("Array");
             foreach (var v in stringArray) {
-                Append(v);
+                Push(v);
             }
         }
 
@@ -111,19 +135,22 @@ namespace TuaRua.FreSharp {
         }
 
         /// <summary>
-        /// Appends the item to the FREArray
+        /// Adds one or more elements to the end of an array and returns the new length of the array.
         /// </summary>
-        /// <param name="value"></param>
-        public void Append(object value) {
-            Set(Length, value);
-        }
-
-        /// <summary>
-        /// Appends the item to the FREArray
-        /// </summary>
-        /// <param name="value"></param>
-        public void Append(FREObject value) {
-            Set(Length, value);
+        /// <param name="args">One or more values to append to the array.</param>
+        public void Push(params object[] args) {
+            uint resultPtr = 0;
+            var argsArr = new ArrayList();
+            if (args != null) {
+                for (var i = 0; i < args.Length; i++) {
+                    argsArr.Add(args.ElementAt(i));
+                }
+            }
+            var ret = FreSharpHelper.Core.callMethod(RawValue, "push", FreSharpHelper.ArgsToArgv(argsArr),
+                FreSharpHelper.GetArgsC(argsArr), ref resultPtr);
+            var status = (FreResultSharp)resultPtr;
+            if (status == FreResultSharp.Ok) return;
+            Logger.Log("cannot call method push on FREArray", status, ret);
         }
 
         /// <summary>
@@ -318,7 +345,7 @@ namespace TuaRua.FreSharp {
         }
 
         /// <summary>
-        /// Provides bracket access to <see cref="FREArray"/>
+        /// Provides bracket access to <see cref="FREArray"/>.
         /// </summary>
         /// <param name="i"></param>
         public FREObject this[uint i] {

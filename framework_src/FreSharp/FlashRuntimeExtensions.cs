@@ -14,15 +14,9 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 // 
-//  Additional Terms
-//  No part, or derivative of this Air Native Extensions's code is permitted 
-//  to be sold as the basis of a commercially packaged Air Native Extension which 
-//  undertakes the same purpose as this software. That is, a WebView for Windows, 
-//  OSX and/or iOS and/or Android.
 //  All Rights Reserved. Tua Rua Ltd.
 
 #endregion
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -30,14 +24,14 @@ using System.Drawing;
 using System.Linq;
 using TuaRua.FreSharp.Display;
 using FREObject = System.IntPtr;
-
+// ReSharper disable UnusedMember.Global
 // ReSharper disable InconsistentNaming
 
 namespace TuaRua.FreSharp {
     /// <summary>
     /// 
     /// </summary>
-    public static class FreSharpExtensions {
+    public static class FlashRuntimeExtensions {
         private static FreSharpLogger Logger => FreSharpLogger.GetInstance();
 
         /// <summary>
@@ -71,41 +65,39 @@ namespace TuaRua.FreSharp {
         /// <param name="inFre"></param>
         /// <param name="name">The property of the FREObject. </param>
         /// <returns></returns>
-#pragma warning disable IDE1006 // Naming Styles
         public static bool hasOwnProperty(this FREObject inFre, string name) =>
             inFre.Call("hasOwnProperty", name).AsBool();
-#pragma warning restore IDE1006 // Naming Styles
 
         /// <summary>
-        /// Converts a FREObject to a DateTime
+        /// Converts a FREObject to a DateTime.
         /// </summary>
         /// <param name="inFre"></param>
         /// <returns></returns>
         public static DateTime AsDateTime(this FREObject inFre) => FreSharpHelper.GetAsDateTime(inFre);
 
         /// <summary>
-        /// Converts a C# DateTime to a FREObject
+        /// Converts a C# DateTime to a FREObject.
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
         public static FREObject ToFREObject(this DateTime value) => FreSharpHelper.NewObject(value);
 
         /// <summary>
-        /// Converts a FREObject to a C# bool
+        /// Converts a FREObject to a C# bool.
         /// </summary>
         /// <param name="inFre"></param>
         /// <returns></returns>
         public static bool AsBool(this FREObject inFre) => FreSharpHelper.GetAsBool(inFre);
 
         /// <summary>
-        /// Converts a C# bool to a FREObject
+        /// Converts a C# bool to a FREObject.
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
         public static FREObject ToFREObject(this bool value) => FreSharpHelper.NewObject(value);
 
         /// <summary>
-        /// Gets the property of a FREObject
+        /// Gets the property of a FREObject.
         /// </summary>
         /// <param name="inFre"></param>
         /// <param name="name">Name of the property</param>
@@ -115,38 +107,38 @@ namespace TuaRua.FreSharp {
         }
 
         /// <summary>
-        /// Sets the property of a FREObject
+        /// Sets the property of a FREObject.
         /// </summary>
         /// <param name="inFre"></param>
-        /// <param name="name">Name of the property</param>
-        /// <param name="value">Value of the property</param>
+        /// <param name="name">Name of the property.</param>
+        /// <param name="value">Value of the property.</param>
         public static void SetProp(this FREObject inFre, string name, object value) {
             FreSharpHelper.SetProperty(inFre, name, value);
         }
 
         /// <summary>
-        /// Sets the property of a FREObject
+        /// Sets the property of a FREObject.
         /// </summary>
         /// <param name="inFre"></param>
-        /// <param name="name">Name of the property</param>
-        /// <param name="value">Value of the property</param>
+        /// <param name="name">Name of the property.</param>
+        /// <param name="value">Value of the property.</param>
         public static void SetProp(this FREObject inFre, string name, FREObject value) {
             FreSharpHelper.SetProperty(inFre, name, value);
         }
 
         /// <summary>
-        /// Returns the type of the FREObject
+        /// Returns the type of the FREObject.
         /// </summary>
         /// <param name="inFre"></param>
         /// <returns></returns>
         public static FreObjectTypeSharp Type(this FREObject inFre) => FreSharpHelper.GetType(inFre);
 
         /// <summary>
-        /// Calls a method on a FREObject
+        /// Calls a method on a FREObject.
         /// </summary>
         /// <param name="inFre"></param>
-        /// <param name="method">The method name</param>
-        /// <param name="args">Arguments to pass to the method</param>
+        /// <param name="method">The method name.</param>
+        /// <param name="args">Arguments to pass to the method.</param>
         /// <returns></returns>
         public static FREObject Call(this FREObject inFre, string method, params object[] args) {
             uint resultPtr = 0;
@@ -167,11 +159,11 @@ namespace TuaRua.FreSharp {
         }
 
         /// <summary>
-        /// Calls a method on a FREArray
+        /// Calls a method on a FREArray.
         /// </summary>
         /// <param name="inFre"></param>
-        /// <param name="methodName">The method name</param>
-        /// <param name="args">Arguments to pass to the method</param>
+        /// <param name="methodName">The method name.</param>
+        /// <param name="args">Arguments to pass to the method.</param>
         /// <returns></returns>
         public static FREArray Call(this FREObject inFre, string methodName, ArrayList args) {
             uint resultPtr = 0;
@@ -185,56 +177,56 @@ namespace TuaRua.FreSharp {
         }
 
         /// <summary>
-        /// Converts a C# int[] to a FREObject
+        /// Converts a C# int[] to a FREObject.
         /// </summary>
         /// <param name="arr"></param>
         /// <returns></returns>
         public static FREObject ToFREObject(this int[] arr) => new FREArray(arr).RawValue;
 
         /// <summary>
-        /// Converts a C# bool[] to a FREObject
+        /// Converts a C# bool[] to a FREObject.
         /// </summary>
         /// <param name="arr"></param>
         /// <returns></returns>
         public static FREObject ToFREObject(this bool[] arr) => new FREArray(arr).RawValue;
 
         /// <summary>
-        /// Converts a C# double[] to a FREObject
+        /// Converts a C# double[] to a FREObject.
         /// </summary>
         /// <param name="arr"></param>
         /// <returns></returns>
         public static FREObject ToFREObject(this double[] arr) => new FREArray(arr).RawValue;
 
         /// <summary>
-        /// Converts a C# string[] to a FREObject
+        /// Converts a C# string[] to a FREObject.
         /// </summary>
         /// <param name="arr"></param>
         /// <returns></returns>
         public static FREObject ToFREObject(this string[] arr) => new FREArray(arr).RawValue;
 
         /// <summary>
-        /// Converts a FREObject to an ArrayList
+        /// Converts a FREObject to an ArrayList.
         /// </summary>
         /// <param name="inFre"></param>
         /// <returns></returns>
         public static ArrayList ToArrayList(this FREObject inFre) => new FREArray(inFre).AsArrayList();
 
         /// <summary>
-        /// Converts a FREArray to an ArrayList
+        /// Converts a FREArray to an ArrayList.
         /// </summary>
         /// <param name="inFre"></param>
         /// <returns></returns>
         public static ArrayList ToArrayList(this FREArray inFre) => inFre.AsArrayList(); //TODO can I delete this
 
         /// <summary>
-        /// Converts a FREObject to a C# int
+        /// Converts a FREObject to a C# int.
         /// </summary>
         /// <param name="inFre"></param>
         /// <returns></returns>
         public static int AsInt(this FREObject inFre) => FreSharpHelper.GetAsInt(inFre);
 
         /// <summary>
-        /// Converts a FREObject to a C# short
+        /// Converts a FREObject to a C# short.
         /// </summary>
         /// <param name="inFre"></param>
         /// <returns></returns>
@@ -244,7 +236,7 @@ namespace TuaRua.FreSharp {
         /// Initialise a System.Drawing.Color from a FREObject.
         /// </summary>
         /// <param name="inFre"></param>
-        /// <param name="hasAlpha">Set to true when the AS3 uint is in ARGB format</param>
+        /// <param name="hasAlpha">Set to true when the AS3 uint is in ARGB format.</param>
         /// <returns></returns>
         public static Color AsColor(this FREObject inFre, bool hasAlpha = true) {
             var rgb = inFre.AsUInt();
@@ -264,7 +256,7 @@ namespace TuaRua.FreSharp {
 
 
         /// <summary>
-        /// Converts a C# System.Drawing.Color to a FREObject
+        /// Converts a C# System.Drawing.Color to a FREObject.
         /// </summary>
         /// <param name="c"></param>
         /// <returns></returns>
@@ -274,7 +266,7 @@ namespace TuaRua.FreSharp {
                                                                                               | (c.B << 0)));
 
         /// <summary>
-        /// Converts a FREObject to a C# Dictionary&lt;string, object&gt;
+        /// Converts a FREObject to a C# Dictionary&lt;string, object&gt;.
         /// </summary>
         /// <param name="inFre"></param>
         /// <returns></returns>
@@ -282,81 +274,81 @@ namespace TuaRua.FreSharp {
             FreSharpHelper.GetAsDictionary(inFre);
 
         /// <summary>
-        /// Converts a C# int to a FREObject
+        /// Converts a C# int to a FREObject.
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
         public static FREObject ToFREObject(this int value) => FreSharpHelper.NewObject(value);
 
         /// <summary>
-        /// Converts a FREObject to a C# uint
+        /// Converts a FREObject to a C# uint.
         /// </summary>
         /// <param name="inFre"></param>
         /// <returns></returns>
         public static uint AsUInt(this FREObject inFre) => FreSharpHelper.GetAsUInt(inFre);
 
         /// <summary>
-        /// Converts a C# uint to a FREObject
+        /// Converts a C# uint to a FREObject.
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
         public static FREObject ToFREObject(this uint value) => FreSharpHelper.NewObject(value);
 
         /// <summary>
-        /// Converts a FREObject to a C# double
+        /// Converts a FREObject to a C# double.
         /// </summary>
         /// <param name="inFre"></param>
         /// <returns></returns>
         public static double AsDouble(this FREObject inFre) => FreSharpHelper.GetAsDouble(inFre);
 
         /// <summary>
-        /// Converts a C# double to a FREObject
+        /// Converts a C# double to a FREObject.
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
         public static FREObject ToFREObject(this double value) => FreSharpHelper.NewObject(value);
 
         /// <summary>
-        /// Converts a C# float to a FREObject
+        /// Converts a C# float to a FREObject.
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
         public static FREObject ToFREObject(this float value) => FreSharpHelper.NewObject(value);
 
         /// <summary>
-        /// Converts a C# short to a FREObject
+        /// Converts a C# short to a FREObject.
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
         public static FREObject ToFREObject(this short value) => FreSharpHelper.NewObject(value);
 
         /// <summary>
-        /// Converts a C# long to a FREObject
+        /// Converts a C# long to a FREObject.
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
         public static FREObject ToFREObject(this long value) => FreSharpHelper.NewObject((int) value);
 
         /// <summary>
-        /// Converts a FREObject to a C# Bitmap
+        /// Converts a FREObject to a C# Bitmap.
         /// </summary>
         /// <param name="inFre"></param>
         /// <returns></returns>
         public static Bitmap AsBitmap(this FREObject inFre) => new FreBitmapDataSharp(inFre).AsBitmap();
 
         /// <summary>
-        /// Converts a C# Bitmap to a FREObject
+        /// Converts a C# Bitmap to a FREObject.
         /// </summary>
         /// <param name="bitmap"></param>
         /// <returns></returns>
         public static FREObject ToFREObject(this Bitmap bitmap) => new FreBitmapDataSharp(bitmap).RawValue;
 
         /// <summary>
-        /// Creates a FREObject
+        /// Creates a FREObject.
         /// </summary>
         /// <param name="value"></param>
-        /// <param name="className">Name of the Class</param>
-        /// <param name="args">Arguments to pass to the Class</param>
+        /// <param name="className">Name of the Class.</param>
+        /// <param name="args">Arguments to pass to the Class.</param>
         /// <returns></returns>
         public static FREObject Init(this FREObject value, string className, params object[] args) {
             uint resultPtr = 0;
@@ -377,10 +369,10 @@ namespace TuaRua.FreSharp {
 
 
         /// <summary>
-        /// Creates a FREObject
+        /// Creates a FREObject.
         /// </summary>
         /// <param name="value"></param>
-        /// <param name="name">Name of the Class</param>
+        /// <param name="name">Name of the Class.</param>
         /// <returns></returns>
         public static FREObject Init(this FREObject value, string name) {
             uint resultPtr = 0;

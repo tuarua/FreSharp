@@ -87,7 +87,7 @@
     <Compile Include="FreObjectTypeSharp.cs" />
     <Compile Include="FreResultSharp.cs" />
     <Compile Include="FreSharpController.cs" />
-    <Compile Include="FreSharpExtensions.cs" />
+    <Compile Include="FlashRuntimeExtensions.cs" />
     <Compile Include="FreSharpHelper.cs" />
     <Compile Include="FreSharpLogger.cs" />
     <Compile Include="FreSharpMainController.cs" />

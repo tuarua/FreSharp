@@ -14,11 +14,6 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 // 
-//  Additional Terms
-//  No part, or derivative of this Air Native Extensions's code is permitted 
-//  to be sold as the basis of a commercially packaged Air Native Extension which 
-//  undertakes the same purpose as this software. That is, a WebView for Windows, 
-//  OSX and/or iOS and/or Android.
 //  All Rights Reserved. Tua Rua Ltd.
 
 #endregion
@@ -30,7 +25,7 @@ using System.Windows;
 using TuaRua.FreSharp.Geom;
 using FREObject = System.IntPtr;
 using Point = System.Windows.Point;
-
+// ReSharper disable All
 // ReSharper disable InconsistentNaming
 
 namespace TuaRua.FreSharp {
@@ -42,34 +37,34 @@ namespace TuaRua.FreSharp {
         private FREObject _rawValue;
 
         /// <summary>
-        /// Returns the FREObject value of the FreObjectSharp
+        /// Returns the FREObject value of the FreObjectSharp.
         /// </summary>
         /// <returns></returns>
         public FREObject RawValue() => _rawValue;
 
         /// <summary>
-        /// Returns the type of the FreObjectSharp
+        /// Returns the type of the FreObjectSharp.
         /// </summary>
         public FreObjectTypeSharp Type() => FreSharpHelper.GetType(_rawValue);
 
         /// <summary>
-        /// Create a FreObjectSharp from base class of FREObject
+        /// Create a FreObjectSharp from base class of FREObject.
         /// </summary>
         /// <param name="freObject"></param>
         // ReSharper disable once InheritdocConsiderUsage
         public FreObjectSharp(FREObject freObject) => _rawValue = freObject;
 
         /// <summary>
-        /// Creates a FreObjectSharp
+        /// Creates a FreObjectSharp.
         /// </summary>
-        /// <param name="className">Name of the Class</param>
+        /// <param name="className">Name of the Class.</param>
         // ReSharper disable once InheritdocConsiderUsage
         public FreObjectSharp(string className) => _rawValue = new FREObject().Init(className);
 
         /// <summary>
-        /// Creates a FreObjectSharp
+        /// Creates a FreObjectSharp.
         /// </summary>
-        /// <param name="className">Name of the Class</param>
+        /// <param name="className">Name of the Class.</param>
         /// <param name="args">Arguments to pass to the Class</param>
         // ReSharper disable once InheritdocConsiderUsage
         public FreObjectSharp(string className, params object[] args) =>

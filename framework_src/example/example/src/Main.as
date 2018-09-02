@@ -41,8 +41,7 @@ public class Main extends Sprite {
         this.addEventListener(Event.ACTIVATE, onActivated);
 
     }
-
-
+    
     private function onActivated(event:Event):void {
         if (!hasActivated) {
             var tf:TextFormat = new TextFormat();
@@ -139,9 +138,9 @@ public class Main extends Sprite {
 
             var testDate:Date = new Date(1990, 5, 13, 8, 59, 3);
 
-            trace("Date returned is same", testDate.time == ane.runDateTests(testDate).time ? "✓" : "❌");
-            trace("GREEN", GREEN, GREEN == ane.runColorTests(GREEN) ? "✓" : "❌");
-            trace("HALF_GREEN", HALF_GREEN, HALF_GREEN == ane.runColorTests(HALF_GREEN) ? "✓" : "❌");
+            trace("Date returned is same", testDate.time == ane.runDateTests(testDate).time ? "✅" : "❌");
+            trace("GREEN", GREEN, GREEN == ane.runColorTests(GREEN) ? "✅" : "❌");
+            trace("HALF_GREEN", HALF_GREEN, HALF_GREEN == ane.runColorTests(HALF_GREEN) ? "✅" : "❌");
 
             addChild(textField);
 

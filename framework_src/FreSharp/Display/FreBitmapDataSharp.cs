@@ -1,9 +1,29 @@
-﻿using System;
+﻿#region License
+
+// Copyright 2017 Tua Rua Ltd.
+// 
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
+// 
+//  http://www.apache.org/licenses/LICENSE-2.0
+// 
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
+// 
+//  All Rights Reserved. Tua Rua Ltd.
+
+#endregion
+using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using FRESharpCore;
-
+using FREObject = System.IntPtr;
+// ReSharper disable UnusedMember.Global
 namespace TuaRua.FreSharp.Display {
     /// <summary>
     /// FreBitmapDataSharp wraps a C FREBitmapData with helper methods.
@@ -13,9 +33,8 @@ namespace TuaRua.FreSharp.Display {
         /// Returns the associated C FREBitmapData2 of the C# FREBitmapData.
         /// </summary>
         /// <returns></returns>
-        public IntPtr RawValue { get; set; } = IntPtr.Zero;
+        public FREObject RawValue { get; }
 
-        //private readonly IntPtr _freBitmapData = IntPtr.Zero;
         private readonly FREBitmapDataCLR _bmd = new FREBitmapDataCLR();
 
         /// <summary>
@@ -68,15 +87,10 @@ namespace TuaRua.FreSharp.Display {
         public IntPtr Bits32;
 
         /// <summary>
-        /// Creates an empty C# FREBitmapData
-        /// </summary>
-        public FreBitmapDataSharp() { }
-
-        /// <summary>
         /// Creates a C# FREBitmapData from a C FREBitmapData2
         /// </summary>
         /// <param name="freBitmapData"></param>
-        public FreBitmapDataSharp(IntPtr freBitmapData) {
+        public FreBitmapDataSharp(FREObject freBitmapData) {
             RawValue = freBitmapData;
         }
 

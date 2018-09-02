@@ -106,6 +106,9 @@ foreach (var fre in freIntArray) {
 // set element 1 to 123
 freIntArray[1] = 123.ToFREObject();
 
+// push 2 elements to FREArray
+freIntArray.Push(22, 33);
+
 // return C# [int] to AIR
 var marks = new[] {99, 98, 92, 97, 95};
 return marks.ToFREObject();
@@ -171,6 +174,10 @@ public static class FrePoint {
     }
 }
 ```
+----------
+
+### Required AS3 classes
+com.tuarua.fre.ANEUtils.as and com.tuarua.fre.ANEError.as are required by FreSwift and should be included in the AS3 library of your ANE
 
 ### Tech
 

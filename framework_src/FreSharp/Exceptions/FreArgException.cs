@@ -14,22 +14,18 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 // 
-//  Additional Terms
-//  No part, or derivative of this Air Native Extensions's code is permitted 
-//  to be sold as the basis of a commercially packaged Air Native Extension which 
-//  undertakes the same purpose as this software. That is, a WebView for Windows, 
-//  OSX and/or iOS and/or Android.
 //  All Rights Reserved. Tua Rua Ltd.
 
 #endregion
-
 using System;
+using System.Diagnostics.CodeAnalysis;
 using FREObject = System.IntPtr;
 
 namespace TuaRua.FreSharp.Exceptions {
     /// <summary>
     /// 
     /// </summary>
+    [SuppressMessage("ReSharper", "UnusedMember.Global")]
     public class FreArgException {
         /// <summary>
         /// Returns a ANEError as a FREObject
