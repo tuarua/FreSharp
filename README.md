@@ -1,8 +1,6 @@
-
-
 # FreSharp
 
-[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=5UR2T52J633RC)
+[ ![Download](https://img.shields.io/nuget/v/TuaRua.FreSharp.svg) ](https://www.nuget.org/packages/TuaRua.FreSharp/)
 
 ### Features
  - Build Adobe Air Native Extensions using C#
