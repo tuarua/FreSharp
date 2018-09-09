@@ -61,6 +61,8 @@ namespace FRESharpCore {
 		void acquireByteArrayData(FREObjectCLR freObject, FREByteArrayCLR^ byteArrayToSet);
 		void releaseByteArrayData(FREObjectCLR freObject);
 
+		FREObjectCLR getActionScriptData(FREContextCLR freContext, UInt32% freResult);
+		void setActionScriptData(FREContextCLR freContext, FREObjectCLR freObject, UInt32% freResult);
 	};
 
 }

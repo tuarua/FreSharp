@@ -2,6 +2,7 @@ package {
 import com.tuarua.Person;
 import com.tuarua.FreSharpExampleANE;
 import com.tuarua.fre.ANEError;
+import com.tuarua.fre.ANEUtils;
 
 import flash.desktop.NativeApplication;
 import flash.display.Bitmap;
@@ -59,13 +60,10 @@ public class Main extends Sprite {
             person.name = "Tom";
             person.city.name = "Portland";
 
-
             var resultString:String = ane.runStringTests("Björk Guðmundsdóttir Sinéad O’Connor 久保田  " +
                     "利伸 Михаил Горбачёв Садриддин Айнӣ Tor Åge Bringsværd 章子怡 €");
 
-
             textField.text += resultString + "\n";
-
 
             var resultNumber:Number = ane.runNumberTests(31.99);
             textField.text += "Number: " + resultNumber + "\n";
@@ -132,9 +130,8 @@ public class Main extends Sprite {
             ane.runByteArrayTests(myByteArray);
             ane.runErrorTests(person, "test string", 78);
 
-            /*var inData:String = "Saved and returned"; //TODO
-            var outData:String = ane.runDataTests(inData) as String;
-            textField.text += outData + "\n";*/
+            const inData:String = "Saved and returned";
+            trace("getActionScriptData returned is same", inData == ane.runDataTests(inData) as String ? "✅" : "❌");
 
             var testDate:Date = new Date(1990, 5, 13, 8, 59, 3);
 

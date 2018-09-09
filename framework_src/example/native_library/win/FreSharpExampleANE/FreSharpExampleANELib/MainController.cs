@@ -10,6 +10,7 @@ using TuaRua.FreSharp.Geom;
 using FREObject = System.IntPtr;
 using FREContext = System.IntPtr;
 using Point = System.Windows.Point;
+// ReSharper disable MemberCanBeMadeStatic.Local
 
 namespace FreExampleSharpLib {
     public class MainController : FreSharpMainController {
@@ -302,7 +303,9 @@ namespace FreExampleSharpLib {
         }
 
         private FREObject RunDataTests(FREContext ctx, uint argc, FREObject[] argv) {
-            return FREObject.Zero;
+            var objectAs = argv[0];
+            Context.SetActionScriptData(objectAs);
+            return Context.GetActionScriptData();
         }
 
         private FREObject RunDateTests(FREContext ctx, uint argc, FREObject[] argv) {

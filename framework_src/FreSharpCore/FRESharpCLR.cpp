@@ -17,7 +17,8 @@ using namespace System;
 using FREObjectCLR = IntPtr;
 
 #include <codecvt>
-
+// ReSharper disable CppMemberFunctionMayBeStatic
+// ReSharper disable CppCStyleCast
 namespace FRESharpCore {
 	FRESharpCLR::FRESharpCLR() {
 	}
@@ -31,7 +32,6 @@ namespace FRESharpCore {
 		using namespace Runtime::InteropServices;
 		const wchar_t* chars = static_cast<const wchar_t*>(Marshal::StringToHGlobalUni(s).ToPointer());
 		os = chars;
-		// ReSharper disable once CppCStyleCast
 		Marshal::FreeHGlobal(IntPtr((void*)chars));
 	}
 
@@ -39,7 +39,6 @@ namespace FRESharpCore {
 		using namespace Runtime::InteropServices;
 		const char* chars = static_cast<const char*>(Marshal::StringToHGlobalAnsi(s).ToPointer());
 		os = chars;
-		// ReSharper disable once CppCStyleCast
 		Marshal::FreeHGlobal(IntPtr((void*)chars));
 	}
 
@@ -53,7 +52,6 @@ namespace FRESharpCore {
 		return FREObjectCLR(result);
 	}
 
-	// ReSharper disable once CppMemberFunctionMayBeStatic
 	FREObjectCLR FRESharpCLR::getFREObject(const double value, UInt32% freResult) {
 		FREObject result;
 		freResult = FRENewObjectFromDouble(value, &result);
@@ -88,21 +86,18 @@ namespace FRESharpCore {
 		return FREObjectCLR(thrownException);
 	}
 
-	// ReSharper disable once CppMemberFunctionMayBeStatic
 	FREObjectCLR FRESharpCLR::getFREObject(const bool value, UInt32% freResult) {
 		FREObject result;
 		freResult = FRENewObjectFromBool(value, &result);
 		return FREObjectCLR(result);
 	}
 
-	// ReSharper disable once CppMemberFunctionMayBeStatic
 	FREObjectCLR FRESharpCLR::getFREObject(const Int32 value, UInt32% freResult) {
 		FREObject result;
 		freResult = FRENewObjectFromInt32(value, &result);
 		return FREObjectCLR(result);
 	}
 
-	// ReSharper disable once CppMemberFunctionMayBeStatic
 	FREObjectCLR FRESharpCLR::getFREObject(const UInt32 value, UInt32% freResult) {
 		FREObject result;
 		freResult = FRENewObjectFromUint32(value, &result);
@@ -165,7 +160,6 @@ namespace FRESharpCore {
 
 	}
 
-	// ReSharper disable once CppMemberFunctionMayBeStatic
 	String ^ FRESharpCLR::getString(FREObjectCLR freObject, UInt32% freResult) {
 		uint32_t string1Length;
 		const uint8_t *val;
@@ -178,14 +172,12 @@ namespace FRESharpCore {
 		return gcnew String("");
 	}
 
-	// ReSharper disable once CppMemberFunctionMayBeStatic
 	Int32 FRESharpCLR::getInt32(FREObjectCLR freObject, UInt32% freResult) {
 		auto val = 0;
 		freResult = FREGetObjectAsInt32(freObject.ToPointer(), &val);
 		return val;
 	}
 
-	// ReSharper disable once CppMemberFunctionMayBeStatic
 	UInt32 FRESharpCLR::getUInt32(FREObjectCLR freObject, UInt32% freResult) {
 		uint32_t val = 0;
 		freResult = FREGetObjectAsUint32(freObject.ToPointer(), &val);
@@ -197,19 +189,16 @@ namespace FRESharpCore {
 		return getUInt32(arrayLengthAS, freResult);
 	}
 
-	// ReSharper disable once CppMemberFunctionMayBeStatic
 	FREObjectCLR FRESharpCLR::getObjectAt(FREObjectCLR freObject, const UInt32 i, UInt32% freResult) {
 		FREObject val = nullptr;
 		freResult = FREGetArrayElementAt(freObject.ToPointer(), i, &val);
 		return FREObjectCLR(val);
 	}
 
-	// ReSharper disable once CppMemberFunctionMayBeStatic
 	void FRESharpCLR::setObjectAt(FREObjectCLR freObject, const UInt32 i, FREObjectCLR value, UInt32% freResult) {
 		freResult = FRESetArrayElementAt(freObject.ToPointer(), i, value.ToPointer());
 	}
 
-	// ReSharper disable once CppMemberFunctionMayBeStatic
 	bool FRESharpCLR::getBool(FREObjectCLR freObject, UInt32% freResult) {
 		uint32_t result = 0;
 		auto ret = false;
@@ -218,7 +207,6 @@ namespace FRESharpCore {
 		return ret;
 	}
 
-	// ReSharper disable once CppMemberFunctionMayBeStatic
 	double FRESharpCLR::getDouble(FREObjectCLR freObject, UInt32% freResult) {
 		auto val = 0.0;
 		freResult = FREGetObjectAsDouble(freObject.ToPointer(), &val);
@@ -235,14 +223,12 @@ namespace FRESharpCore {
 			reinterpret_cast<const uint8_t *>(nameStr.data()));
 	}
 
-	// ReSharper disable once CppMemberFunctionMayBeStatic
 	int FRESharpCLR::getType(FREObjectCLR freObject, UInt32% freResult) {
 		auto val = FRE_TYPE_NULL;
 		freResult = FREGetObjectType(freObject.ToPointer(), &val);
 		return val;
 	}
 
-	// ReSharper disable once CppMemberFunctionMayBeStatic
 	void FRESharpCLR::acquireBitmapData(FREObjectCLR freObject, FREBitmapDataCLR^ descriptorToSet) {
 		FREBitmapData2 bitmapData;
 		FREAcquireBitmapData2(freObject.ToPointer(), &bitmapData);
@@ -255,7 +241,6 @@ namespace FRESharpCore {
 		descriptorToSet->lineStride32 = bitmapData.lineStride32;
 	}
 
-	// ReSharper disable once CppMemberFunctionMayBeStatic
 	void FRESharpCLR::releaseBitmapData(FREObjectCLR freObject) {
 		FREReleaseBitmapData(freObject.ToPointer());
 	}
@@ -303,22 +288,17 @@ namespace FRESharpCore {
 		descriptorToSet->isInvertedY = bitmapData.isInvertedY;
 		descriptorToSet->isPremultiplied = bitmapData.isPremultiplied;
 		descriptorToSet->lineStride32 = bitmapData.lineStride32;
-		// Free resources
 		releaseBitmapData(FREObjectCLR(freBitmap));
 		invalidateBitmapDataRect(FREObjectCLR(freBitmap), 0, 0, value->Width, value->Height);
-
 		value->UnlockBits(windowsBitmapData);
 		delete windowsBitmapData;
 		return FREObjectCLR(freBitmap);
 	}
 
-	
-	// ReSharper disable once CppMemberFunctionMayBeStatic
 	void FRESharpCLR::invalidateBitmapDataRect(FREObjectCLR freObject, const UInt32 x, const UInt32 y, const UInt32 width, const UInt32 height) {
 		FREInvalidateBitmapDataRect(freObject.ToPointer(), x, y, width, height);
 	}
 
-	// ReSharper disable CppMemberFunctionMayBeStatic
 	void FRESharpCLR::acquireByteArrayData(FREObjectCLR freObject, FREByteArrayCLR^ byteArrayToSet) {
 		using namespace Runtime::InteropServices;
 		FREByteArray byteArray;
@@ -328,10 +308,22 @@ namespace FRESharpCore {
 		byteArrayToSet->bytes = IntPtr(input);
 	}
 
-	// ReSharper disable CppMemberFunctionMayBeStatic
 	void FRESharpCLR::releaseByteArrayData(FREObjectCLR freObject) {
-		// ReSharper restore CppMemberFunctionMayBeStatic
 		FREReleaseByteArray(freObject.ToPointer());
+	}
+
+	FREObjectCLR FRESharpCLR::getActionScriptData(FREContextCLR freContext, UInt32% freResult) {
+		FREObject ret = nullptr;
+		FREObject thrownException = nullptr;
+		FREGetContextActionScriptData(freContext.ToPointer(), &ret);
+		if (FRE_OK == freResult) {
+			return FREObjectCLR(ret);
+		}
+		return FREObjectCLR(thrownException);
+	}
+
+	void FRESharpCLR::setActionScriptData(FREContextCLR freContext, FREObjectCLR freObject, UInt32% freResult) {
+		freResult = FRESetContextActionScriptData(freContext.ToPointer(), freObject.ToPointer());
 	}
 
 }

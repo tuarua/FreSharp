@@ -56,7 +56,7 @@ namespace TuaRua.FreSharp {
         /// Creates a C# FreArray with a given class name.
         /// </summary>
         /// <param name="className"></param>
-        [Obsolete("FREArray is deprecated, please use FREArray(className, length, fixedSize) instead.", true)]
+        [Obsolete("FREArray is obsoleted, please use FREArray(className, length, fixedSize) instead.", true)]
         public FREArray(string className) {
             RawValue = new FREObject().Init(className);
         }

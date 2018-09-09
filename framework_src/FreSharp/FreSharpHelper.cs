@@ -281,6 +281,23 @@ namespace TuaRua.FreSharp {
                 : type;
         }
 
+        internal static FREObject GetActionScriptData(ref FREContext freContext) {
+            uint resultPtr = 0;
+            var ret = Core.getActionScriptData(freContext, ref resultPtr);
+            var status = (FreResultSharp)resultPtr;
+            if (status == FreResultSharp.Ok) return ret;
+            Logger.Log("cannot get ActionScript data", status, ret);
+            return FREObject.Zero;
+        }
+
+        internal static void SetActionScriptData(ref FREContext freContext, FREObject value) {
+            uint resultPtr = 0;
+            Core.setActionScriptData(freContext, value, ref resultPtr);
+            var status = (FreResultSharp)resultPtr;
+            if (status == FreResultSharp.Ok) return;
+            Logger.Log("cannot set ActionScript data", status);
+        }
+
         internal static Dictionary<string, object> GetAsDictionary(FREObject rawValue) {
             var ret = new Dictionary<string, object>();
             var aneUtils = new FREObject().Init("com.tuarua.fre.ANEUtils");

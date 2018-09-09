@@ -19,6 +19,8 @@
 #endregion
 using System;
 using FREContext = System.IntPtr;
+using FREObject = System.IntPtr;
+// ReSharper disable UnusedMember.Global
 
 namespace TuaRua.FreSharp {
     /// <summary>
@@ -28,9 +30,9 @@ namespace TuaRua.FreSharp {
         private FREContext _rawValue;
 
         /// <summary>
-        /// Creates a C# FREObject from a C FREObject.
+        /// Creates a FreContextSharp.
         /// </summary>
-        /// <param name="freContext"></param>
+        /// <param name="freContext">FREContext</param>
         public FreContextSharp(FREContext freContext) {
             _rawValue = freContext;
         }
@@ -40,7 +42,7 @@ namespace TuaRua.FreSharp {
         /// </summary>
         /// <param name="name"></param>
         /// <param name="value"></param>
-        [Obsolete("SendEvent is deprecated, please use DispatchEvent instead.", true)]
+        [Obsolete("SendEvent is obsoleted, please use DispatchEvent instead.", true)]
         public void SendEvent(string name, string value) {
             FreSharpHelper.DispatchEvent(ref _rawValue, name, value);
         }
@@ -54,6 +56,22 @@ namespace TuaRua.FreSharp {
             FreSharpHelper.DispatchEvent(ref _rawValue, name, value);
         }
 
+        /// <summary>
+        /// Call this function to get an extension context’s ActionScript data.
+        /// </summary>
+        /// <returns></returns>
+        public FREObject GetActionScriptData() {
+            return _rawValue == FREObject.Zero
+                ? FREObject.Zero
+                : FreSharpHelper.GetActionScriptData(ref _rawValue);
+        }
 
+        /// <summary>
+        /// Call this function to set an extension context’s ActionScript data.
+        /// </summary>
+        /// <param name="value">FREObject to set</param>
+        public void SetActionScriptData(FREObject value) {
+            FreSharpHelper.SetActionScriptData(ref _rawValue, value);
+        }
     }
 }

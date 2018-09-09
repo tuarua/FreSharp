@@ -8,7 +8,10 @@
 - mark `FreSharpHelper` as internal
 - Add `FreSharpLogger` to trace any FREExceptions
 - Require `public override string TAG => "MainController";`
-- Remove `SendEvent()` method
+- Obsolete `SendEvent()`
+- Add `FreContextSharp.GetActionScriptData()`
+- Add `FreContextSharp.SetActionScriptData()`
+- Improve `ANEUtils.map()` performance
 - Refactor
 - **C++ project now needs reference to ..\packages\TuaRua.FreSharp.2.0.0\FreSharp\$(PlatformTarget)\FreSharp.dll**
 

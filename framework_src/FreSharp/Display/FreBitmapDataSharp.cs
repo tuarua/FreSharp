@@ -134,7 +134,7 @@ namespace TuaRua.FreSharp.Display {
         /// <summary>
         /// Converts the FREBitmapData into a C# Bitmap
         /// </summary>
-        [Obsolete("GetAsBitmap is deprecated, please use AsBitmap instead.")]
+        [Obsolete("GetAsBitmap is obsoleted, please use AsBitmap instead.", true)]
         public Bitmap GetAsBitmap() {
             var bitmap = new Bitmap(1, 1);
             Acquire();

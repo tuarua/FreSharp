@@ -103,7 +103,7 @@ namespace TuaRua.FreSharp {
         /// </summary>
         /// <param name="name"></param>
         /// <param name="value"></param>
-        [Obsolete("SendEvent is deprecated, please use DispatchEvent instead.", true)]
+        [Obsolete("SendEvent is obsoleted, please use DispatchEvent instead.", true)]
         public void SendEvent(string name, string value) {
             Context?.DispatchEvent(name, value);
         }
