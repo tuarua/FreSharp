@@ -10,7 +10,7 @@ namespace FreSharpBridge {
 		Marshal::FreeHGlobal(FREObjectCLR((void*)chars));
 	}
 
-	array<FREObjectCLR>^ MarshalFREArray(array<FREObject>^ argv, uint32_t argc) {
+	array<FREObjectCLR>^ MarshalFREArray(array<FREObject>^ argv, const uint32_t argc) {
 		auto arr = gcnew array<FREObjectCLR>(argc);
 		for (uint32_t i = 0; i < argc; i++) {
 			arr[i] = FREObjectCLR(argv[i]);
@@ -29,7 +29,7 @@ namespace FreSharpBridge {
 		return ret;
 	}
 
-	FREObject CallSharpFunction(String^ name, FREContext context, array<FREObject>^ argv, uint32_t argc) {
+	FREObject CallSharpFunction(String^ name, FREContext context, array<FREObject>^ argv, const uint32_t argc) {
 		return static_cast<FREObject>(ManagedGlobals::controller->CallSharpFunction(
 			name, FREContextCLR(context), argc, MarshalFREArray(argv, argc)));
 	}
@@ -60,6 +60,7 @@ extern "C" {
 
 	FRE_FUNCTION(callSharpFunction) {
 		auto fName = std::string(static_cast<const char*>(functionData));
-		return FreSharpBridge::CallSharpFunction(gcnew System::String(fName.c_str()), context, getArgvAsArray(argv, argc), argc);
+		return FreSharpBridge::CallSharpFunction(gcnew System::String(fName.c_str()), context,
+			getArgvAsArray(argv, argc), argc);
 	}
 }

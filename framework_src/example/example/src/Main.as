@@ -1,9 +1,6 @@
 package {
 import com.tuarua.Person;
 import com.tuarua.FreSharpExampleANE;
-import com.tuarua.fre.ANEError;
-import com.tuarua.fre.ANEUtils;
-
 import flash.desktop.NativeApplication;
 import flash.display.Bitmap;
 import flash.display.BitmapData;

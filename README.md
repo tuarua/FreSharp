@@ -35,7 +35,7 @@ The following table shows the primitive as3 types which can easily be converted 
 | Array | double[] | `var arr = argv[0].AsDoubleArray()` | `return arr.ToFREObject()`|
 | Array | bool[] | `var arr = argv[0].AsBoolArray()` | `return arr.ToFREObject()`|
 | Object | Dictionary | `var dct = argv[0].AsDictionary()` | N/A |
-| null | FREObject.Zero |  |  |
+| null | FREObject.Zero |  | return FREObject.Zero |
 
 #### Basic Types
 ```C#

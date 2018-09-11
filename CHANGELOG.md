@@ -12,6 +12,7 @@
 - Add `FreContextSharp.GetActionScriptData()`
 - Add `FreContextSharp.SetActionScriptData()`
 - Improve `ANEUtils.map()` performance
+- Upgraded to AIR 31
 - Refactor
 - **C++ project now needs reference to ..\packages\TuaRua.FreSharp.2.0.0\FreSharp\$(PlatformTarget)\FreSharp.dll**
 
