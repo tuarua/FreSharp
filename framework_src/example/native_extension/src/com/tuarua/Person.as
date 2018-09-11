@@ -11,7 +11,9 @@ public class Person {
     public var height:Number = 1.80;
     public var city:City = new City();
 
-    public function Person() {
+    public function Person(name:String = "", age:int = 0) {
+        this.name = name;
+        this.age = age;
         super();
     }
 

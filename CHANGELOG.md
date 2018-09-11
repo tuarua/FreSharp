@@ -1,3 +1,21 @@
+### 2.0.0
+- Fix `FREObject.AsDateTime()` UTC bug
+- repurpose `FreObjectSharp` for use as a dynamic object
+- Added `FREObject.toString()`
+- Added `FREObject.hasOwnProperty(string name)`
+- Added `FREArray.Push()`
+- `FREObject.AsColor(bool hasAlpha = true)` hasAlpha default value is now TRUE
+- mark `FreSharpHelper` as internal
+- Add `FreSharpLogger` to trace any FREExceptions
+- Require `public override string TAG => "MainController";`
+- Obsolete `SendEvent()`
+- Add `FreContextSharp.GetActionScriptData()`
+- Add `FreContextSharp.SetActionScriptData()`
+- Improve `ANEUtils.map()` performance
+- Upgraded to AIR 31
+- Refactor
+- **C++ project now needs reference to ..\packages\TuaRua.FreSharp.2.0.0\FreSharp\$(PlatformTarget)\FreSharp.dll**
+
 ### 1.7.0
 - deprecate SendEvent, use DispatchEvent instead
 - deprecate FREArray(className), use FREArray(className, length, fixedSize) instead (className only no <Vector. prefix)

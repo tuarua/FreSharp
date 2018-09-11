@@ -57,13 +57,16 @@ namespace HelloWorldLib {
         public FREObject InitController(FREContext ctx, uint argc, FREObject[] argv) {
             // get a reference to the AIR Window HWND
             _airWindow = Process.GetCurrentProcess().MainWindowHandle;
+
+            // Turn on FreSharp logging
+            FreSharpLogger.GetInstance().Context = Context;
+
             return FREObject.Zero;
         }
 
-       public override void OnFinalize() {
-           
-       }
-   }
+       public override void OnFinalize() {}
+       public override string TAG => "MainController";
+    }
 
 
 }

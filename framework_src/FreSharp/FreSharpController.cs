@@ -14,11 +14,6 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 // 
-//  Additional Terms
-//  No part, or derivative of this Air Native Extensions's code is permitted 
-//  to be sold as the basis of a commercially packaged Air Native Extension which 
-//  undertakes the same purpose as this software. That is, a WebView for Windows, 
-//  OSX and/or iOS and/or Android.
 //  All Rights Reserved. Tua Rua Ltd.
 
 #endregion
@@ -26,19 +21,28 @@
 using System;
 using System.Linq;
 using FREContext = System.IntPtr;
+// ReSharper disable UnusedMember.Global
+// ReSharper disable InconsistentNaming
 
 namespace TuaRua.FreSharp {
     /// <summary>
     /// 
     /// </summary>
     public abstract class FreSharpController {
+        private const string TRACE = "TRACE";
+
+        /// <summary>
+        /// Tag used when tracing logs
+        /// </summary>
+        public abstract string TAG { get; }
+
         /// <summary>
         /// 
         /// </summary>
         public FreContextSharp Context;
 
         /// <summary>
-        /// 
+        /// Sets the FREContext.
         /// </summary>
         /// <param name="freContext"></param>
         public void SetFreContext(ref FREContext freContext) {
@@ -46,17 +50,32 @@ namespace TuaRua.FreSharp {
         }
 
         /// <summary>
-        /// 
+        /// Sends StatusEvent to our swc with a level of "TRACE".
         /// </summary>
-        /// <param name="values"></param>
+        /// <param name="values">value to trace to console</param>
         public void Trace(params object[] values) {
             var traceStr = values.Aggregate("", (current, value) => current + value + " ");
-            Context?.DispatchEvent("TRACE", traceStr);
+            Context?.DispatchEvent(TRACE, traceStr);
         }
 
-        [Obsolete("SendEvent is deprecated, please use DispatchEvent instead.", true)]
-        public void SendEvent(string name, string value) {
-            Context?.DispatchEvent(name, value);
+        /// <summary>
+        /// Sends StatusEvent to our swc with a level of "TRACE".
+        /// The output string is prefixed with ⚠️ WARNING:
+        /// </summary>
+        /// <param name="values">value to trace to console</param>
+        public void Warning(params object[] values) {
+            var traceStr = values.Aggregate("", (current, value) => current + value + " ");
+            Context?.DispatchEvent(TRACE, $"⚠️WARNING: {traceStr}");
+        }
+
+        /// <summary>
+        /// Sends StatusEvent to our swc with a level of "TRACE".
+        /// The output string is prefixed with ℹ️ INFO:
+        /// </summary>
+        /// <param name="values">value to trace to console.</param>
+        public void Info(params object[] values) {
+            var traceStr = values.Aggregate("", (current, value) => current + value + " ");
+            Context?.DispatchEvent(TRACE, $"ℹ️INFO: {traceStr}");
         }
 
         /// <summary>
@@ -64,8 +83,18 @@ namespace TuaRua.FreSharp {
         /// </summary>
         /// <param name="name"></param>
         /// <param name="value"></param>
-        public void DispatchEvent(string name, string value)
-        {
+        [Obsolete("SendEvent is obsoleted, please use DispatchEvent instead.", true)]
+        public void SendEvent(string name, string value) {
+            Context?.DispatchEvent(name, value);
+        }
+
+        /// <summary>
+        /// Sends StatusEvent to our swc with a level of name and code of value.
+        /// Replaces DispatchStatusEventAsync.
+        /// </summary>
+        /// <param name="name">name of event.</param>
+        /// <param name="value">value passed with event.</param>
+        public void DispatchEvent(string name, string value) {
             Context?.DispatchEvent(name, value);
         }
     }

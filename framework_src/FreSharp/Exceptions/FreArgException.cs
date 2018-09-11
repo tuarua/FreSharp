@@ -18,12 +18,15 @@
 
 #endregion
 using System;
+using System.Diagnostics.CodeAnalysis;
 using FREObject = System.IntPtr;
+
 namespace TuaRua.FreSharp.Exceptions {
     /// <summary>
     /// 
     /// </summary>
-    public class FreException {
+    [SuppressMessage("ReSharper", "UnusedMember.Global")]
+    public class FreArgException {
         /// <summary>
         /// Returns a ANEError as a FREObject
         /// </summary>
@@ -33,17 +36,18 @@ namespace TuaRua.FreSharp.Exceptions {
         /// Creates a FreException from a C# Exception
         /// </summary>
         /// <param name="e"></param>
-        public FreException(Exception e) {
-            RawValue = new FREObject().Init("com.tuarua.fre.ANEError", e.Message, 0, e.GetType().ToString(), e.Source, e.StackTrace);
+        public FreArgException(Exception e) {
+            RawValue = new FREObject().Init("com.tuarua.fre.ANEError", e.Message, 0, e.GetType().ToString(), e.Source,
+                e.StackTrace);
         }
 
         /// <summary>
         /// Creates a FreException from a C# message string
         /// </summary>
         /// <param name="message"></param>
-        public FreException(string message) {
-            RawValue = new FREObject().Init("com.tuarua.fre.ANEError", message, 0, "FreSharp.Exceptions.Generic", "", "");
+        public FreArgException(string message) {
+            RawValue = new FREObject().Init("com.tuarua.fre.ANEError", $"{message} - incorrect arguments", 0,
+                "FreSharp.Exceptions.FreInvalidArgumentException", "", "");
         }
-
     }
 }

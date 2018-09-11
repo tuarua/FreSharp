@@ -17,33 +17,33 @@
 //  All Rights Reserved. Tua Rua Ltd.
 
 #endregion
-using System;
 using FREObject = System.IntPtr;
-namespace TuaRua.FreSharp.Exceptions {
+using Point = System.Windows.Point;
+
+// ReSharper disable InconsistentNaming
+
+namespace TuaRua.FreSharp.Geom {
     /// <summary>
-    /// 
+    /// Wrapper Class for C# System.Windows.Point
     /// </summary>
-    public class FreException {
+    public static class FrePoint {
         /// <summary>
-        /// Returns a ANEError as a FREObject
+        /// Converts a C# Point to a FREObject
         /// </summary>
-        public FREObject RawValue { get; }
-
-        /// <summary>
-        /// Creates a FreException from a C# Exception
-        /// </summary>
-        /// <param name="e"></param>
-        public FreException(Exception e) {
-            RawValue = new FREObject().Init("com.tuarua.fre.ANEError", e.Message, 0, e.GetType().ToString(), e.Source, e.StackTrace);
+        /// <param name="value"></param>
+        /// <returns>FREObject</returns>
+        public static FREObject ToFREObject(this Point value) {
+            return new FREObject().Init("flash.geom.Point", value.X, value.Y);
         }
 
         /// <summary>
-        /// Creates a FreException from a C# message string
+        /// Converts a FREObject to a C# Point
         /// </summary>
-        /// <param name="message"></param>
-        public FreException(string message) {
-            RawValue = new FREObject().Init("com.tuarua.fre.ANEError", message, 0, "FreSharp.Exceptions.Generic", "", "");
+        /// <param name="inFre"></param>
+        /// <returns>Point</returns>
+        public static Point AsPoint(this FREObject inFre) {
+            dynamic fre = new FreObjectSharp(inFre);
+            return new Point(fre.x, fre.y);
         }
-
     }
 }

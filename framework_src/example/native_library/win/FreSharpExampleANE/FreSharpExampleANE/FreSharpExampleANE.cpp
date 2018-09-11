@@ -1,6 +1,5 @@
 #include "FreSharpMacros.h"
 #include "FreSharpExampleANE.h"
-#include "FlashRuntimeExtensions.h"
 #include "stdafx.h"
 #include "FreSharpBridge.h"
 
@@ -34,7 +33,6 @@ extern "C" {
 			,MAP_FUNCTION(runByteArrayTests)
 			,MAP_FUNCTION(runErrorTests)
 			,MAP_FUNCTION(runDataTests)
-			,MAP_FUNCTION(runErrorTests2)
 			,MAP_FUNCTION(runDateTests)
 			,MAP_FUNCTION(runColorTests)
 		};

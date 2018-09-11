@@ -1,8 +1,6 @@
 package {
 import com.tuarua.Person;
 import com.tuarua.FreSharpExampleANE;
-import com.tuarua.fre.ANEError;
-
 import flash.desktop.NativeApplication;
 import flash.display.Bitmap;
 import flash.display.BitmapData;
@@ -40,10 +38,8 @@ public class Main extends Sprite {
         NativeApplication.nativeApplication.addEventListener(Event.EXITING, onExiting);
         this.addEventListener(Event.ACTIVATE, onActivated);
 
-
     }
-
-
+    
     private function onActivated(event:Event):void {
         if (!hasActivated) {
             var tf:TextFormat = new TextFormat();
@@ -59,7 +55,7 @@ public class Main extends Sprite {
             var person:Person = new Person();
             person.age = 21;
             person.name = "Tom";
-            person.city.name = "Dunleer";
+            person.city.name = "Portland";
 
             var resultString:String = ane.runStringTests("Björk Guðmundsdóttir Sinéad O’Connor 久保田  " +
                     "利伸 Михаил Горбачёв Садриддин Айнӣ Tor Åge Bringsværd 章子怡 €");
@@ -71,6 +67,7 @@ public class Main extends Sprite {
 
             var resultInt:int = ane.runIntTests(-54, 66);
             textField.text += "Int: " + resultInt + "\n";
+
 
             var intArray:Array = [];
             intArray.push(3, 1, 4, 2, 6, 5);
@@ -94,16 +91,10 @@ public class Main extends Sprite {
                 textField.text += "Person.age: " + resultObject.age.toString() + "\n";
             }
 
-            try {
-                var inRect:Rectangle = new Rectangle(50, 60, 70, 80);
-                var resultRectangle:Rectangle = ane.runExtensibleTests(inRect) as Rectangle;
-                trace("resultRectangle", resultRectangle);
-            } catch (e:ANEError) {
-                trace(e.message);
-                trace(e.type);
-                trace(e.errorID);
-                trace(e.getStackTrace());
-            }
+
+            var inRect:Rectangle = new Rectangle(50.9, 60, 70, 80);
+            var resultRectangle:Rectangle = ane.runExtensibleTests(inRect) as Rectangle;
+            trace("resultRectangle", resultRectangle);
 
             const IMAGE_URL:String = "http://www.ibasoglu.com/wp-content/uploads/2015/07/visual_csharp_logo1.png";
 
@@ -134,32 +125,16 @@ public class Main extends Sprite {
             var myByteArray:ByteArray = new ByteArray();
             myByteArray.writeUTFBytes("C# in an ANE. Say whaaaat!");
             ane.runByteArrayTests(myByteArray);
-
-            //catch the error in C# only
             ane.runErrorTests(person, "test string", 78);
 
-            //catch the error in as
+            const inData:String = "Saved and returned";
+            trace("getActionScriptData returned is same", inData == ane.runDataTests(inData) as String ? "✅" : "❌");
 
-            try {
-                ane.runErrorTests2("abc");
-            } catch (e:ANEError) {
-                //trace("e is",e)
-                trace("e.message: ", e.message);
-                trace("e.type: ", e.type);
-                trace("e.errorID", e.errorID);
-                trace("e.getStackTrace", e.getStackTrace());
-            }
+            var testDate:Date = new Date(1990, 5, 13, 8, 59, 3);
 
-
-            /*var inData:String = "Saved and returned"; //TODO
-             var outData:String = ane.runDataTests(inData) as String;
-             textField.text += outData + "\n";*/
-
-            var returnedDate:Date = ane.runDateTests(new Date());
-            trace("returnedDate:", returnedDate);
-
-            trace("GREEN", GREEN, GREEN == ane.runColorTests(GREEN));
-            trace("HALF_GREEN", HALF_GREEN, HALF_GREEN == ane.runColorTests(HALF_GREEN));
+            trace("Date returned is same", testDate.time == ane.runDateTests(testDate).time ? "✅" : "❌");
+            trace("GREEN", GREEN, GREEN == ane.runColorTests(GREEN) ? "✅" : "❌");
+            trace("HALF_GREEN", HALF_GREEN, HALF_GREEN == ane.runColorTests(HALF_GREEN) ? "✅" : "❌");
 
             addChild(textField);
 

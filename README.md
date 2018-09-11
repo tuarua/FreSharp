@@ -1,8 +1,6 @@
-
-
 # FreSharp
 
-[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=5UR2T52J633RC)
+[ ![Download](https://img.shields.io/nuget/v/TuaRua.FreSharp.svg) ](https://www.nuget.org/packages/TuaRua.FreSharp/)
 
 ### Features
  - Build Adobe Air Native Extensions using C#
@@ -37,7 +35,7 @@ The following table shows the primitive as3 types which can easily be converted 
 | Array | double[] | `var arr = argv[0].AsDoubleArray()` | `return arr.ToFREObject()`|
 | Array | bool[] | `var arr = argv[0].AsBoolArray()` | `return arr.ToFREObject()`|
 | Object | Dictionary | `var dct = argv[0].AsDictionary()` | N/A |
-| null | FREObject.Zero |  |  |
+| null | FREObject.Zero |  | return FREObject.Zero |
 
 #### Basic Types
 ```C#
@@ -56,7 +54,7 @@ var frePerson = new FREObject().Init("com.tuarua.Person");
 // create a FREObject passing args
 // 
 // The following param types are allowed: 
-// int, uint, short, long, bool, string, double, FREObject
+// int, uint, short, long, bool, string, double, Rect, Point, DateTime, Color, FREObject
 var frePerson = new FREObject().Init("com.tuarua.Person", "Bob", "Doe", 28, myFREObject);
 ```
 
@@ -65,7 +63,7 @@ var frePerson = new FREObject().Init("com.tuarua.Person", "Bob", "Doe", 28, myFR
 // call a FREObject method passing args
 // 
 // The following param types are allowed: 
-// int, uint, short, long, bool, string, double, FREObject
+// int, uint, short, long, bool, string, double, Rect, Point, DateTime, Color, FREObject
 var addition = freCalculator.Call("add", 100, 33);
 ```
 
@@ -75,8 +73,17 @@ var oldAge = person.GetProp("age").AsInt();
 var newAge = oldAge + 10;
 
 // The following param types are allowed: 
-// int, uint, short, long, bool, string, double, FREObject
+// int, uint, short, long, bool, string, double, Rect, Point, DateTime, Color, FREObject
 person.SetProp("age", newAge);
+
+// create a FreSharpObject DynamicObject 
+dynamic person = new FreObjectSharp("com.tuarua.Person", "Ben McBobster", 80);
+int oldAge = person.age; // implicit conversion
+var name = (string) person.name; // explicit conversion
+
+// The following prop types are allowed: 
+// int, uint, short, long, bool, string, double, Rect, Point, DateTime, Color, FREObject
+person.age = oldAge + 10;
 ```
 
 #### Arrays
@@ -96,6 +103,9 @@ foreach (var fre in freIntArray) {
 
 // set element 1 to 123
 freIntArray[1] = 123.ToFREObject();
+
+// push 2 elements to FREArray
+freIntArray.Push(22, 33);
 
 // return C# [int] to AIR
 var marks = new[] {99, 98, 92, 97, 95};
@@ -132,58 +142,40 @@ ba.Release();
 
 #### Error Handling
 ```C#
+// Turn on logging to trace out any captured errors in FreSharp
+FreSharpLogger.GetInstance().Context = Context;
+
+person.Call("add", 100); // not passing enough args - traces captured error.
+
 try {
-    testString.Call("noStringFunc"); //call method on a string
+    myCSharpFunc(); // call a C# method which can throw
 }
 catch (Exception e) {
-    return new FreException(e).RawValue; //return as3 error and throw in swc
+    return new FreException(e).RawValue; // return as3 error and throw in swc
 }
 ```
 
 Advanced: Extending FreObjectSharp. Creating a C# version of flash.geom.point
 
 ```C#
-using System.Collections;
-using System.Windows;
-using TuaRua.FreSharp;
 using FREObject = System.IntPtr;
+using Point = System.Windows.Point;
 
-namespace FreSharp.Geom {
-    public class FrePointSharp {
-        public FrePointSharp() { }
+public static class FrePoint {
+    public static FREObject ToFREObject(this Point value) {
+        return new FREObject().Init("flash.geom.Point", value.X, value.Y);
+    }
 
-        public FREObject RawValue { get; set; } = FREObject.Zero;
-
-        public FrePointSharp(FREObject freObject) {
-            RawValue = freObject;
-        }
-
-        public FrePointSharp(Point value) {
-            uint resultPtr = 0;
-            var args = new ArrayList {
-                value.X,
-                value.Y
-            };
-
-            RawValue = FreSharpHelper.Core.getFREObject("flash.geom.Point", FreSharpHelper.ArgsToArgv(args),
-                FreSharpHelper.GetArgsC(args), ref resultPtr);
-            var status = (FreResultSharp) resultPtr;
-
-            if (status == FreResultSharp.Ok) {
-                return;
-            }
-            FreSharpHelper.ThrowFreException(status, "cannot create point ", RawValue);
-        }
-
-        
-        public Point Value => new Point(
-            RawValue.GetProp("x").AsDouble(), 
-            RawValue.GetProp("y").AsDouble());
+    public static Point AsPoint(this FREObject inFre) {
+        dynamic fre = new FreObjectSharp(inFre);
+        return new Point(fre.x, fre.y);
     }
 }
-public static Point AsPoint(this FREObject inFre) => new FrePointSharp(inFre).Value;
-public static FREObject ToFREObject(this Point point) => new FrePointSharp(point).RawValue;
 ```
+----------
+
+### Required AS3 classes
+**com.tuarua.fre.ANEUtils.as** and **com.tuarua.fre.ANEError.as** are required by FreSharp and should be included in the AS3 library of your ANE
 
 ### Tech
 
