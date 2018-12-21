@@ -20,9 +20,6 @@ import flash.utils.ByteArray;
 
 [SWF(width="640", height="640", frameRate="60", backgroundColor="#F1F1F1")]
 public class Main extends Sprite {
-    [Embed(source="adobeair.png")]
-    public static const TestImage:Class;
-
     public static const GREEN:uint = 0xFF00FF00;
     public static const HALF_GREEN:uint = 0x8000FF00;
 
@@ -37,7 +34,6 @@ public class Main extends Sprite {
 
         NativeApplication.nativeApplication.addEventListener(Event.EXITING, onExiting);
         this.addEventListener(Event.ACTIVATE, onActivated);
-
     }
     
     private function onActivated(event:Event):void {

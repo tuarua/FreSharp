@@ -1,3 +1,9 @@
+### 2.1.0
+- Upgraded to AIR 32
+- Added `FREArray.IsEmpty`
+- Added `FREArray.Insert()`
+- Added `FREArray.Remove()`
+
 ### 2.0.0
 - Fix `FREObject.AsDateTime()` UTC bug
 - repurpose `FreObjectSharp` for use as a dynamic object

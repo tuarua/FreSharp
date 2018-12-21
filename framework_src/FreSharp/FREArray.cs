@@ -135,6 +135,11 @@ namespace TuaRua.FreSharp {
         }
 
         /// <summary>
+        /// A Boolean value indicating whether the FREArray is empty.
+        /// </summary>
+        public bool IsEmpty => Length == 0;
+
+        /// <summary>
         /// Adds one or more elements to the end of an array and returns the new length of the array.
         /// </summary>
         /// <param name="args">One or more values to append to the array.</param>
@@ -151,6 +156,28 @@ namespace TuaRua.FreSharp {
             var status = (FreResultSharp)resultPtr;
             if (status == FreResultSharp.Ok) return;
             Logger.Log("cannot call method push on FREArray", status, ret);
+        }
+
+        /// <summary>
+        /// Insert a single element into the FREArray.
+        /// </summary>
+        /// <param name="at">An uint that specifies the position in the Vector where the element is to be inserted.
+        /// You can use a negative Int to specify a position relative to the end of the
+        /// FREArray(for example, -1 for the last element of the FREArray)</param>
+        /// <param name="value"></param>
+        public void Insert(FREObject value, int at) {
+            RawValue.Call("insertAt", at, value);
+        }
+
+        /// <summary>
+        /// Remove a single element from the Vector. This method modifies the FREArray without making a copy.
+        /// </summary>
+        /// <param name="at">An Int that specifies the index of the element in the FREArray that is to be deleted.
+        /// You can use a negative Int to specify a position relative to the end of the FREArray
+        /// (for example, -1 for the last element of the Vector).</param>
+        /// <returns>The element that was removed from the original FREArray</returns>
+        public FREObject Remove(int at) {
+            return RawValue.Call("removeAt", at);
         }
 
         /// <summary>
