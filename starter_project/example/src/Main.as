@@ -3,15 +3,19 @@ package {
 import com.mycompany.CustomEvent;
 import com.mycompany.HelloWorldANE;
 
+import flash.desktop.NativeApplication;
+
 import flash.display.Sprite;
+import flash.events.Event;
 import flash.text.TextField;
 
 public class Main extends Sprite {
-    public function Main() {
+    private var ane:HelloWorldANE;
 
-        var ane:HelloWorldANE = new HelloWorldANE();
+    public function Main() {
+        NativeApplication.nativeApplication.addEventListener(Event.EXITING, onExiting);
+        ane = HelloWorldANE.helloWorld;
         ane.addEventListener("MY_EVENT", onANEEvent);
-        ane.init();
 
         var myString:String = ane.sayHello("Hey there", true, 5);
 
@@ -20,8 +24,12 @@ public class Main extends Sprite {
         addChild(textField);
     }
 
-    private function onANEEvent(event:CustomEvent):void {
+    private static function onANEEvent(event:CustomEvent):void {
         trace(event);
+    }
+
+    private static function onExiting(event:Event):void {
+        HelloWorldANE.dispose();
     }
 }
 }
