@@ -1,3 +1,8 @@
+### 2.2.0
+- Add `[DateTime]` support to `FREArray`
+- Change: `FREArray` now uses Vector.<Type> throughout
+- Improve `ANEUtils.map` performance
+
 ### 2.1.0
 - Upgraded to AIR 32
 - Added `FREArray.IsEmpty`

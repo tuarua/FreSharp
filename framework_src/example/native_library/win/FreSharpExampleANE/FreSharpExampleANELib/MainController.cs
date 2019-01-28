@@ -143,6 +143,9 @@ namespace FreExampleSharpLib {
             Trace("New Person is of type CLASS:",
                 newPerson.Type(), newPerson.Type().Equals(FreObjectTypeSharp.Class) ? "✅" : "❌");
 
+            Trace("New Person className is com.tuarua::Person",
+                newPerson.ClassName() == "com.tuarua::Person" ? "✅" : "❌");
+
             dynamic sharpPerson = new FreObjectSharp("com.tuarua.Person", "Ben McBobster", 80);
             Trace("sharpPerson.RawValue.ToString()",
                 ((FREObject) sharpPerson.RawValue()).toString()); //case sensitive, calls as3 toString NOT c# ToString()

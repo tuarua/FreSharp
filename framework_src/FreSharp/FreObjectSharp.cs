@@ -112,8 +112,18 @@ namespace TuaRua.FreSharp {
                 return true;
             }
 
+            if (type == typeof(string[])) {
+                result = new FREArray(_rawValue).AsStringArray();
+                return true;
+            }
+
             if (type == typeof(double)) {
                 result = _rawValue.AsDouble();
+                return true;
+            }
+
+            if (type == typeof(double[])) {
+                result = new FREArray(_rawValue).AsDoubleArray();
                 return true;
             }
 
@@ -122,13 +132,28 @@ namespace TuaRua.FreSharp {
                 return true;
             }
 
+            if (type == typeof(bool[])) {
+                result = new FREArray(_rawValue).AsBoolArray();
+                return true;
+            }
+
             if (type == typeof(uint)) {
                 result = _rawValue.AsUInt();
                 return true;
             }
 
-            if (type == typeof(int) || type == typeof(long) || type == typeof(short)) { //TODO short is not great
+            if (type == typeof(uint[])) {
+                result = new FREArray(_rawValue).AsUIntArray();
+                return true;
+            }
+
+            if (type == typeof(int) || type == typeof(long) || type == typeof(short)) {
                 result = _rawValue.AsInt();
+                return true;
+            }
+
+            if (type == typeof(int[])) {
+                result = new FREArray(_rawValue).AsIntArray();
                 return true;
             }
 

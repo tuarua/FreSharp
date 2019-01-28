@@ -223,10 +223,7 @@ namespace TuaRua.FreSharp {
             new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc).AddSeconds(rawValue.GetProp("time").AsDouble() / 1000);
 
         internal static FreObjectTypeSharp GetActionscriptType(FREObject rawValue) {
-            var aneUtils = new FREObject().Init("com.tuarua.fre.ANEUtils");
-            var classType = aneUtils.Call("getClassType", rawValue);
-            var type = GetAsString(classType).ToLower();
-
+            var type = rawValue.ClassName().ToLower();
             switch (type) {
                 case "object":
                     return FreObjectTypeSharp.Object;

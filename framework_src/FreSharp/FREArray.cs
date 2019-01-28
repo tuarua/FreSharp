@@ -78,8 +78,32 @@ namespace TuaRua.FreSharp {
         /// </summary>
         /// <param name="intArray"></param>
         public FREArray(IEnumerable<int> intArray) {
-            RawValue = new FREObject().Init("Array");
+            RawValue = new FREObject().Init("Vector.<int>");
             foreach (var v in intArray) {
+                Push(v);
+            }
+        }
+
+        /// <inheritdoc />
+        /// <summary>
+        /// Creates a FREArray from a C# uint[].
+        /// </summary>
+        /// <param name="uintArray"></param>
+        public FREArray(IEnumerable<uint> uintArray) {
+            RawValue = new FREObject().Init("Vector.<uint>");
+            foreach (var v in uintArray) {
+                Push(v);
+            }
+        }
+
+        /// <inheritdoc />
+        /// <summary>
+        /// Creates a FREArray from a C# DateTime[].
+        /// </summary>
+        /// <param name="dateArray"></param>
+        public FREArray(IEnumerable<DateTime> dateArray) {
+            RawValue = new FREObject().Init("Vector.<Date>");
+            foreach (var v in dateArray) {
                 Push(v);
             }
         }
@@ -90,7 +114,7 @@ namespace TuaRua.FreSharp {
         /// </summary>
         /// <param name="doubleArray"></param>
         public FREArray(IEnumerable<double> doubleArray) {
-            RawValue = new FREObject().Init("Array");
+            RawValue = new FREObject().Init("Vector.<Number>");
             foreach (var v in doubleArray) {
                 Push(v);
             }
@@ -102,7 +126,7 @@ namespace TuaRua.FreSharp {
         /// </summary>
         /// <param name="boolArray"></param>
         public FREArray(IEnumerable<bool> boolArray) {
-            RawValue = new FREObject().Init("Array");
+            RawValue = new FREObject().Init("Vector.<Boolean>");
             foreach (var v in boolArray) {
                 Push(v);
             }
@@ -114,7 +138,7 @@ namespace TuaRua.FreSharp {
         /// </summary>
         /// <param name="stringArray"></param>
         public FREArray(IEnumerable<string> stringArray) {
-            RawValue = new FREObject().Init("Array");
+            RawValue = new FREObject().Init("Vector.<String>");
             foreach (var v in stringArray) {
                 Push(v);
             }
@@ -302,6 +326,26 @@ namespace TuaRua.FreSharp {
                 }
 
                 arr.SetValue(FreSharpHelper.GetAsBool(itm), i);
+            }
+
+            return arr;
+        }
+
+        /// <summary>
+        /// Returns the FREArray as a C# DateTime[].
+        /// </summary>
+        /// <returns></returns>
+        public DateTime[] AsDateArray()
+        {
+            var arr = new DateTime[Length];
+            var len = Length;
+            if (len <= 0) return arr;
+            for (uint i = 0; i < len; i++) {
+                var itm = At(i);
+                if (itm.Type() != FreObjectTypeSharp.Date) {
+                    return arr;
+                }
+                arr.SetValue(FreSharpHelper.GetAsDateTime(itm), i);
             }
 
             return arr;

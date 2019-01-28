@@ -69,6 +69,13 @@ namespace TuaRua.FreSharp {
             inFre.Call("hasOwnProperty", name).AsBool();
 
         /// <summary>
+        /// Returns the className of the FREObject
+        /// </summary>
+        /// <param name="inFre"></param>
+        /// <returns></returns>
+        public static string ClassName(this FREObject inFre) => new FREObject().Init("com.tuarua.fre.ANEUtils").Call("getClassType", inFre).AsString();
+
+        /// <summary>
         /// Converts a FREObject to a DateTime.
         /// </summary>
         /// <param name="inFre"></param>
