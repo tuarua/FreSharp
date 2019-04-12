@@ -17,6 +17,7 @@
 //  All Rights Reserved. Tua Rua Ltd.
 
 #endregion
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -35,7 +36,7 @@ using Rect = System.Windows.Rect;
 namespace TuaRua.FreSharp {
     internal static class FreSharpHelper {
         private static FreSharpLogger Logger => FreSharpLogger.GetInstance();
-        internal static FRESharpCLR Core = new FRESharpCLR();
+        internal static readonly FRESharpCLR Core = new FRESharpCLR();
 
         internal static void DispatchEvent(ref FREContext freContext, string name, string value) {
             Core.dispatchEvent(freContext, name, value);
@@ -220,13 +221,11 @@ namespace TuaRua.FreSharp {
         }
 
         internal static DateTime GetAsDateTime(FREObject rawValue) =>
-            new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc).AddSeconds(rawValue.GetProp("time").AsDouble() / 1000);
+            new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc).AddSeconds(
+                rawValue.GetProp("time").AsDouble() / 1000);
 
-        internal static FreObjectTypeSharp GetActionscriptType(FREObject rawValue) {
-            var aneUtils = new FREObject().Init("com.tuarua.fre.ANEUtils");
-            var classType = aneUtils.Call("getClassType", rawValue);
-            var type = GetAsString(classType).ToLower();
-
+        private static FreObjectTypeSharp GetActionscriptType(FREObject rawValue) {
+            var type = rawValue.ClassName().ToLower();
             switch (type) {
                 case "object":
                     return FreObjectTypeSharp.Object;
@@ -284,7 +283,7 @@ namespace TuaRua.FreSharp {
         internal static FREObject GetActionScriptData(ref FREContext freContext) {
             uint resultPtr = 0;
             var ret = Core.getActionScriptData(freContext, ref resultPtr);
-            var status = (FreResultSharp)resultPtr;
+            var status = (FreResultSharp) resultPtr;
             if (status == FreResultSharp.Ok) return ret;
             Logger.Log("cannot get ActionScript data", status, ret);
             return FREObject.Zero;
@@ -293,7 +292,7 @@ namespace TuaRua.FreSharp {
         internal static void SetActionScriptData(ref FREContext freContext, FREObject value) {
             uint resultPtr = 0;
             Core.setActionScriptData(freContext, value, ref resultPtr);
-            var status = (FreResultSharp)resultPtr;
+            var status = (FreResultSharp) resultPtr;
             if (status == FreResultSharp.Ok) return;
             Logger.Log("cannot set ActionScript data", status);
         }
@@ -351,7 +350,7 @@ namespace TuaRua.FreSharp {
             }
         }
 
-        internal static object GetAsObject(FREObject rawValue) {
+        private static object GetAsObject(FREObject rawValue) {
             switch (GetType(rawValue)) {
                 case FreObjectTypeSharp.Object:
                 case FreObjectTypeSharp.Class:

@@ -17,8 +17,11 @@
 //  All Rights Reserved. Tua Rua Ltd.
 
 #endregion
+
 using System;
 using FREObject = System.IntPtr;
+// ReSharper disable UnusedMember.Global
+
 namespace TuaRua.FreSharp.Exceptions {
     /// <summary>
     /// 
@@ -34,7 +37,9 @@ namespace TuaRua.FreSharp.Exceptions {
         /// </summary>
         /// <param name="e"></param>
         public FreException(Exception e) {
-            RawValue = new FREObject().Init("com.tuarua.fre.ANEError", e.Message, 0, e.GetType().ToString(), e.Source, e.StackTrace);
+            RawValue = new FREObject().Init("com.tuarua.fre.ANEError", e.Message, 0, 
+                e.GetType().ToString(), e.Source,
+                e.StackTrace);
         }
 
         /// <summary>
@@ -42,8 +47,8 @@ namespace TuaRua.FreSharp.Exceptions {
         /// </summary>
         /// <param name="message"></param>
         public FreException(string message) {
-            RawValue = new FREObject().Init("com.tuarua.fre.ANEError", message, 0, "FreSharp.Exceptions.Generic", "", "");
+            RawValue = new FREObject().Init("com.tuarua.fre.ANEError", message, 0, 
+                "FreSharp.Exceptions.Generic", "", "");
         }
-
     }
 }

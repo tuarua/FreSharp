@@ -2,6 +2,9 @@
 using System.Drawing;
 using System.Runtime.InteropServices;
 using Hwnd = System.IntPtr;
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedMember.Global
+// ReSharper disable FieldCanBeMadeReadOnly.Global
 
 #pragma warning disable 1591
 
@@ -11,6 +14,7 @@ namespace TuaRua.FreSharp.Utils {
     /// </summary>
     public static class WinApi {
         private const string User32 = "user32";
+
         //private const string Kernel32 = "kernel32";
         private const string Gdi32 = "gdi32";
 
@@ -25,9 +29,11 @@ namespace TuaRua.FreSharp.Utils {
             if (dpiScale > 1.0) {
                 return dpiScale;
             }
+
             if (physicalScreenHeight / (double) logicalScreenHeight > 1.0) {
                 return physicalScreenHeight / (double) logicalScreenHeight;
             }
+
             return 1.0;
         }
 
@@ -100,7 +106,7 @@ namespace TuaRua.FreSharp.Utils {
 
     [Flags]
     public enum WindowLongFlags {
-        GWL_EXSTYLE = -20,
+        GWL_EXSTYLE = -20
     }
 
     [Flags]
@@ -123,12 +129,12 @@ namespace TuaRua.FreSharp.Utils {
     [Flags]
     public enum WindowStyles {
         WS_CHILD = 0x40000000,
-        WS_VISIBLE = 0x10000000,
+        WS_VISIBLE = 0x10000000
     }
 
     [Flags]
     public enum WindowExStyles {
-        WS_EX_LAYERED = 0x00080000,
+        WS_EX_LAYERED = 0x00080000
     }
 
     [Flags]

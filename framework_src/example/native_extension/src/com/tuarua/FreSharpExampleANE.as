@@ -50,8 +50,8 @@ public class FreSharpExampleANE extends EventDispatcher {
         return ctx.call("runIntTests", value, value2) as int;
     }
 
-    public function runArrayTests(value:Array, value2:Vector.<String>, value3:Vector.<Number>, value4:Vector.<Boolean>):Array {
-        return ctx.call("runArrayTests", value, value2, value3, value4) as Array;
+    public function runArrayTests(value:Array, value2:Vector.<String>, value3:Vector.<Number>, value4:Vector.<Boolean>):Vector.<int> {
+        return ctx.call("runArrayTests", value, value2, value3, value4) as Vector.<int>;
     }
 
     public function runObjectTests(value:Person):Person {

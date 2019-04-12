@@ -17,6 +17,7 @@
 //  All Rights Reserved. Tua Rua Ltd.
 
 #endregion
+
 using FREObject = System.IntPtr;
 using Rect = System.Windows.Rect;
 

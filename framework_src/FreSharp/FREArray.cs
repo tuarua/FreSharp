@@ -17,14 +17,16 @@
 //  All Rights Reserved. Tua Rua Ltd.
 
 #endregion
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using TuaRua.FreSharp.Display;
 using TuaRua.FreSharp.Geom;
 using FREObject = System.IntPtr;
+// ReSharper disable UnusedMember.Global
+
 // ReSharper disable InheritdocConsiderUsage
 // ReSharper disable InconsistentNaming
 
@@ -32,7 +34,6 @@ namespace TuaRua.FreSharp {
     /// <summary>
     /// 
     /// </summary>
-    [SuppressMessage("ReSharper", "UnusedMember.Global")]
     public class FREArray : IEnumerable<FREObject> {
         private static FreSharpLogger Logger => FreSharpLogger.GetInstance();
 
@@ -53,16 +54,6 @@ namespace TuaRua.FreSharp {
 
         /// <inheritdoc />
         /// <summary>
-        /// Creates a C# FreArray with a given class name.
-        /// </summary>
-        /// <param name="className"></param>
-        [Obsolete("FREArray is obsoleted, please use FREArray(className, length, fixedSize) instead.", true)]
-        public FREArray(string className) {
-            RawValue = new FREObject().Init(className);
-        }
-
-        /// <inheritdoc />
-        /// <summary>
         /// Creates a C# FREArray with a given class name. Do not specify the &lt;Vector. prefix.
         /// </summary>
         /// <param name="className">name of AS3 class to create.</param>
@@ -78,8 +69,32 @@ namespace TuaRua.FreSharp {
         /// </summary>
         /// <param name="intArray"></param>
         public FREArray(IEnumerable<int> intArray) {
-            RawValue = new FREObject().Init("Array");
+            RawValue = new FREObject().Init("Vector.<int>");
             foreach (var v in intArray) {
+                Push(v);
+            }
+        }
+
+        /// <inheritdoc />
+        /// <summary>
+        /// Creates a FREArray from a C# uint[].
+        /// </summary>
+        /// <param name="uintArray"></param>
+        public FREArray(IEnumerable<uint> uintArray) {
+            RawValue = new FREObject().Init("Vector.<uint>");
+            foreach (var v in uintArray) {
+                Push(v);
+            }
+        }
+
+        /// <inheritdoc />
+        /// <summary>
+        /// Creates a FREArray from a C# DateTime[].
+        /// </summary>
+        /// <param name="dateArray"></param>
+        public FREArray(IEnumerable<DateTime> dateArray) {
+            RawValue = new FREObject().Init("Vector.<Date>");
+            foreach (var v in dateArray) {
                 Push(v);
             }
         }
@@ -90,7 +105,7 @@ namespace TuaRua.FreSharp {
         /// </summary>
         /// <param name="doubleArray"></param>
         public FREArray(IEnumerable<double> doubleArray) {
-            RawValue = new FREObject().Init("Array");
+            RawValue = new FREObject().Init("Vector.<Number>");
             foreach (var v in doubleArray) {
                 Push(v);
             }
@@ -102,7 +117,7 @@ namespace TuaRua.FreSharp {
         /// </summary>
         /// <param name="boolArray"></param>
         public FREArray(IEnumerable<bool> boolArray) {
-            RawValue = new FREObject().Init("Array");
+            RawValue = new FREObject().Init("Vector.<Boolean>");
             foreach (var v in boolArray) {
                 Push(v);
             }
@@ -114,7 +129,7 @@ namespace TuaRua.FreSharp {
         /// </summary>
         /// <param name="stringArray"></param>
         public FREArray(IEnumerable<string> stringArray) {
-            RawValue = new FREObject().Init("Array");
+            RawValue = new FREObject().Init("Vector.<String>");
             foreach (var v in stringArray) {
                 Push(v);
             }
@@ -151,9 +166,10 @@ namespace TuaRua.FreSharp {
                     argsArr.Add(args.ElementAt(i));
                 }
             }
+
             var ret = FreSharpHelper.Core.callMethod(RawValue, "push", FreSharpHelper.ArgsToArgv(argsArr),
                 FreSharpHelper.GetArgsC(argsArr), ref resultPtr);
-            var status = (FreResultSharp)resultPtr;
+            var status = (FreResultSharp) resultPtr;
             if (status == FreResultSharp.Ok) return;
             Logger.Log("cannot call method push on FREArray", status, ret);
         }
@@ -302,6 +318,26 @@ namespace TuaRua.FreSharp {
                 }
 
                 arr.SetValue(FreSharpHelper.GetAsBool(itm), i);
+            }
+
+            return arr;
+        }
+
+        /// <summary>
+        /// Returns the FREArray as a C# DateTime[].
+        /// </summary>
+        /// <returns></returns>
+        public DateTime[] AsDateArray() {
+            var arr = new DateTime[Length];
+            var len = Length;
+            if (len <= 0) return arr;
+            for (uint i = 0; i < len; i++) {
+                var itm = At(i);
+                if (itm.Type() != FreObjectTypeSharp.Date) {
+                    return arr;
+                }
+
+                arr.SetValue(FreSharpHelper.GetAsDateTime(itm), i);
             }
 
             return arr;

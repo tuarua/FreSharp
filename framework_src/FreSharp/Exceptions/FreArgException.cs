@@ -17,15 +17,17 @@
 //  All Rights Reserved. Tua Rua Ltd.
 
 #endregion
+
 using System;
-using System.Diagnostics.CodeAnalysis;
 using FREObject = System.IntPtr;
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedAutoPropertyAccessor.Global
+// ReSharper disable UnusedMember.Global
 
 namespace TuaRua.FreSharp.Exceptions {
     /// <summary>
     /// 
     /// </summary>
-    [SuppressMessage("ReSharper", "UnusedMember.Global")]
     public class FreArgException {
         /// <summary>
         /// Returns a ANEError as a FREObject

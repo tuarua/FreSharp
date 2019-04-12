@@ -17,24 +17,28 @@
 //  All Rights Reserved. Tua Rua Ltd.
 
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using FREObject = System.IntPtr;
 using FREContext = System.IntPtr;
+// ReSharper disable MemberCanBeProtected.Global
 // ReSharper disable UnusedMember.Global
 // ReSharper disable InconsistentNaming
 
-namespace TuaRua.FreSharp { 
+namespace TuaRua.FreSharp {
     /// <summary>
     /// 
     /// </summary>
     public abstract class FreSharpMainController {
         private const string TRACE = "TRACE";
+
         /// <summary>
         /// Called by C++ ContextFinalizer.
         /// </summary>
         public abstract void OnFinalize();
+
         /// <summary>
         /// Returns functions which connect C++ to C#.
         /// </summary>
@@ -49,6 +53,7 @@ namespace TuaRua.FreSharp {
         /// 
         /// </summary>
         public FreContextSharp Context;
+
         /// <summary>
         /// 
         /// </summary>
@@ -96,16 +101,6 @@ namespace TuaRua.FreSharp {
         public void Info(params object[] values) {
             var traceStr = values.Aggregate("", (current, value) => current + value + " ");
             Context?.DispatchEvent(TRACE, $"{TAG}: ℹ️INFO: {traceStr}");
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="value"></param>
-        [Obsolete("SendEvent is obsoleted, please use DispatchEvent instead.", true)]
-        public void SendEvent(string name, string value) {
-            Context?.DispatchEvent(name, value);
         }
 
         /// <summary>

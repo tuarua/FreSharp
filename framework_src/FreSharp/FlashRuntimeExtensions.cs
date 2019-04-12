@@ -17,6 +17,7 @@
 //  All Rights Reserved. Tua Rua Ltd.
 
 #endregion
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -24,6 +25,7 @@ using System.Drawing;
 using System.Linq;
 using TuaRua.FreSharp.Display;
 using FREObject = System.IntPtr;
+
 // ReSharper disable UnusedMember.Global
 // ReSharper disable InconsistentNaming
 
@@ -67,6 +69,14 @@ namespace TuaRua.FreSharp {
         /// <returns></returns>
         public static bool hasOwnProperty(this FREObject inFre, string name) =>
             inFre.Call("hasOwnProperty", name).AsBool();
+
+        /// <summary>
+        /// Returns the className of the FREObject
+        /// </summary>
+        /// <param name="inFre"></param>
+        /// <returns></returns>
+        public static string ClassName(this FREObject inFre) =>
+            new FREObject().Init("com.tuarua.fre.ANEUtils").Call("getClassType", inFre).AsString();
 
         /// <summary>
         /// Converts a FREObject to a DateTime.
@@ -181,28 +191,28 @@ namespace TuaRua.FreSharp {
         /// </summary>
         /// <param name="arr"></param>
         /// <returns></returns>
-        public static FREObject ToFREObject(this int[] arr) => new FREArray(arr).RawValue;
+        public static FREObject ToFREObject(this IEnumerable<int> arr) => new FREArray(arr).RawValue;
 
         /// <summary>
         /// Converts a C# bool[] to a FREObject.
         /// </summary>
         /// <param name="arr"></param>
         /// <returns></returns>
-        public static FREObject ToFREObject(this bool[] arr) => new FREArray(arr).RawValue;
+        public static FREObject ToFREObject(this IEnumerable<bool> arr) => new FREArray(arr).RawValue;
 
         /// <summary>
         /// Converts a C# double[] to a FREObject.
         /// </summary>
         /// <param name="arr"></param>
         /// <returns></returns>
-        public static FREObject ToFREObject(this double[] arr) => new FREArray(arr).RawValue;
+        public static FREObject ToFREObject(this IEnumerable<double> arr) => new FREArray(arr).RawValue;
 
         /// <summary>
         /// Converts a C# string[] to a FREObject.
         /// </summary>
         /// <param name="arr"></param>
         /// <returns></returns>
-        public static FREObject ToFREObject(this string[] arr) => new FREArray(arr).RawValue;
+        public static FREObject ToFREObject(this IEnumerable<string> arr) => new FREArray(arr).RawValue;
 
         /// <summary>
         /// Converts a FREObject to an ArrayList.
@@ -230,7 +240,7 @@ namespace TuaRua.FreSharp {
         /// </summary>
         /// <param name="inFre"></param>
         /// <returns></returns>
-        public static short AsShort(this FREObject inFre) => (short)FreSharpHelper.GetAsInt(inFre);
+        public static short AsShort(this FREObject inFre) => (short) FreSharpHelper.GetAsInt(inFre);
 
         /// <summary>
         /// Initialise a System.Drawing.Color from a FREObject.
