@@ -17,8 +17,10 @@
 //  All Rights Reserved. Tua Rua Ltd.
 
 #endregion
+
 using System;
 using FREObject = System.IntPtr;
+// ReSharper disable MemberCanBePrivate.Global
 
 namespace TuaRua.FreSharp {
     /// <summary>

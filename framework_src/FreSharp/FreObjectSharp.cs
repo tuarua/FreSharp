@@ -25,6 +25,7 @@ using System.Windows;
 using TuaRua.FreSharp.Geom;
 using FREObject = System.IntPtr;
 using Point = System.Windows.Point;
+
 // ReSharper disable All
 // ReSharper disable InconsistentNaming
 

@@ -17,9 +17,12 @@
 //  All Rights Reserved. Tua Rua Ltd.
 
 #endregion
+
 using System.Runtime.InteropServices;
 using FRESharpCore;
 using FREObject = System.IntPtr;
+// ReSharper disable MemberCanBePrivate.Global
+
 namespace TuaRua.FreSharp {
     /// <summary>
     /// FreByteArraySharp wraps a C FREByteArray with helper methods.

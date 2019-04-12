@@ -17,9 +17,10 @@
 //  All Rights Reserved. Tua Rua Ltd.
 
 #endregion
-using System;
+
 using FREContext = System.IntPtr;
 using FREObject = System.IntPtr;
+
 // ReSharper disable UnusedMember.Global
 
 namespace TuaRua.FreSharp {
@@ -35,16 +36,6 @@ namespace TuaRua.FreSharp {
         /// <param name="freContext">FREContext</param>
         public FreContextSharp(FREContext freContext) {
             _rawValue = freContext;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="value"></param>
-        [Obsolete("SendEvent is obsoleted, please use DispatchEvent instead.", true)]
-        public void SendEvent(string name, string value) {
-            FreSharpHelper.DispatchEvent(ref _rawValue, name, value);
         }
 
         /// <summary>

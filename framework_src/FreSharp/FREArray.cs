@@ -17,14 +17,16 @@
 //  All Rights Reserved. Tua Rua Ltd.
 
 #endregion
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using TuaRua.FreSharp.Display;
 using TuaRua.FreSharp.Geom;
 using FREObject = System.IntPtr;
+// ReSharper disable UnusedMember.Global
+
 // ReSharper disable InheritdocConsiderUsage
 // ReSharper disable InconsistentNaming
 
@@ -32,7 +34,6 @@ namespace TuaRua.FreSharp {
     /// <summary>
     /// 
     /// </summary>
-    [SuppressMessage("ReSharper", "UnusedMember.Global")]
     public class FREArray : IEnumerable<FREObject> {
         private static FreSharpLogger Logger => FreSharpLogger.GetInstance();
 
@@ -49,16 +50,6 @@ namespace TuaRua.FreSharp {
         /// <param name="freObject"></param>
         public FREArray(FREObject freObject) {
             RawValue = freObject;
-        }
-
-        /// <inheritdoc />
-        /// <summary>
-        /// Creates a C# FreArray with a given class name.
-        /// </summary>
-        /// <param name="className"></param>
-        [Obsolete("FREArray is obsoleted, please use FREArray(className, length, fixedSize) instead.", true)]
-        public FREArray(string className) {
-            RawValue = new FREObject().Init(className);
         }
 
         /// <inheritdoc />
@@ -175,9 +166,10 @@ namespace TuaRua.FreSharp {
                     argsArr.Add(args.ElementAt(i));
                 }
             }
+
             var ret = FreSharpHelper.Core.callMethod(RawValue, "push", FreSharpHelper.ArgsToArgv(argsArr),
                 FreSharpHelper.GetArgsC(argsArr), ref resultPtr);
-            var status = (FreResultSharp)resultPtr;
+            var status = (FreResultSharp) resultPtr;
             if (status == FreResultSharp.Ok) return;
             Logger.Log("cannot call method push on FREArray", status, ret);
         }
@@ -335,8 +327,7 @@ namespace TuaRua.FreSharp {
         /// Returns the FREArray as a C# DateTime[].
         /// </summary>
         /// <returns></returns>
-        public DateTime[] AsDateArray()
-        {
+        public DateTime[] AsDateArray() {
             var arr = new DateTime[Length];
             var len = Length;
             if (len <= 0) return arr;
@@ -345,6 +336,7 @@ namespace TuaRua.FreSharp {
                 if (itm.Type() != FreObjectTypeSharp.Date) {
                     return arr;
                 }
+
                 arr.SetValue(FreSharpHelper.GetAsDateTime(itm), i);
             }
 

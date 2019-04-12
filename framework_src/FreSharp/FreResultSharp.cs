@@ -17,6 +17,7 @@
 //  All Rights Reserved. Tua Rua Ltd.
 
 #endregion
+
 // ReSharper disable UnusedMember.Global
 namespace TuaRua.FreSharp {
     /// <summary>C# implementation of FREResult.</summary>
@@ -78,6 +79,6 @@ namespace TuaRua.FreSharp {
         /// The runtime could not allocate enough memory to change the size of an
         /// Array or Vector object.
         /// </summary>
-        FreInsufficientMemory = 9,
+        FreInsufficientMemory = 9
     }
 }

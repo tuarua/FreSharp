@@ -1,4 +1,5 @@
 ﻿#region License
+
 // Copyright 2017 Tua Rua Ltd.
 // 
 //  Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,11 +15,12 @@
 //  limitations under the License.
 // 
 //  Additional Terms
-//  No part, or derivative of this Air Native Extensions's code is permitted 
+//  No part, or derivative of this Air Native Extension's code is permitted 
 //  to be sold as the basis of a commercially packaged Air Native Extension which 
 //  undertakes the same purpose as this software. That is, a WebView for Windows, 
 //  OSX and/or iOS and/or Android.
 //  All Rights Reserved. Tua Rua Ltd.
+
 #endregion
 
 using System.Text;
@@ -27,7 +29,7 @@ namespace TuaRua.FreSharp.Utils {
     /// <summary>
     /// 
     /// </summary>
-    public class StringUtils {
+    public static class StringUtils {
         /// <summary>
         /// 
         /// </summary>

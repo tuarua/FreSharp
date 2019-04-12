@@ -10,6 +10,8 @@ using TuaRua.FreSharp.Geom;
 using FREObject = System.IntPtr;
 using FREContext = System.IntPtr;
 using Point = System.Windows.Point;
+
+// ReSharper disable UnusedMember.Global
 // ReSharper disable MemberCanBeMadeStatic.Local
 
 namespace FreExampleSharpLib {
@@ -28,7 +30,7 @@ namespace FreExampleSharpLib {
                     {"runErrorTests", RunErrorTests},
                     {"runDataTests", RunDataTests},
                     {"runDateTests", RunDateTests},
-                    {"runColorTests", RunColorTests},
+                    {"runColorTests", RunColorTests}
                 };
             return FunctionsDict.Select(kvp => kvp.Key).ToArray();
         }
@@ -147,7 +149,7 @@ namespace FreExampleSharpLib {
                 newPerson.ClassName() == "com.tuarua::Person" ? "✅" : "❌");
 
             dynamic sharpPerson = new FreObjectSharp("com.tuarua.Person", "Ben McBobster", 80);
-            Trace("sharpPerson.RawValue.ToString()",
+            Trace("sharpPerson.RawValue.toString()",
                 ((FREObject) sharpPerson.RawValue()).toString()); //case sensitive, calls as3 toString NOT c# ToString()
 
             var oldAge = person.GetProp("age").AsInt();
@@ -204,15 +206,16 @@ namespace FreExampleSharpLib {
                     ((int) sharpPerson.age).Equals(999) ? "✅" : "❌");
                 Trace("Dynamic height as double:", (double) sharpPerson.height,
                     ((double) sharpPerson.height).Equals(1.88) ? "✅" : "❌");
-                Trace("Dynamic isMan as bool:",  (bool)sharpPerson.isMan, 
-                    ((bool)sharpPerson.isMan).Equals(true) ? "✅" : "❌");
+                Trace("Dynamic isMan as bool:", (bool) sharpPerson.isMan,
+                    ((bool) sharpPerson.isMan).Equals(true) ? "✅" : "❌");
 
                 sharpPerson.age = 111.ToFREObject();
                 sharpPerson.height = 2;
 
-                Trace("Dynamic age as int:", (int)sharpPerson.age, ((int)sharpPerson.age).Equals(111) ? "✅" : "❌");
-                Trace("Dynamic height as double:", (double)sharpPerson.height,
-                    ((double)sharpPerson.height).Equals(2) ? "✅" : "❌");
+                Trace("Dynamic age as int:", (int) sharpPerson.age, 
+                    ((int) sharpPerson.age).Equals(111) ? "✅" : "❌");
+                Trace("Dynamic height as double:", (double) sharpPerson.height,
+                    ((double) sharpPerson.height).Equals(2) ? "✅" : "❌");
             }
             catch (Exception e) {
                 Trace(e.GetType());

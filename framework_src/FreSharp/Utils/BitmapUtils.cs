@@ -1,6 +1,7 @@
 ﻿using System.Drawing;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+// ReSharper disable UnusedMember.Global
 
 namespace TuaRua.FreSharp.Utils {
     /// <summary>

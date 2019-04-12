@@ -2,6 +2,7 @@
 - Add `[DateTime]` support to `FREArray`
 - Change: `FREArray` now uses Vector.<Type> throughout
 - Improve `ANEUtils.map` performance
+- Upgrade to AIR 32.0.0.116
 
 ### 2.1.0
 - Upgraded to AIR 32
