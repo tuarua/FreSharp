@@ -8,6 +8,9 @@
             <entry library-name="HelloWorldANE" library-level="project">
               <dependency linkage="Merged" />
             </entry>
+            <entry library-name="FreSharpANE" library-level="project">
+              <dependency linkage="Merged" />
+            </entry>
           </entries>
           <sdk name="AIRSDK_32" />
         </dependencies>
@@ -27,5 +30,6 @@
     <orderEntry type="jdk" jdkName="AIRSDK_32" jdkType="Flex SDK Type (new)" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="HelloWorldANE" level="project" />
+    <orderEntry type="library" exported="" name="FreSharpANE" level="project" />
   </component>
 </module>

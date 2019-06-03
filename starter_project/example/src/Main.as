@@ -2,19 +2,19 @@ package {
 
 import com.mycompany.CustomEvent;
 import com.mycompany.HelloWorldANE;
+import com.tuarua.FreSharp;
 
 import flash.desktop.NativeApplication;
-
 import flash.display.Sprite;
 import flash.events.Event;
 import flash.text.TextField;
 
 public class Main extends Sprite {
-    private var ane:HelloWorldANE;
+    private var freSharpANE:FreSharp = new FreSharp();//must create before all others
 
     public function Main() {
         NativeApplication.nativeApplication.addEventListener(Event.EXITING, onExiting);
-        ane = HelloWorldANE.helloWorld;
+        var ane:HelloWorldANE = HelloWorldANE.helloWorld;
         ane.addEventListener("MY_EVENT", onANEEvent);
 
         var myString:String = ane.sayHello("Hey there", true, 5);
@@ -28,8 +28,9 @@ public class Main extends Sprite {
         trace(event);
     }
 
-    private static function onExiting(event:Event):void {
+    private function onExiting(event:Event):void {
         HelloWorldANE.dispose();
+        freSharpANE.dispose();
     }
 }
 }

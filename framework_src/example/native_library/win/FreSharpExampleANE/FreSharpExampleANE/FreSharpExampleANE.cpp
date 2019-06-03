@@ -19,7 +19,6 @@ extern "C" {
 	}
 
 	CONTEXT_INIT(TRFS) {
-
 		FREBRIDGE_INIT
 
 		static FRENamedFunction extensionFunctions[] = {

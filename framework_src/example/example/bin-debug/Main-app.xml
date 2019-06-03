@@ -4,6 +4,7 @@
   <name>Main</name>
   <versionNumber>0.0.0</versionNumber>
   <extensions>
+    <extensionID>com.tuarua.FreSharp</extensionID>
     <extensionID>com.tuarua.FreSharpExampleANE</extensionID>
   </extensions>
   <initialWindow>
