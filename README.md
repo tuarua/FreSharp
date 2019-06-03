@@ -177,6 +177,11 @@ public static class FrePoint {
 ### Required AS3 classes
 **com.tuarua.fre.ANEUtils.as** and **com.tuarua.fre.ANEError.as** are required by FreSharp and should be included in the AS3 library of your ANE
 
+### Required Dependencies
+Starting from version 2.2.0 FreSharp.ane is required in your AIR project.      
+This ANE contains the required FreSharp dlls and also handles the searching for and loading of a project's C# dll when packaged inside the ANE.    
+No more copying these files into your AIRSDK!
+
 ### Tech
 
 Uses .NET 4.6

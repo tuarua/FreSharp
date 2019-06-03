@@ -37,11 +37,7 @@ prefix##_contextFinalizer(nullCTX); \
 #define FREBRIDGE_INIT FreSharpBridge::InitController(); \
 FreSharpBridge::SetFREContext(ctx); \
 FreSharpBridge::GetFunctions();
-#endif // !FREBRIDGE_INIT
-#define FREBRIDGE_INIT FreSharpBridge::InitController(); \
-FreSharpBridge::SetFREContext(ctx); \
-FreSharpBridge::GetFunctions();
-
+#endif
 
 #ifndef CONTEXT_INIT
 #define CONTEXT_INIT(prefix) void (prefix##_contextInitializer)(void *extData, const uint8_t *ctxType, FREContext ctx, uint32_t *numFunctionsToSet, const FRENamedFunction **functionsToSet)

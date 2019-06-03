@@ -1,4 +1,5 @@
 package {
+import com.tuarua.FreSharp;
 import com.tuarua.FreSharpExampleANE;
 import com.tuarua.Person;
 
@@ -19,6 +20,7 @@ import flash.utils.ByteArray;
 
 [SWF(width="640", height="640", frameRate="60", backgroundColor="#F1F1F1")]
 public class Main extends Sprite {
+    private var freSharpANE:FreSharp = new FreSharp();//must create before all others
     public static const GREEN:uint = 0xFF00FF00;
     public static const HALF_GREEN:uint = 0x8000FF00;
 
@@ -137,6 +139,7 @@ public class Main extends Sprite {
 
     private function onExiting(event:Event):void {
         ane.dispose();
+        freSharpANE.dispose();
     }
 
 }
