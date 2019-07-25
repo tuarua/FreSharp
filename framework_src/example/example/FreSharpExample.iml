@@ -8,7 +8,7 @@
             <entry library-name="FreSharpExampleANE" library-level="project">
               <dependency linkage="Merged" />
             </entry>
-            <entry library-name="FreSharpANE" library-level="project">
+            <entry library-name="FreSharp" library-level="project">
               <dependency linkage="Merged" />
             </entry>
           </entries>
@@ -29,7 +29,7 @@
             <entry library-name="FreSharpExampleANE" library-level="project">
               <dependency linkage="Merged" />
             </entry>
-            <entry library-name="FreSharpANE" library-level="project">
+            <entry library-name="FreSharp" library-level="project">
               <dependency linkage="Merged" />
             </entry>
           </entries>
@@ -55,8 +55,6 @@
     <orderEntry type="jdk" jdkName="AIRSDK_32&#9;AIRSDK_28_64" jdkType="__CompositeFlexSdk__" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="FreSharpExampleANE" level="project" />
-    <orderEntry type="library" exported="" name="greensock" level="project" />
-    <orderEntry type="library" exported="" name="AIRNativeANE" level="project" />
-    <orderEntry type="library" exported="" name="FreSharpANE" level="project" />
+    <orderEntry type="library" exported="" name="FreSharp" level="project" />
   </component>
 </module>
