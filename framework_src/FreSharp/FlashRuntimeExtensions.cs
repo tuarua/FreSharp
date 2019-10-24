@@ -25,6 +25,7 @@ using System.Drawing;
 using System.Linq;
 using TuaRua.FreSharp.Display;
 using FREObject = System.IntPtr;
+// ReSharper disable UnusedParameter.Global
 
 // ReSharper disable UnusedMember.Global
 // ReSharper disable InconsistentNaming
@@ -222,13 +223,6 @@ namespace TuaRua.FreSharp {
         public static ArrayList ToArrayList(this FREObject inFre) => new FREArray(inFre).AsArrayList();
 
         /// <summary>
-        /// Converts a FREArray to an ArrayList.
-        /// </summary>
-        /// <param name="inFre"></param>
-        /// <returns></returns>
-        public static ArrayList ToArrayList(this FREArray inFre) => inFre.AsArrayList(); //TODO can I delete this
-
-        /// <summary>
         /// Converts a FREObject to a C# int.
         /// </summary>
         /// <param name="inFre"></param>
@@ -255,13 +249,13 @@ namespace TuaRua.FreSharp {
                     Convert.ToByte((rgb >> 24) & 0xff),
                     Convert.ToByte((rgb >> 16) & 0xff),
                     Convert.ToByte((rgb >> 8) & 0xff),
-                    Convert.ToByte((rgb >> 0) & 0xff));
+                    Convert.ToByte(rgb & 0xff));
             }
 
             return Color.FromArgb(
                 Convert.ToByte((rgb >> 16) & 0xff),
                 Convert.ToByte((rgb >> 8) & 0xff),
-                Convert.ToByte((rgb >> 0) & 0xff));
+                Convert.ToByte(rgb & 0xff));
         }
 
 
@@ -273,7 +267,7 @@ namespace TuaRua.FreSharp {
         public static FREObject ToFREObject(this Color c) => FreSharpHelper.NewObject((uint) ((c.A << 24)
                                                                                               | (c.R << 16)
                                                                                               | (c.G << 8)
-                                                                                              | (c.B << 0)));
+                                                                                              | c.B));
 
         /// <summary>
         /// Converts a FREObject to a C# Dictionary&lt;string, object&gt;.
@@ -376,7 +370,6 @@ namespace TuaRua.FreSharp {
             Logger.Log($"cannot create class {className}", status, ret);
             return FREObject.Zero;
         }
-
 
         /// <summary>
         /// Creates a FREObject.

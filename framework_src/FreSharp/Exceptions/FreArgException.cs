@@ -19,6 +19,7 @@
 #endregion
 
 using System;
+using System.Runtime.CompilerServices;
 using FREObject = System.IntPtr;
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Global
@@ -47,9 +48,15 @@ namespace TuaRua.FreSharp.Exceptions {
         /// Creates a FreException from a C# message string
         /// </summary>
         /// <param name="message"></param>
-        public FreArgException(string message) {
-            RawValue = new FREObject().Init("com.tuarua.fre.ANEError", $"{message} - incorrect arguments", 0,
-                "FreSharp.Exceptions.FreInvalidArgumentException", "", "");
+        /// <param name="filePath"></param>
+        /// <param name="lineNumber"></param>
+        public FreArgException([CallerMemberName] string message = "", 
+            [CallerFilePath] string filePath = "",
+            [CallerLineNumber] int lineNumber = 0) {
+            RawValue = new FREObject().Init("com.tuarua.fre.ANEError", $"incorrect arguments passed - {message}", 0,
+                "FreSharp.Exceptions.FreInvalidArgumentException",
+                filePath.Length > 0 || lineNumber > 0 ? $"[{filePath}:{lineNumber}]" : "", 
+                "");
         }
     }
 }

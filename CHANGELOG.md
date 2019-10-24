@@ -1,3 +1,6 @@
+### 2.3.0
+- Add default params to `FreArgException` 
+
 ### 2.2.0
 - Add `[DateTime]` support to `FREArray`
 - Change: `FREArray` now uses Vector.<Type> throughout

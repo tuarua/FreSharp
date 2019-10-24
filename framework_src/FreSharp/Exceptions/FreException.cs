@@ -20,6 +20,7 @@
 
 using System;
 using FREObject = System.IntPtr;
+using System.Runtime.CompilerServices;
 // ReSharper disable UnusedMember.Global
 
 namespace TuaRua.FreSharp.Exceptions {
@@ -46,9 +47,17 @@ namespace TuaRua.FreSharp.Exceptions {
         /// Creates a FreException from a C# message string
         /// </summary>
         /// <param name="message"></param>
-        public FreException(string message) {
+        /// <param name="callerMemberName"></param>
+        /// <param name="filePath"></param>
+        /// <param name="lineNumber"></param>
+        public FreException(string message, 
+            [CallerMemberName] string callerMemberName = "", 
+            [CallerFilePath] string filePath = "",
+            [CallerLineNumber] int lineNumber = 0) {
             RawValue = new FREObject().Init("com.tuarua.fre.ANEError", message, 0, 
-                "FreSharp.Exceptions.Generic", "", "");
+                "FreSharp.Exceptions.Generic", 
+                filePath.Length > 0 || lineNumber > 0 ? $"[{filePath}:{lineNumber}:{callerMemberName}]" : "",
+                "");
         }
     }
 }

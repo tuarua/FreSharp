@@ -305,7 +305,7 @@ namespace FreExampleSharpLib {
             var unused3 = person.Call("add", 100); //not passing enough args
             s.Call("noStringFunc"); //call method on a string
             var unused4 = i.AsString(); //try to convert int to string
-            return FREObject.Zero;
+            return new FreException("I am an ANEError").RawValue;
         }
 
         private FREObject RunDataTests(FREContext ctx, uint argc, FREObject[] argv) {
