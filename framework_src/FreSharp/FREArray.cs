@@ -144,7 +144,7 @@ namespace TuaRua.FreSharp {
                 var ret = FreSharpHelper.Core.getArrayLength(RawValue, ref resultPtr);
                 var status = (FreResultSharp) resultPtr;
                 if (status == FreResultSharp.Ok) return ret;
-                Logger.Log("cannot get length of array", status);
+                Logger.Error("cannot get length of array", status);
                 return 0;
             }
         }
@@ -171,7 +171,7 @@ namespace TuaRua.FreSharp {
                 FreSharpHelper.GetArgsC(argsArr), ref resultPtr);
             var status = (FreResultSharp) resultPtr;
             if (status == FreResultSharp.Ok) return;
-            Logger.Log("cannot call method push on FREArray", status, ret);
+            Logger.Error("cannot call method push on FREArray", status, ret);
         }
 
         /// <summary>
@@ -228,19 +228,7 @@ namespace TuaRua.FreSharp {
         /// </summary>
         /// <returns></returns>
         public int[] AsIntArray() {
-            var arr = new int[Length];
-            var len = Length;
-            if (len <= 0) return arr;
-            for (uint i = 0; i < len; i++) {
-                var itm = At(i);
-                if (itm.Type() != FreObjectTypeSharp.Int) {
-                    return arr;
-                }
-
-                arr[i] = FreSharpHelper.GetAsInt(itm);
-            }
-
-            return arr;
+            return this.Select(el => el.AsInt()).ToArray();
         }
 
         /// <summary>
@@ -248,19 +236,7 @@ namespace TuaRua.FreSharp {
         /// </summary>
         /// <returns></returns>
         public uint[] AsUIntArray() {
-            var arr = new uint[Length];
-            var len = Length;
-            if (len <= 0) return arr;
-            for (uint i = 0; i < len; i++) {
-                var itm = At(i);
-                if (itm.Type() != FreObjectTypeSharp.Int) {
-                    return arr;
-                }
-
-                arr[i] = FreSharpHelper.GetAsUInt(itm);
-            }
-
-            return arr;
+            return this.Select(el => el.AsUInt()).ToArray();
         }
 
         /// <summary>
@@ -268,19 +244,7 @@ namespace TuaRua.FreSharp {
         /// </summary>
         /// <returns></returns>
         public double[] AsDoubleArray() {
-            var arr = new double[Length];
-            var len = Length;
-            if (len <= 0) return arr;
-            for (uint i = 0; i < len; i++) {
-                var itm = At(i);
-                if (itm.Type() != FreObjectTypeSharp.Number && itm.Type() != FreObjectTypeSharp.Int) {
-                    return arr;
-                }
-
-                arr[i] = FreSharpHelper.GetAsDouble(itm);
-            }
-
-            return arr;
+            return this.Select(el => el.AsDouble()).ToArray();
         }
 
         /// <summary>
@@ -288,19 +252,7 @@ namespace TuaRua.FreSharp {
         /// </summary>
         /// <returns></returns>
         public string[] AsStringArray() {
-            var arr = new string[Length];
-            var len = Length;
-            if (len <= 0) return arr;
-            for (uint i = 0; i < len; i++) {
-                var itm = At(i);
-                if (itm.Type() != FreObjectTypeSharp.String) {
-                    return arr;
-                }
-
-                arr[i] = FreSharpHelper.GetAsString(itm);
-            }
-
-            return arr;
+            return this.Select(el => el.AsString()).ToArray();
         }
 
         /// <summary>
@@ -308,19 +260,7 @@ namespace TuaRua.FreSharp {
         /// </summary>
         /// <returns></returns>
         public bool[] AsBoolArray() {
-            var arr = new bool[Length];
-            var len = Length;
-            if (len <= 0) return arr;
-            for (uint i = 0; i < len; i++) {
-                var itm = At(i);
-                if (itm.Type() != FreObjectTypeSharp.Boolean) {
-                    return arr;
-                }
-
-                arr.SetValue(FreSharpHelper.GetAsBool(itm), i);
-            }
-
-            return arr;
+            return this.Select(el => el.AsBool()).ToArray();
         }
 
         /// <summary>
@@ -328,19 +268,7 @@ namespace TuaRua.FreSharp {
         /// </summary>
         /// <returns></returns>
         public DateTime[] AsDateArray() {
-            var arr = new DateTime[Length];
-            var len = Length;
-            if (len <= 0) return arr;
-            for (uint i = 0; i < len; i++) {
-                var itm = At(i);
-                if (itm.Type() != FreObjectTypeSharp.Date) {
-                    return arr;
-                }
-
-                arr.SetValue(FreSharpHelper.GetAsDateTime(itm), i);
-            }
-
-            return arr;
+            return this.Select(el => el.AsDateTime()).ToArray();
         }
 
         /// <summary>

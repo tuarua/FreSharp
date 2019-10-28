@@ -131,7 +131,7 @@ namespace TuaRua.FreSharp {
             var ret = Core.getFREObject(value, ref resultPtr);
             var status = (FreResultSharp) resultPtr;
             if (status == FreResultSharp.Ok) return ret;
-            Logger.Log($"cannot create FREObject from {value}", status);
+            Logger.Error($"cannot create FREObject from {value}", status);
             return FREObject.Zero;
         }
 
@@ -144,7 +144,7 @@ namespace TuaRua.FreSharp {
             var ret = Core.getFREObject(value, ref resultPtr);
             var status = (FreResultSharp) resultPtr;
             if (status == FreResultSharp.Ok) return ret;
-            Logger.Log($"cannot create FREObject from {value}", status);
+            Logger.Error($"cannot create FREObject from {value}", status);
             return FREObject.Zero;
         }
 
@@ -153,7 +153,7 @@ namespace TuaRua.FreSharp {
             var ret = Core.getFREObject(value, ref resultPtr);
             var status = (FreResultSharp) resultPtr;
             if (status == FreResultSharp.Ok) return ret;
-            Logger.Log($"cannot create FREObject from {value}", status);
+            Logger.Error($"cannot create FREObject from {value}", status);
             return FREObject.Zero;
         }
 
@@ -162,7 +162,7 @@ namespace TuaRua.FreSharp {
             var ret = Core.getFREObject(value, ref resultPtr);
             var status = (FreResultSharp) resultPtr;
             if (status == FreResultSharp.Ok) return ret;
-            Logger.Log($"cannot create FREObject from {value}", status);
+            Logger.Error($"cannot create FREObject from {value}", status);
             return FREObject.Zero;
         }
 
@@ -171,7 +171,7 @@ namespace TuaRua.FreSharp {
             var ret = Core.getFREObject(value, ref resultPtr);
             var status = (FreResultSharp) resultPtr;
             if (status == FreResultSharp.Ok) return ret;
-            Logger.Log($"cannot create FREObject from {value}", status);
+            Logger.Error($"cannot create FREObject from {value}", status);
             return FREObject.Zero;
         }
 
@@ -180,7 +180,7 @@ namespace TuaRua.FreSharp {
             var ret = Core.getString(rawValue, ref resultPtr);
             var status = (FreResultSharp) resultPtr;
             if (status == FreResultSharp.Ok) return StringUtils.ToUtf8(ret);
-            Logger.Log($"cannot get FREObject {rawValue.toString()} as String", status);
+            Logger.Error($"cannot get FREObject {rawValue.toString()} as String", status);
             return null;
         }
 
@@ -189,7 +189,7 @@ namespace TuaRua.FreSharp {
             var ret = Core.getDouble(rawValue, ref resultPtr);
             var status = (FreResultSharp) resultPtr;
             if (status == FreResultSharp.Ok) return ret;
-            Logger.Log($"cannot get FREObject {rawValue.toString()} as Double", status);
+            Logger.Error($"cannot get FREObject {rawValue.toString()} as Double", status);
             return 0.0;
         }
 
@@ -198,7 +198,7 @@ namespace TuaRua.FreSharp {
             var ret = Core.getBool(rawValue, ref resultPtr);
             var status = (FreResultSharp) resultPtr;
             if (status == FreResultSharp.Ok) return ret;
-            Logger.Log($"cannot get FREObject {rawValue.toString()} as Bool", status);
+            Logger.Error($"cannot get FREObject {rawValue.toString()} as Bool", status);
             return false;
         }
 
@@ -207,7 +207,7 @@ namespace TuaRua.FreSharp {
             var ret = Core.getInt32(rawValue, ref resultPtr);
             var status = (FreResultSharp) resultPtr;
             if (status == FreResultSharp.Ok) return ret;
-            Logger.Log($"cannot get FREObject {rawValue.toString()} as Int", status);
+            Logger.Error($"cannot get FREObject {rawValue.toString()} as Int", status);
             return 0;
         }
 
@@ -216,7 +216,7 @@ namespace TuaRua.FreSharp {
             var ret = Core.getUInt32(rawValue, ref resultPtr);
             var status = (FreResultSharp) resultPtr;
             if (status == FreResultSharp.Ok) return ret;
-            Logger.Log($"cannot get {rawValue.toString()} as UInt", status);
+            Logger.Error($"cannot get {rawValue.toString()} as UInt", status);
             return 0;
         }
 
@@ -252,7 +252,7 @@ namespace TuaRua.FreSharp {
                 ref resultPtr);
             var status = (FreResultSharp) resultPtr;
             if (status == FreResultSharp.Ok) return;
-            Logger.Log($"cannot set property {name} to {rawValue.toString()}", status, ret);
+            Logger.Error($"cannot set property {name} to {rawValue.toString()}", status, ret);
         }
 
         internal static void SetProperty(FREObject rawValue, string name, FREObject value) {
@@ -260,7 +260,7 @@ namespace TuaRua.FreSharp {
             var ret = Core.setProperty(rawValue, name, value, ref resultPtr);
             var status = (FreResultSharp) resultPtr;
             if (status == FreResultSharp.Ok) return;
-            Logger.Log($"cannot set property {name} to {rawValue.toString()}", status, ret);
+            Logger.Error($"cannot set property {name} to {rawValue.toString()}", status, ret);
         }
 
         internal static FREObject GetProperty(FREObject rawValue, string name) {
@@ -268,7 +268,7 @@ namespace TuaRua.FreSharp {
             var ret = Core.getProperty(rawValue, name, ref resultPtr);
             var status = (FreResultSharp) resultPtr;
             if (status == FreResultSharp.Ok) return ret;
-            Logger.Log($"cannot get property {name} of {rawValue.toString()}", status, ret);
+            Logger.Error($"cannot get property {name} of {rawValue.toString()}", status, ret);
             return FREObject.Zero;
         }
 
@@ -285,7 +285,7 @@ namespace TuaRua.FreSharp {
             var ret = Core.getActionScriptData(freContext, ref resultPtr);
             var status = (FreResultSharp) resultPtr;
             if (status == FreResultSharp.Ok) return ret;
-            Logger.Log("cannot get ActionScript data", status, ret);
+            Logger.Error("cannot get ActionScript data", status, ret);
             return FREObject.Zero;
         }
 
@@ -294,7 +294,7 @@ namespace TuaRua.FreSharp {
             Core.setActionScriptData(freContext, value, ref resultPtr);
             var status = (FreResultSharp) resultPtr;
             if (status == FreResultSharp.Ok) return;
-            Logger.Log("cannot set ActionScript data", status);
+            Logger.Error("cannot set ActionScript data", status);
         }
 
         internal static Dictionary<string, object> GetAsDictionary(FREObject rawValue) {

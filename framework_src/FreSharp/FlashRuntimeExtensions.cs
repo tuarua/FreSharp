@@ -165,7 +165,7 @@ namespace TuaRua.FreSharp {
 
             var status = (FreResultSharp) resultPtr;
             if (status == FreResultSharp.Ok) return ret;
-            Logger.Log($"cannot call method {method} of {inFre.toString()}", status, ret);
+            Logger.Error($"cannot call method {method} of {inFre.toString()}", status, ret);
             return FREObject.Zero;
         }
 
@@ -183,7 +183,7 @@ namespace TuaRua.FreSharp {
             var ret = new FREArray(fre);
             var status = (FreResultSharp) resultPtr;
             if (status == FreResultSharp.Ok) return ret;
-            Logger.Log($"cannot call method {methodName} of {inFre.toString()}", status, fre);
+            Logger.Error($"cannot call method {methodName} of {inFre.toString()}", status, fre);
             return null;
         }
 
@@ -367,7 +367,7 @@ namespace TuaRua.FreSharp {
                 FreSharpHelper.GetArgsC(argsArr), ref resultPtr);
             var status = (FreResultSharp) resultPtr;
             if (status == FreResultSharp.Ok) return ret;
-            Logger.Log($"cannot create class {className}", status, ret);
+            Logger.Error($"cannot create class {className}", status, ret);
             return FREObject.Zero;
         }
 
@@ -384,7 +384,7 @@ namespace TuaRua.FreSharp {
                 FreSharpHelper.GetArgsC(argsArr), ref resultPtr);
             var status = (FreResultSharp) resultPtr;
             if (status == FreResultSharp.Ok) return ret;
-            Logger.Log($"cannot create class {name}", status, ret);
+            Logger.Error($"cannot create class {name}", status, ret);
             return FREObject.Zero;
         }
     }
