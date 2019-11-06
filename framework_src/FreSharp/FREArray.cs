@@ -41,7 +41,7 @@ namespace TuaRua.FreSharp {
         /// Returns the associated C FREObject of the C# FREObject.
         /// </summary>
         /// <returns></returns>
-        public FREObject RawValue { get; }
+        public FREObject RawValue { get; set; }
 
         /// <inheritdoc />
         /// <summary>
@@ -59,8 +59,19 @@ namespace TuaRua.FreSharp {
         /// <param name="className">name of AS3 class to create.</param>
         /// <param name="length">number of elements in the array.</param>
         /// <param name="fixedSize">whether the array is fixed.</param>
-        public FREArray(string className, int length = 0, bool fixedSize = false) {
+        /// <param name="items">populates the FREArray with the supplied Array of FREObjects.</param>
+        public FREArray(string className, int length = 0, bool fixedSize = false, FREObject[] items = null) {
+            create(className, length, fixedSize, items);
+        }
+
+        private void create(string className, int length = 0, bool fixedSize = false, FREObject[] items = null) {
             RawValue = new FREObject().Init("Vector.<" + className + ">", length, fixedSize);
+            if (items == null) return;
+            uint cnt = 0;
+            foreach (var v in items) {
+                if (length > 0) this[cnt] = v; else Push(v);
+                cnt += 1;
+            }
         }
 
         /// <inheritdoc />
@@ -69,10 +80,7 @@ namespace TuaRua.FreSharp {
         /// </summary>
         /// <param name="intArray"></param>
         public FREArray(IEnumerable<int> intArray) {
-            RawValue = new FREObject().Init("Vector.<int>");
-            foreach (var v in intArray) {
-                Push(v);
-            }
+            create("int", items: intArray.Select(el => el.ToFREObject()).ToArray());
         }
 
         /// <inheritdoc />
@@ -81,10 +89,7 @@ namespace TuaRua.FreSharp {
         /// </summary>
         /// <param name="uintArray"></param>
         public FREArray(IEnumerable<uint> uintArray) {
-            RawValue = new FREObject().Init("Vector.<uint>");
-            foreach (var v in uintArray) {
-                Push(v);
-            }
+            create("uint", items: uintArray.Select(el => el.ToFREObject()).ToArray());
         }
 
         /// <inheritdoc />
@@ -93,10 +98,7 @@ namespace TuaRua.FreSharp {
         /// </summary>
         /// <param name="dateArray"></param>
         public FREArray(IEnumerable<DateTime> dateArray) {
-            RawValue = new FREObject().Init("Vector.<Date>");
-            foreach (var v in dateArray) {
-                Push(v);
-            }
+            create("Date", items: dateArray.Select(el => el.ToFREObject()).ToArray());
         }
 
         /// <inheritdoc />
@@ -105,10 +107,7 @@ namespace TuaRua.FreSharp {
         /// </summary>
         /// <param name="doubleArray"></param>
         public FREArray(IEnumerable<double> doubleArray) {
-            RawValue = new FREObject().Init("Vector.<Number>");
-            foreach (var v in doubleArray) {
-                Push(v);
-            }
+            create("Number", items: doubleArray.Select(el => el.ToFREObject()).ToArray());
         }
 
         /// <inheritdoc />
@@ -117,10 +116,7 @@ namespace TuaRua.FreSharp {
         /// </summary>
         /// <param name="boolArray"></param>
         public FREArray(IEnumerable<bool> boolArray) {
-            RawValue = new FREObject().Init("Vector.<Boolean>");
-            foreach (var v in boolArray) {
-                Push(v);
-            }
+            create("Boolean", items: boolArray.Select(el => el.ToFREObject()).ToArray());
         }
 
         /// <inheritdoc />
@@ -129,10 +125,7 @@ namespace TuaRua.FreSharp {
         /// </summary>
         /// <param name="stringArray"></param>
         public FREArray(IEnumerable<string> stringArray) {
-            RawValue = new FREObject().Init("Vector.<String>");
-            foreach (var v in stringArray) {
-                Push(v);
-            }
+            create("String", items: stringArray.Select(el => el.ToFREObject()).ToArray());
         }
 
         /// <summary>

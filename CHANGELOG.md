@@ -1,6 +1,7 @@
 ### 2.3.0
 - Add default params to `FreArgException` 
 - Refactor FREArray
+- add optional `FREObject[] items` param to `FREArray`
 
 ### 2.2.0
 - Add `[DateTime]` support to `FREArray`
