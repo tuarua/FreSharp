@@ -118,12 +118,7 @@ namespace TuaRua.FreSharp {
         }
 
         internal static uint GetArgsC(ArrayList args) {
-            uint cnt = 0;
-            if (args != null) {
-                cnt = (uint) args.Count;
-            }
-
-            return cnt;
+            return args != null ? (uint) args.Count : 0;
         }
 
         internal static FREObject NewObject(string value) {
