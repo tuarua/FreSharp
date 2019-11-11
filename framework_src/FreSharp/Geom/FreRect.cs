@@ -39,10 +39,10 @@ namespace TuaRua.FreSharp.Geom {
         /// <summary>
         /// Converts a FREObject to a C# Rect.
         /// </summary>
-        /// <param name="inFre"></param>
+        /// <param name="freObject"></param>
         /// <returns></returns>
-        public static Rect AsRect(this FREObject inFre) {
-            dynamic fre = new FreObjectSharp(inFre);
+        public static Rect AsRect(this FREObject freObject) {
+            dynamic fre = new FreObjectSharp(freObject);
             return new Rect(fre.x, fre.y, fre.width, fre.height);
         }
     }

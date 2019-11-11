@@ -40,10 +40,10 @@ namespace TuaRua.FreSharp.Geom {
         /// <summary>
         /// Converts a FREObject to a C# Point
         /// </summary>
-        /// <param name="inFre"></param>
+        /// <param name="freObject"></param>
         /// <returns>Point</returns>
-        public static Point AsPoint(this FREObject inFre) {
-            dynamic fre = new FreObjectSharp(inFre);
+        public static Point AsPoint(this FREObject freObject) {
+            dynamic fre = new FreObjectSharp(freObject);
             return new Point(fre.x, fre.y);
         }
     }

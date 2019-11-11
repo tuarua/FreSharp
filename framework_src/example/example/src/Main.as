@@ -2,6 +2,7 @@ package {
 import com.tuarua.FreSharp;
 import com.tuarua.FreSharpExampleANE;
 import com.tuarua.Person;
+import com.tuarua.fre.ANEError;
 
 import flash.desktop.NativeApplication;
 import flash.display.Bitmap;
@@ -121,7 +122,17 @@ public class Main extends Sprite {
         var myByteArray:ByteArray = new ByteArray();
         myByteArray.writeUTFBytes("C# in an ANE. Say whaaaat!");
         ane.runByteArrayTests(myByteArray);
-        ane.runErrorTests(person, "test string", 78);
+
+        try {
+            ane.runErrorTests(person, "test string", 78);
+        } catch (e:ANEError) {
+            trace("Error captured in AS");
+            trace("e.message:", e.message);
+            trace("e.errorID:", e.errorID);
+            trace("e.type:", e.type);
+            trace("e.source:", e.source);
+            trace("e.getStackTrace():", e.getStackTrace());
+        }
 
         const inData:String = "Saved and returned";
         trace("getActionScriptData returned is same", inData == ane.runDataTests(inData) as String ? "✅" : "❌");

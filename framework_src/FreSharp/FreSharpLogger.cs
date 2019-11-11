@@ -62,8 +62,16 @@ namespace TuaRua.FreSharp {
         /// Traces the message to the console.
         /// </summary>
         /// <param name="message">Message to log.</param>
+        public void Info(string message) {
+            Context?.DispatchEvent("TRACE", $"[FreSharp] ℹ️INFO: {message}");
+        }
+        
+        /// <summary>
+        /// Traces the message to the console.
+        /// </summary>
+        /// <param name="message">Message to log.</param>
         /// <param name="type">Type of error</param>
-        public void Log(string message, FreResultSharp type) {
+        public void Error(string message, FreResultSharp type) {
             Context?.DispatchEvent("TRACE", $"[FreSharp] ‼ {type} {message}");
         }
 
@@ -73,7 +81,7 @@ namespace TuaRua.FreSharp {
         /// <param name="message">Message to log.</param>
         /// <param name="type">Type of error</param>
         /// <param name="freException">The Exception</param>
-        public void Log(string message, FreResultSharp type, FREObject freException) {
+        public void Error(string message, FreResultSharp type, FREObject freException) {
             Context?.DispatchEvent("TRACE", $"[FreSharp] ‼ {type} {message}");
             if (FreObjectTypeSharp.Class != freException.Type()) return;
             try {
