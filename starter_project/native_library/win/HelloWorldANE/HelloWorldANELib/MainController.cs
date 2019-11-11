@@ -25,9 +25,9 @@ namespace HelloWorldLib {
         }
 
         private FREObject SayHello(FREContext ctx, uint argc, FREObject[] argv) {
-            if (argv[0] == FREObject.Zero) return FREObject.Zero;
-            if (argv[1] == FREObject.Zero) return FREObject.Zero;
-            if (argv[2] == FREObject.Zero) return FREObject.Zero;
+            if (argv[0] == FREObject.Zero) return new FreArgException().RawValue;
+            if (argv[1] == FREObject.Zero) return new FreArgException().RawValue;
+            if (argv[2] == FREObject.Zero) return new FreArgException().RawValue;
 
             try {
                 var myString = argv[0].AsString();
