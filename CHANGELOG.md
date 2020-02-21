@@ -1,3 +1,6 @@
+### 2.4.0
+- `FreSharp.dispose()` is now static funcion
+
 ### 2.3.0
 - Add default params to `FreArgException` 
 - Refactor `FREArray`

@@ -1,6 +1,3 @@
-/**
- * Created by Eoin Landy on 20/04/2017.
- */
 package com.tuarua {
 import com.tuarua.fre.ANEError;
 
@@ -13,7 +10,7 @@ import flash.utils.ByteArray;
 
 public class FreSharpExampleANE extends EventDispatcher {
     private static const NAME:String = "FreSharpExampleANE";
-    private var ctx:ExtensionContext;
+    private static var ctx:ExtensionContext;
 
     public function FreSharpExampleANE() {
         initiate();
@@ -29,7 +26,7 @@ public class FreSharpExampleANE extends EventDispatcher {
         }
     }
 
-    private function gotEvent(event:StatusEvent):void {
+    private static function gotEvent(event:StatusEvent):void {
         var pObj:Object;
         switch (event.level) {
             case "TRACE":
@@ -87,7 +84,7 @@ public class FreSharpExampleANE extends EventDispatcher {
         return ctx.call("runColorTests", value) as uint;
     }
 
-    public function dispose():void {
+    public static function dispose():void {
         if (!ctx) {
             trace("[" + NAME + "] Error. ANE Already in a disposed or failed state...");
             return;

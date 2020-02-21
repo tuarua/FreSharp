@@ -3,7 +3,7 @@
 	<id>com.tuarua.FreSharp</id>
 	<name>FreSharp</name>
 	<copyright>This work is licensed under Apache License, Copyright (c) 2017 Tua Rua Ltd.</copyright>
-	<versionNumber>2.2.0</versionNumber>
+	<versionNumber>2.4.0</versionNumber>
 	<platforms>
 	<platform name="Windows-x86">
             <applicationDeployment>
