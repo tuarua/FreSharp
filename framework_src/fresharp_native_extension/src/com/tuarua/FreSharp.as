@@ -4,7 +4,7 @@ import flash.system.Capabilities;
 
 public class FreSharp {
     private static const NAME:String = "FreSharp";
-    private var ctx:ExtensionContext;
+    private static var ctx:ExtensionContext;
 
     public function FreSharp() {
         if (!isWindows()) return;
@@ -21,7 +21,7 @@ public class FreSharp {
         }
     }
 
-    public function dispose():void {
+    public static function dispose():void {
         if (!isWindows()) return;
         if (!ctx) {
             trace("[" + NAME + "] Error. ANE Already in a disposed or failed state...");
