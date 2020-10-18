@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Runtime.InteropServices;
 using Hwnd = System.IntPtr;
+using Hmonitor = System.IntPtr;
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable UnusedMember.Global
 // ReSharper disable FieldCanBeMadeReadOnly.Global
@@ -14,9 +15,8 @@ namespace TuaRua.FreSharp.Utils {
     /// </summary>
     public static class WinApi {
         private const string User32 = "user32";
-
-        //private const string Kernel32 = "kernel32";
         private const string Gdi32 = "gdi32";
+        private const string ShCore = "shcore";
 
         public static double GetScaleFactor() {
             var g = Graphics.FromHwnd(Hwnd.Zero);
@@ -35,6 +35,19 @@ namespace TuaRua.FreSharp.Utils {
             }
 
             return 1.0;
+        }
+
+        /// <summary>
+        /// Gets the scale factor of the monitor.
+        /// </summary>
+        /// <param name="hwnd">A handle to the window of interest.</param>
+        /// <returns></returns>
+        public static double GetScaleFactor(Hwnd hwnd) {
+            GetScaleFactorForMonitor(
+                MonitorFromWindow(hwnd, MonitorFlags.MONITOR_DEFAULTTONEAREST),
+                out int dsf);
+            if (dsf < 100) dsf = 100;
+            return Convert.ToDouble(dsf) / 100.0;
         }
 
         /// <summary>
@@ -78,7 +91,6 @@ namespace TuaRua.FreSharp.Utils {
         [DllImport(User32, ExactSpelling = true)]
         public static extern bool RegisterTouchWindow(Hwnd hwnd, TouchWindowFlags flags);
 
-
         /// <summary>
         /// 
         /// </summary>
@@ -102,11 +114,42 @@ namespace TuaRua.FreSharp.Utils {
 
         [DllImport(Gdi32, ExactSpelling = true)]
         public static extern int GetDeviceCaps(Hwnd hdc, int nIndex);
+
+        /// <summary>
+        /// Gets the scale factor of a specific monitor.
+        /// </summary>
+        /// <param name="hMon">The monitor's handle.</param>
+        /// <param name="pScale">When this function returns successfully, this value points to one of the
+        /// DEVICE_SCALE_FACTOR values that specify the scale factor of the specified monitor.
+        /// If the function call fails, this value points to a valid scale factor so that apps can opt to
+        /// continue on with incorrectly sized resources.</param>
+        /// <returns>If this function succeeds, it returns S_OK. Otherwise, it returns an HRESULT error code.</returns>
+        [DllImport(ShCore)]
+        public static extern Hwnd GetScaleFactorForMonitor([In]Hmonitor hMon, [Out]out int pScale);
+
+        /// <summary>
+        /// The MonitorFromWindow function retrieves a handle to the display monitor that has the largest area of
+        /// intersection with the bounding rectangle of a specified window.
+        /// </summary>
+        /// <param name="hwnd">A handle to the window of interest.</param>
+        /// <param name="dwFlags">Determines the function's return value if the window does not intersect any display monitor.</param>
+        /// <returns>If the window intersects one or more display monitor rectangles, the return value is
+        /// an HMONITOR handle to the display monitor that has the largest area of intersection with the window.
+        /// If the window does not intersect a display monitor, the return value depends on the value of dwFlags.</returns>
+        [DllImport(User32)]
+        public static extern Hmonitor MonitorFromWindow(Hwnd hwnd, MonitorFlags dwFlags);
+    }
+    [Flags]
+    public enum WindowLongFlags
+    {
+        GWL_EXSTYLE = -20
     }
 
     [Flags]
-    public enum WindowLongFlags {
-        GWL_EXSTYLE = -20
+    public enum MonitorFlags {
+        MONITOR_DEFAULTTONULL = 0,
+        MONITOR_DEFAULTTOPRIMARY = 1,
+        MONITOR_DEFAULTTONEAREST = 2
     }
 
     [Flags]

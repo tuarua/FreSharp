@@ -1,3 +1,6 @@
+### 2.5.0
+- Add more reliable `WinApi.GetScaleFactor(Hwnd hwnd)`
+
 ### 2.4.0
 - `FreSharp.dispose()` is now static funcion 
 

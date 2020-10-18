@@ -181,7 +181,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\..\..\..\sdks\AIR\AIRSDK_29\include\FlashRuntimeExtensions.h" />
+    <ClInclude Include="D:\dev\sdks\AIR\AIRSDK_32\include\FlashRuntimeExtensions.h" />
     <ClInclude Include="FreNamespace.h" />
     <ClInclude Include="FreSharpBridge.h" />
     <ClInclude Include="FreSharpMacros.h" />
@@ -194,7 +194,7 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="FreSharp">
-      <HintPath>..\packages\TuaRua.FreSharp.2.4.0\FreSharp\$(PlatformTarget)\FreSharp.dll</HintPath>
+      <HintPath>..\packages\TuaRua.FreSharp.2.5.0\FreSharp\$(PlatformTarget)\FreSharp.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
